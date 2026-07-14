@@ -12,7 +12,10 @@ import {
     LayoutGrid,
     List,
     SearchX,
-    MessageCircle
+    MessageCircle,
+    Lock,
+    Copy,
+    Share2
 } from 'lucide-react';
 
 interface Store {
@@ -30,6 +33,24 @@ interface Store {
     error_log: string | null;
     is_found: boolean;
     created_at: string;
+    full_settings?: {
+        data?: {
+            store?: {
+                settings?: {
+                    freelance_number?: string;
+                };
+                social?: Record<string, string>;
+            };
+            theme?: {
+                name?: string;
+                profile?: { id?: number; name?: string | null };
+                mode?: string;
+                translations_hash?: string;
+                is_rtl?: boolean;
+            };
+            maintenance?: boolean;
+        }
+    };
 }
 
 interface Props {
@@ -294,9 +315,9 @@ export default function StoresIndex({ stores, filter, stats }: Props) {
                                         <tr>
                                             <th className="px-4 py-3 font-medium">Store ID</th>
                                             <th className="px-4 py-3 font-medium">Status</th>
-                                            <th className="px-4 py-3 font-medium">Store / Product</th>
-                                            <th className="px-4 py-3 font-medium">Domain</th>
-                                            <th className="px-4 py-3 font-medium">Error / Log</th>
+                                            <th className="px-4 py-3 font-medium">Store Info</th>
+                                            <th className="px-4 py-3 font-medium">Contacts & Socials</th>
+                                            <th className="px-4 py-3 font-medium">Theme</th>
                                             <th className="px-4 py-3 font-medium">Date</th>
                                             <th className="px-4 py-3 font-medium text-right">Action</th>
                                         </tr>
@@ -304,48 +325,117 @@ export default function StoresIndex({ stores, filter, stats }: Props) {
                                     <tbody className="divide-y divide-border">
                                         {stores.data.map((store) => (
                                             <tr key={store.id} className="bg-card hover:bg-muted/30 transition-colors">
-                                                <td className="px-4 py-3 font-medium">
+                                                <td className="px-4 py-4 font-medium align-top">
                                                     {store.store_id}
                                                 </td>
-                                                <td className="px-4 py-3">
+                                                <td className="px-4 py-4 align-top">
                                                     {store.is_found ? (
-                                                        <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-2 py-1 text-xs font-medium text-emerald-500">
+                                                        <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-2 py-1 text-xs font-medium text-emerald-500 mb-1">
                                                             <CheckCircle2 className="h-3.5 w-3.5" /> Active
                                                         </span>
                                                     ) : (
-                                                        <span className="inline-flex items-center gap-1.5 rounded-full bg-destructive/10 px-2 py-1 text-xs font-medium text-destructive">
-                                                            <AlertCircle className="h-3.5 w-3.5" /> Failed
-                                                        </span>
+                                                        <div className="flex flex-col gap-1">
+                                                            <span className="inline-flex w-fit items-center gap-1.5 rounded-full bg-destructive/10 px-2 py-1 text-xs font-medium text-destructive">
+                                                                <AlertCircle className="h-3.5 w-3.5" /> Failed
+                                                            </span>
+                                                            {store.error_log && (
+                                                                <span className="text-[10px] text-destructive line-clamp-3 w-32 mt-1" title={store.error_log}>
+                                                                    {store.error_log}
+                                                                </span>
+                                                            )}
+                                                        </div>
                                                     )}
                                                 </td>
-                                                <td className="px-4 py-3 max-w-[200px] truncate" title={store.store_name || store.product_name || ''}>
-                                                    {store.store_name || store.product_name || <span className="text-muted-foreground/50">-</span>}
-                                                </td>
-                                                <td className="px-4 py-3 max-w-[150px] truncate" title={store.domain || ''}>
-                                                    {store.domain ? (
-                                                        <span className="inline-flex items-center gap-1 text-muted-foreground">
-                                                            <LinkIcon className="h-3 w-3 shrink-0" />
-                                                            {store.domain}
-                                                        </span>
-                                                    ) : <span className="text-muted-foreground/50">-</span>}
-                                                </td>
-                                                <td className="px-4 py-3 max-w-[200px]">
-                                                    {store.error_log ? (
-                                                        <div className="text-xs text-destructive truncate" title={store.error_log}>
-                                                            {store.error_log}
+                                                <td className="px-4 py-4 align-top">
+                                                    <div className="flex gap-3">
+                                                        {store.store_logo && (
+                                                            <img src={store.store_logo} alt={store.store_name || ''} className="h-10 w-10 rounded-full object-cover border border-border bg-muted shrink-0" />
+                                                        )}
+                                                        <div className="flex flex-col min-w-0 max-w-[250px]">
+                                                            <div className="flex items-center gap-2">
+                                                                <span className="font-semibold truncate" title={store.store_name || store.domain || ''}>
+                                                                    {store.store_name || store.domain || '-'}
+                                                                </span>
+                                                                {store.full_settings?.data?.maintenance === true && (
+                                                                    <Lock className="h-3 w-3 text-amber-500 shrink-0" title="Maintenance Mode" />
+                                                                )}
+                                                            </div>
+                                                            {store.full_settings?.data?.store?.settings?.freelance_number && (
+                                                                <span className="text-[10px] text-muted-foreground mt-0.5 truncate">
+                                                                    FL: {store.full_settings.data.store.settings.freelance_number}
+                                                                </span>
+                                                            )}
+                                                            {store.store_description && (
+                                                                <span className="text-[11px] text-muted-foreground mt-1.5 line-clamp-2" title={store.store_description}>
+                                                                    {store.store_description}
+                                                                </span>
+                                                            )}
                                                         </div>
-                                                    ) : <span className="text-muted-foreground/50">-</span>}
+                                                    </div>
                                                 </td>
-                                                <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">
+                                                <td className="px-4 py-4 align-top max-w-[200px]">
+                                                    <div className="space-y-2">
+                                                        {store.contacts && Object.entries(store.contacts).map(([key, value]) => (
+                                                            <div key={key} className="flex items-center justify-between gap-3 text-xs border-b border-border/50 pb-1.5 last:border-0 last:pb-0">
+                                                                <div className="flex items-center gap-1.5 capitalize font-medium text-muted-foreground shrink-0">
+                                                                    <MessageCircle className="h-3 w-3" />
+                                                                    {key}
+                                                                </div>
+                                                                <div className="flex items-center gap-2 min-w-0">
+                                                                    <span className="truncate text-[10px]" title={value}>{value}</span>
+                                                                    {value.startsWith('http') ? (
+                                                                        <a href={value} target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-primary shrink-0"><ExternalLink className="h-3 w-3" /></a>
+                                                                    ) : (
+                                                                        <button onClick={() => navigator.clipboard.writeText(value)} className="text-muted-foreground hover:text-primary shrink-0" title="Copy"><Copy className="h-3 w-3" /></button>
+                                                                    )}
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                        {store.full_settings?.data?.store?.social && Object.entries(store.full_settings.data.store.social).map(([key, value]) => (
+                                                            <div key={key} className="flex items-center justify-between gap-3 text-xs border-b border-border/50 pb-1.5 last:border-0 last:pb-0">
+                                                                <div className="flex items-center gap-1.5 capitalize font-medium text-muted-foreground shrink-0">
+                                                                    <Share2 className="h-3 w-3" />
+                                                                    {key}
+                                                                </div>
+                                                                <div className="flex items-center gap-2 min-w-0">
+                                                                    <span className="truncate text-[10px]" title={value}>{value}</span>
+                                                                    <a href={value} target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-primary shrink-0"><ExternalLink className="h-3 w-3" /></a>
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </td>
+                                                <td className="px-4 py-4 align-top w-48">
+                                                    {store.full_settings?.data?.theme ? (
+                                                        <div className="text-[11px] space-y-1.5 bg-muted/30 p-2 rounded-md">
+                                                            <div className="flex items-center justify-between gap-2 border-b border-border/50 pb-1">
+                                                                <span className="text-muted-foreground shrink-0">Name:</span>
+                                                                <span className="font-medium truncate" title={store.full_settings.data.theme.name}>{store.full_settings.data.theme.name}</span>
+                                                            </div>
+                                                            <div className="flex items-center justify-between gap-2 border-b border-border/50 pb-1">
+                                                                <span className="text-muted-foreground shrink-0">Profile ID:</span>
+                                                                <span className="font-medium">{store.full_settings.data.theme.profile?.id || '-'}</span>
+                                                            </div>
+                                                            <div className="flex items-center justify-between gap-2">
+                                                                <span className="text-muted-foreground shrink-0">Mode:</span>
+                                                                <span className="font-medium capitalize">{store.full_settings.data.theme.mode}</span>
+                                                            </div>
+                                                        </div>
+                                                    ) : (
+                                                        <span className="text-muted-foreground/50 text-xs">-</span>
+                                                    )}
+                                                </td>
+                                                <td className="px-4 py-4 text-muted-foreground text-xs whitespace-nowrap align-top">
                                                     {new Date(store.created_at).toLocaleDateString()}
                                                 </td>
-                                                <td className="px-4 py-3 text-right">
+                                                <td className="px-4 py-4 text-right align-top">
                                                     {store.product_url ? (
                                                         <a 
                                                             href={store.product_url} 
                                                             target="_blank" 
                                                             rel="noreferrer" 
-                                                            className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:text-primary"
+                                                            className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:text-primary bg-primary/10 p-2"
+                                                            title="Visit Product"
                                                         >
                                                             <ExternalLink className="h-4 w-4" />
                                                         </a>
@@ -354,12 +444,13 @@ export default function StoresIndex({ stores, filter, stats }: Props) {
                                                             href={`https://${store.domain}`} 
                                                             target="_blank" 
                                                             rel="noreferrer" 
-                                                            className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:text-primary"
+                                                            className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:text-primary bg-primary/10 p-2"
+                                                            title="Visit Store"
                                                         >
                                                             <ExternalLink className="h-4 w-4" />
                                                         </a>
                                                     ) : (
-                                                        <span className="text-muted-foreground/30"><ExternalLink className="h-4 w-4" /></span>
+                                                        <span className="text-muted-foreground/30 inline-flex p-2"><ExternalLink className="h-4 w-4" /></span>
                                                     )}
                                                 </td>
                                             </tr>
