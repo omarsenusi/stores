@@ -171,29 +171,40 @@ class ScrapeNextSallaStoreCommand extends Command
         $themeName = $store->full_settings['data']['theme']['name'] ?? 'غير متوفر';
         $maintenance = (isset($store->full_settings['data']['maintenance']) && $store->full_settings['data']['maintenance']) ? 'نعم 🔒' : 'لا 🔓';
 
-        $text = "🎉 *متجر جديد تم اكتشافه!*\n\n";
-        $text .= "🏬 *اسم المتجر:* {$storeName}\n";
-        $text .= "🔗 *الرابط:* {$fullUrl}\n";
-        $text .= "📝 *الوصف:* {$description}\n";
-        $text .= "📞 *واتساب:* {$whatsapp}\n";
-        $text .= "📱 *جوال:* {$mobile}\n";
-        $text .= "🎨 *رقم القالب:* {$themeName}\n";
-        $text .= "🛠 *وضع الصيانة:* {$maintenance}\n\n";
+        // Escape variables for Telegram HTML mode
+        $storeName = htmlspecialchars(strip_tags($storeName));
+        $description = htmlspecialchars(strip_tags($description));
+        $themeName = htmlspecialchars(strip_tags($themeName));
+
+        $text = "🎉 <b>متجر جديد تم اكتشافه!</b>\n\n";
+        $text .= "🏬 <b>اسم المتجر:</b> {$storeName}\n";
+        $text .= "🔗 <b>الرابط:</b> <a href=\"{$fullUrl}\">اضغط هنا للزيارة</a>\n";
+        $text .= "📝 <b>الوصف:</b> {$description}\n";
+        $text .= "📞 <b>واتساب:</b> {$whatsapp}\n";
+        $text .= "📱 <b>جوال:</b> {$mobile}\n";
+        $text .= "🎨 <b>رقم القالب:</b> {$themeName}\n";
+        $text .= "🛠 <b>وضع الصيانة:</b> {$maintenance}\n\n";
         
         if ($store->product_name) {
-            $text .= "📦 *أحدث منتج:* {$store->product_name}\n\n";
+            $productName = htmlspecialchars(strip_tags($store->product_name));
+            $text .= "📦 <b>أحدث منتج:</b> {$productName}\n\n";
         }
 
         $text .= "#متجر_جديد #سلة #Salla #Scraper";
 
         try {
-            Http::withoutVerifying()->post("https://api.telegram.org/bot{$botToken}/sendMessage", [
+            $response = Http::withoutVerifying()->post("https://api.telegram.org/bot{$botToken}/sendMessage", [
                 'chat_id' => $chatId,
                 'text' => $text,
-                'parse_mode' => 'Markdown',
+                'parse_mode' => 'HTML',
                 'disable_web_page_preview' => false,
             ]);
-            $this->info("Telegram message sent successfully!");
+            
+            if ($response->successful()) {
+                $this->info("Telegram message sent successfully!");
+            } else {
+                $this->error("Telegram API Error: " . $response->body());
+            }
         } catch (\Exception $e) {
             $this->error("Failed to send Telegram message: " . $e->getMessage());
         }
