@@ -29,17 +29,15 @@ interface Props {
         current_page: number;
         last_page: number;
     };
-    filters: {
-        filter?: string;
-    };
+    filter: string;
 }
 
-export default function StoresIndex({ stores, filters }: Props) {
-    const [filter, setFilter] = useState(filters.filter || '');
+export default function StoresIndex({ stores, filter }: Props) {
+    const [currentFilter, setCurrentFilter] = useState(filter);
 
     const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
-        setFilter(value);
+        setCurrentFilter(value);
 
         router.get(
             '/stores',
@@ -60,7 +58,7 @@ export default function StoresIndex({ stores, filters }: Props) {
                                 <h2 className="text-xl font-semibold">Scraped Stores</h2>
                                 
                                 <select 
-                                    value={filter}
+                                    value={currentFilter}
                                     onChange={handleFilterChange}
                                     className="border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                 >

@@ -25,7 +25,7 @@ class StoreController extends Controller
 
         return Inertia::render('stores/index', [
             'stores' => $stores,
-            'filters' => $request->only('filter'),
+            'filter' => $request->filter ?? '',
         ]);
     }
 }
