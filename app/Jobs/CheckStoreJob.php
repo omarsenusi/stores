@@ -45,7 +45,9 @@ class CheckStoreJob implements ShouldQueue
     protected function processStore(): void
     {
         try {
-            $response = Http::withHeaders([
+            $response = Http::withOptions([
+                'version' => 2.0,
+            ])->withHeaders([
                 'accept' => 'application/json, text/plain, */*',
                 'accept-language' => 'ar',
                 'cache-control' => 'no-cache',
