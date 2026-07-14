@@ -59,6 +59,15 @@ export default function StoresIndex({ stores, filter, stats }: Props) {
         localStorage.setItem('stores-view-mode', mode);
     };
 
+    // Auto-refresh data every 60 seconds
+    useEffect(() => {
+        const interval = setInterval(() => {
+            router.reload({ only: ['stores', 'stats'], preserveScroll: true, preserveState: true });
+        }, 60000);
+
+        return () => clearInterval(interval);
+    }, []);
+
     const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
         setCurrentFilter(value);
