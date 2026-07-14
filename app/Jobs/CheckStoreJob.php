@@ -86,6 +86,11 @@ class CheckStoreJob implements ShouldQueue
             $fullSettings = null;
             $errorLog = null;
 
+            $productName = null;
+            $productDescription = null;
+            $productUrl = null;
+            $productImage = null;
+
             if ($status === 200 && isset($data['success']) && $data['success']) {
                 $isFound = true;
                 $store = $data['data']['store'] ?? null;
@@ -105,6 +110,48 @@ class CheckStoreJob implements ShouldQueue
                         }
                     }
                 }
+
+                // Fetch products to verify active products exist
+                $productsResponse = Http::withOptions([
+                    'version' => 2.0,
+                ])->withHeaders([
+                    'accept' => 'application/json, text/plain, */*',
+                    'accept-language' => 'ar',
+                    'cache-control' => 'no-cache',
+                    'currency' => 'SAR',
+                    's-anonymous-id' => 'a0112d9b-77c9-4f9c-b300-4ef13266460a',
+                    's-app-os' => 'browser',
+                    's-app-version' => '2.14.499',
+                    's-country' => 'EG',
+                    's-ray' => '50',
+                    's-source' => 'twilight',
+                    's-store-api-version' => 'swoole',
+                    's-user-id' => 'FfuSe8KENcaVTETwoNKfS0CLbCDXBTnNIvIDplKz',
+                    's-version-id' => '1307728351',
+                    'sec-ch-ua' => '"Not;A=Brand";v="8", "Chromium";v="150", "Google Chrome";v="150"',
+                    'sec-ch-ua-mobile' => '?0',
+                    'sec-ch-ua-platform' => '"Windows"',
+                    'sec-fetch-dest' => 'empty',
+                    'sec-fetch-mode' => 'cors',
+                    'sec-fetch-site' => 'cross-site',
+                    'store-identifier' => $this->storeId,
+                    'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36',
+                    'x-requested-with' => 'XMLHttpRequest',
+                ])->get('https://api.salla.dev/store/v1/products', [
+                    'limit' => 3,
+                ]);
+
+                if ($productsResponse->status() === 200) {
+                    $prodData = $productsResponse->json();
+                    if (isset($prodData['success']) && $prodData['success'] && !empty($prodData['data'])) {
+                        $firstProduct = $prodData['data'][0];
+                        $productName = $firstProduct['name'] ?? null;
+                        $productDescription = $firstProduct['description'] ?? null;
+                        $productUrl = $firstProduct['url'] ?? null;
+                        $productImage = $firstProduct['original_image'] ?? ($firstProduct['image']['url'] ?? null);
+                    }
+                }
+
             } else {
                 $isFound = false;
                 $errorLog = "Unexpected status {$status}: ".substr($response->body(), 0, 500);
@@ -115,6 +162,10 @@ class CheckStoreJob implements ShouldQueue
                 ['store_id' => (string) $this->storeId],
                 [
                     'domain' => $domain,
+                    'product_name' => $productName,
+                    'product_description' => $productDescription,
+                    'product_url' => $productUrl,
+                    'product_image' => $productImage,
                     'store_name' => $storeName,
                     'store_logo' => $storeLogo,
                     'store_description' => $storeDescription,

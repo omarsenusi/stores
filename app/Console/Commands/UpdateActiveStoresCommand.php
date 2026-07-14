@@ -93,6 +93,50 @@ class UpdateActiveStoresCommand extends Command
                         ]);
                     }
                 }
+
+                // Fetch products to verify active products exist
+                $productsResponse = \Illuminate\Support\Facades\Http::withOptions([
+                    'version' => 2.0,
+                ])->withHeaders([
+                    'accept' => 'application/json, text/plain, */*',
+                    'accept-language' => 'ar',
+                    'cache-control' => 'no-cache',
+                    'currency' => 'SAR',
+                    's-anonymous-id' => 'a0112d9b-77c9-4f9c-b300-4ef13266460a',
+                    's-app-os' => 'browser',
+                    's-app-version' => '2.14.499',
+                    's-country' => 'EG',
+                    's-ray' => '50',
+                    's-source' => 'twilight',
+                    's-store-api-version' => 'swoole',
+                    's-user-id' => 'FfuSe8KENcaVTETwoNKfS0CLbCDXBTnNIvIDplKz',
+                    's-version-id' => '1307728351',
+                    'sec-ch-ua' => '"Not;A=Brand";v="8", "Chromium";v="150", "Google Chrome";v="150"',
+                    'sec-ch-ua-mobile' => '?0',
+                    'sec-ch-ua-platform' => '"Windows"',
+                    'sec-fetch-dest' => 'empty',
+                    'sec-fetch-mode' => 'cors',
+                    'sec-fetch-site' => 'cross-site',
+                    'store-identifier' => $store->store_id,
+                    'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+                    'x-requested-with' => 'XMLHttpRequest',
+                ])->get('https://api.salla.dev/store/v1/products', [
+                    'limit' => 3,
+                ]);
+
+                if ($productsResponse->status() === 200) {
+                    $prodData = $productsResponse->json();
+                    if (isset($prodData['success']) && $prodData['success'] && !empty($prodData['data'])) {
+                        $firstProduct = $prodData['data'][0];
+                        $store->update([
+                            'product_name' => $firstProduct['name'] ?? null,
+                            'product_description' => $firstProduct['description'] ?? null,
+                            'product_url' => $firstProduct['url'] ?? null,
+                            'product_image' => $firstProduct['original_image'] ?? ($firstProduct['image']['url'] ?? null),
+                        ]);
+                    }
+                }
+
             } catch (\Exception $e) {
                 // Ignore and continue
             }

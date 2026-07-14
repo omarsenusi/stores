@@ -26,6 +26,7 @@ interface Store {
     product_name: string | null;
     product_description: string | null;
     product_url: string | null;
+    product_image: string | null;
     error_log: string | null;
     is_found: boolean;
     created_at: string;
@@ -210,11 +211,14 @@ export default function StoresIndex({ stores, filter, stats }: Props) {
                                             </div>
 
                                             <div className="flex-1 space-y-2 mt-2">
-                                                {store.store_logo && (
-                                                    <div className="mb-4">
-                                                        <img src={store.store_logo} alt={store.store_name || 'Store Logo'} className="h-16 w-16 rounded-full object-cover border border-border bg-muted" />
-                                                    </div>
-                                                )}
+                                                <div className="flex gap-2 mb-4">
+                                                    {store.store_logo && (
+                                                        <img src={store.store_logo} alt={store.store_name || 'Store Logo'} className="h-16 w-16 rounded-full object-cover border border-border bg-muted" title="Store Logo" />
+                                                    )}
+                                                    {store.product_image && (
+                                                        <img src={store.product_image} alt={store.product_name || 'Product'} className="h-16 w-16 rounded-md object-cover border border-border bg-muted" title="Example Product" />
+                                                    )}
+                                                </div>
                                                 {store.store_name || store.product_name || store.domain ? (
                                                     <>
                                                         <h3 className="font-semibold leading-none tracking-tight line-clamp-1" title={store.store_name || store.product_name || ''}>

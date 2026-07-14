@@ -15,6 +15,7 @@ class ScrapedStore extends Model
         'product_name',
         'product_description',
         'product_url',
+        'product_image',
         'store_name',
         'store_logo',
         'store_description',
