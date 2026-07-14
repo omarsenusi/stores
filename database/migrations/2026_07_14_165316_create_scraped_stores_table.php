@@ -15,6 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('store_id')->unique()->index();
             $table->string('domain')->nullable();
+            $table->string('product_name')->nullable();
+            $table->text('product_description')->nullable();
+            $table->text('product_url')->nullable();
+            $table->text('error_log')->nullable();
             $table->boolean('is_found')->default(false);
             $table->timestamps();
         });

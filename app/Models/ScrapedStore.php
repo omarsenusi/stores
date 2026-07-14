@@ -12,6 +12,10 @@ class ScrapedStore extends Model
     protected $fillable = [
         'store_id',
         'domain',
+        'product_name',
+        'product_description',
+        'product_url',
+        'error_log',
         'is_found',
     ];
 
