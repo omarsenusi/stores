@@ -32,7 +32,7 @@ class CheckStoreJob implements ShouldQueue
     public function handle(): void
     {
         Redis::throttle('salla-api')
-            ->allow(15)
+            ->allow(3)
             ->every(30)
             ->then(function () {
                 $this->processStore();
