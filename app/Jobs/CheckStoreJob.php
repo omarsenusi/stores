@@ -31,14 +31,16 @@ class CheckStoreJob implements ShouldQueue
      */
     public function handle(): void
     {
+        // We discovered Salla limits at ~144-150 requests.
+        // We will throttle at 120 requests every 60 seconds to be extremely safe and fast.
         Redis::throttle('salla-api')
-            ->allow(3)
-            ->every(30)
+            ->allow(120)
+            ->every(60)
             ->then(function () {
                 $this->processStore();
             }, function () {
-                // Could not obtain lock; release back to the queue after 30 seconds
-                $this->release(30);
+                // If limit reached, release the job back to the queue to try again after 10 seconds
+                $this->release(10);
             });
     }
 
