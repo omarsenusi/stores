@@ -18,7 +18,8 @@ import {
     Search,
     Unlock,
     Phone,
-    Download
+    Download,
+    LayoutGrid
 } from 'lucide-react';
 
 interface Store {
