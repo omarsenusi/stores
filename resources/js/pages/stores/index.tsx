@@ -9,13 +9,16 @@ import {
     ShoppingBag,
     Link as LinkIcon,
     CalendarClock,
-    LayoutGrid,
     List,
     SearchX,
     MessageCircle,
     Lock,
     Copy,
-    Share2
+    Share2,
+    Search,
+    Unlock,
+    Phone,
+    Download
 } from 'lucide-react';
 
 interface Store {
@@ -63,16 +66,36 @@ interface Props {
         total: number;
     };
     filter: string;
+    search: string;
+    maintenance: string;
     stats: {
         total: number;
         found: number;
         not_found: number;
+        maintenance: number;
+        active: number;
     };
 }
 
-export default function StoresIndex({ stores, filter, stats }: Props) {
+export default function StoresIndex({ stores, filter, search, maintenance, stats }: Props) {
     const [currentFilter, setCurrentFilter] = useState(filter);
+    const [currentSearch, setCurrentSearch] = useState(search);
+    const [currentMaintenance, setCurrentMaintenance] = useState(maintenance);
     const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
+
+    // Debounced search handling
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (currentSearch !== search) {
+                router.get(
+                    '/stores',
+                    { filter: currentFilter, maintenance: currentMaintenance, search: currentSearch },
+                    { preserveState: true, preserveScroll: true, replace: true }
+                );
+            }
+        }, 500);
+        return () => clearTimeout(timer);
+    }, [currentSearch, search, currentFilter, currentMaintenance]);
 
     // Load view mode preference from localStorage
     useEffect(() => {
@@ -96,13 +119,13 @@ export default function StoresIndex({ stores, filter, stats }: Props) {
         return () => clearInterval(interval);
     }, []);
 
-    const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const value = e.target.value;
-        setCurrentFilter(value);
+    const handleFilterChange = (filterVal: string, maintVal: string) => {
+        setCurrentFilter(filterVal);
+        setCurrentMaintenance(maintVal);
 
         router.get(
             '/stores',
-            { filter: value },
+            { filter: filterVal, maintenance: maintVal, search: currentSearch },
             { preserveState: true, preserveScroll: true, replace: true }
         );
     };
@@ -114,35 +137,55 @@ export default function StoresIndex({ stores, filter, stats }: Props) {
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 
                 {/* Stats Section */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div className="flex items-center gap-4 rounded-xl border border-sidebar-border/70 bg-card p-6 shadow-sm dark:border-sidebar-border">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
-                            <StoreIcon className="h-6 w-6" />
+                <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+                    <div className="flex flex-col gap-2 rounded-xl border border-sidebar-border/70 bg-card p-4 shadow-sm dark:border-sidebar-border">
+                        <div className="flex items-center gap-2">
+                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary">
+                                <StoreIcon className="h-4 w-4" />
+                            </div>
+                            <p className="text-xs font-medium text-muted-foreground">Total Scraped</p>
                         </div>
-                        <div>
-                            <p className="text-sm font-medium text-muted-foreground">Total Stores Checked</p>
-                            <h3 className="text-2xl font-bold">{stats.total.toLocaleString()}</h3>
-                        </div>
+                        <h3 className="text-xl font-bold">{stats.total.toLocaleString()}</h3>
                     </div>
                     
-                    <div className="flex items-center gap-4 rounded-xl border border-sidebar-border/70 bg-card p-6 shadow-sm dark:border-sidebar-border">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-500">
-                            <CheckCircle2 className="h-6 w-6" />
+                    <div className="flex flex-col gap-2 rounded-xl border border-sidebar-border/70 bg-card p-4 shadow-sm dark:border-sidebar-border">
+                        <div className="flex items-center gap-2">
+                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-500">
+                                <CheckCircle2 className="h-4 w-4" />
+                            </div>
+                            <p className="text-xs font-medium text-muted-foreground">Store Found</p>
                         </div>
-                        <div>
-                            <p className="text-sm font-medium text-muted-foreground">Active Stores (Found)</p>
-                            <h3 className="text-2xl font-bold">{stats.found.toLocaleString()}</h3>
-                        </div>
+                        <h3 className="text-xl font-bold">{stats.found.toLocaleString()}</h3>
                     </div>
 
-                    <div className="flex items-center gap-4 rounded-xl border border-sidebar-border/70 bg-card p-6 shadow-sm dark:border-sidebar-border">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10 text-destructive">
-                            <SearchX className="h-6 w-6" />
+                    <div className="flex flex-col gap-2 rounded-xl border border-sidebar-border/70 bg-card p-4 shadow-sm dark:border-sidebar-border">
+                        <div className="flex items-center gap-2">
+                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-500">
+                                <Unlock className="h-4 w-4" />
+                            </div>
+                            <p className="text-xs font-medium text-muted-foreground">Store Active</p>
                         </div>
-                        <div>
-                            <p className="text-sm font-medium text-muted-foreground">Inactive / Failed</p>
-                            <h3 className="text-2xl font-bold">{stats.not_found.toLocaleString()}</h3>
+                        <h3 className="text-xl font-bold">{stats.active.toLocaleString()}</h3>
+                    </div>
+
+                    <div className="flex flex-col gap-2 rounded-xl border border-sidebar-border/70 bg-card p-4 shadow-sm dark:border-sidebar-border">
+                        <div className="flex items-center gap-2">
+                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-500/10 text-amber-500">
+                                <Lock className="h-4 w-4" />
+                            </div>
+                            <p className="text-xs font-medium text-muted-foreground">Maintenance</p>
                         </div>
+                        <h3 className="text-xl font-bold">{stats.maintenance.toLocaleString()}</h3>
+                    </div>
+
+                    <div className="flex flex-col gap-2 rounded-xl border border-sidebar-border/70 bg-card p-4 shadow-sm dark:border-sidebar-border">
+                        <div className="flex items-center gap-2">
+                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-destructive/10 text-destructive">
+                                <SearchX className="h-4 w-4" />
+                            </div>
+                            <p className="text-xs font-medium text-muted-foreground">Failed / Closed</p>
+                        </div>
+                        <h3 className="text-xl font-bold">{stats.not_found.toLocaleString()}</h3>
                     </div>
                 </div>
 
@@ -158,9 +201,55 @@ export default function StoresIndex({ stores, filter, stats }: Props) {
                         </div>
                     </div>
 
-                    <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                    <div className="flex flex-col md:flex-row gap-3 w-full md:w-auto">
+                        {/* Search */}
+                        <div className="relative w-full md:w-[250px]">
+                            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                <Search className="h-4 w-4 text-muted-foreground" />
+                            </div>
+                            <input 
+                                type="text"
+                                placeholder="Search store name, phone, domain..."
+                                value={currentSearch}
+                                onChange={(e) => setCurrentSearch(e.target.value)}
+                                className="flex h-10 w-full rounded-md border border-input bg-background pl-10 pr-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                            />
+                        </div>
+
+                        {/* Maintenance Filter */}
+                        <div className="relative w-full md:w-[150px]">
+                            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                <Lock className="h-4 w-4 text-muted-foreground" />
+                            </div>
+                            <select 
+                                value={currentMaintenance}
+                                onChange={(e) => handleFilterChange(currentFilter, e.target.value)}
+                                className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background pl-10 pr-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                            >
+                                <option value="">Any Status</option>
+                                <option value="yes">Under Maintenance</option>
+                                <option value="no">Active</option>
+                            </select>
+                        </div>
+
+                        {/* Status Filter */}
+                        <div className="relative w-full md:w-[180px]">
+                            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                <Filter className="h-4 w-4 text-muted-foreground" />
+                            </div>
+                            <select 
+                                value={currentFilter}
+                                onChange={(e) => handleFilterChange(e.target.value, currentMaintenance)}
+                                className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background pl-10 pr-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                            >
+                                <option value="">All Scraped</option>
+                                <option value="found">Active Stores (Found)</option>
+                                <option value="not_found">Inactive / Failed</option>
+                            </select>
+                        </div>
+
                         {/* View Toggle */}
-                        <div className="flex items-center rounded-md border border-input bg-background p-1">
+                        <div className="flex items-center rounded-md border border-input bg-background p-1 hidden sm:flex">
                             <button
                                 onClick={() => handleViewModeChange('grid')}
                                 className={`inline-flex h-8 items-center justify-center rounded-sm px-3 text-sm font-medium transition-colors ${
@@ -184,22 +273,15 @@ export default function StoresIndex({ stores, filter, stats }: Props) {
                                 <List className="h-4 w-4" />
                             </button>
                         </div>
-
-                        {/* Filter */}
-                        <div className="relative w-full sm:w-auto">
-                            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                <Filter className="h-4 w-4 text-muted-foreground" />
-                            </div>
-                            <select 
-                                value={currentFilter}
-                                onChange={handleFilterChange}
-                                className="flex h-10 w-full sm:w-[200px] items-center justify-between rounded-md border border-input bg-background pl-10 pr-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                            >
-                                <option value="">All Stores</option>
-                                <option value="found">Active Stores (Found)</option>
-                                <option value="not_found">Inactive / Failed</option>
-                            </select>
-                        </div>
+                        
+                        {/* Export Button */}
+                        <a 
+                            href={`/stores/export?filter=${currentFilter}&maintenance=${currentMaintenance}&search=${currentSearch}`}
+                            className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow transition-colors hover:bg-emerald-700 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring ml-auto shrink-0"
+                        >
+                            <Download className="h-4 w-4" />
+                            <span className="hidden sm:inline">Export Excel</span>
+                        </a>
                     </div>
                 </div>
 
@@ -317,7 +399,10 @@ export default function StoresIndex({ stores, filter, stats }: Props) {
                                             <th className="px-4 py-3 font-medium">Store ID</th>
                                             <th className="px-4 py-3 font-medium">Status</th>
                                             <th className="px-4 py-3 font-medium">Store Info</th>
-                                            <th className="px-4 py-3 font-medium">Contacts & Socials</th>
+                                            <th className="px-4 py-3 font-medium">Domain</th>
+                                            <th className="px-4 py-3 font-medium text-center">Maintenance</th>
+                                            <th className="px-4 py-3 font-medium">Phone</th>
+                                            <th className="px-4 py-3 font-medium">Socials & Other</th>
                                             <th className="px-4 py-3 font-medium">Theme</th>
                                             <th className="px-4 py-3 font-medium">Date</th>
                                             <th className="px-4 py-3 font-medium text-right">Action</th>
@@ -352,14 +437,11 @@ export default function StoresIndex({ stores, filter, stats }: Props) {
                                                         {store.store_logo && (
                                                             <img src={store.store_logo} alt={store.store_name || ''} className="h-10 w-10 rounded-full object-cover border border-border bg-muted shrink-0" />
                                                         )}
-                                                        <div className="flex flex-col min-w-0 max-w-[250px]">
+                                                        <div className="flex flex-col min-w-0 max-w-[200px]">
                                                             <div className="flex items-center gap-2">
-                                                            <span className="font-semibold truncate" title={store.store_name || store.full_settings?.data?.store?.url || store.domain || ''}>
-                                                                {store.store_name || store.full_settings?.data?.store?.url || store.domain || '-'}
+                                                            <span className="font-semibold truncate" title={store.store_name || store.domain || ''}>
+                                                                {store.store_name || store.domain || '-'}
                                                             </span>
-                                                                {store.full_settings?.data?.maintenance === true && (
-                                                                    <Lock className="h-3 w-3 text-amber-500 shrink-0" title="Maintenance Mode" />
-                                                                )}
                                                             </div>
                                                             {store.full_settings?.data?.store?.settings?.freelance_number && (
                                                                 <span className="text-[10px] text-muted-foreground mt-0.5 truncate">
@@ -374,9 +456,50 @@ export default function StoresIndex({ stores, filter, stats }: Props) {
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td className="px-4 py-4 align-top max-w-[200px]">
+                                                <td className="px-4 py-4 align-top max-w-[150px]">
+                                                    {store.full_settings?.data?.store?.url || store.domain ? (
+                                                        <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                                                            <LinkIcon className="h-3 w-3 shrink-0" />
+                                                            <span className="truncate" title={store.full_settings?.data?.store?.url || store.domain || ''}>
+                                                                {store.full_settings?.data?.store?.url || store.domain}
+                                                            </span>
+                                                        </div>
+                                                    ) : <span className="text-muted-foreground/50">-</span>}
+                                                </td>
+                                                <td className="px-4 py-4 align-top text-center">
+                                                    {store.full_settings?.data?.maintenance === true ? (
+                                                        <span className="inline-flex items-center gap-1 rounded-md bg-amber-500/10 px-2 py-1 text-xs font-medium text-amber-500" title="Maintenance Mode">
+                                                            <Lock className="h-3.5 w-3.5" /> Yes
+                                                        </span>
+                                                    ) : store.is_found ? (
+                                                        <span className="inline-flex items-center gap-1 rounded-md bg-emerald-500/10 px-2 py-1 text-xs font-medium text-emerald-500" title="Active">
+                                                            <Unlock className="h-3.5 w-3.5" /> No
+                                                        </span>
+                                                    ) : <span className="text-muted-foreground/50">-</span>}
+                                                </td>
+                                                <td className="px-4 py-4 align-top max-w-[150px]">
+                                                    {store.contacts?.whatsapp || store.contacts?.mobile ? (
+                                                        <div className="flex flex-col gap-1.5">
+                                                            {store.contacts.whatsapp && (
+                                                                <div className="flex items-center gap-2 text-xs">
+                                                                    <MessageCircle className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
+                                                                    <span className="truncate">{store.contacts.whatsapp}</span>
+                                                                    <button onClick={() => navigator.clipboard.writeText(store.contacts?.whatsapp || '')} className="text-muted-foreground hover:text-primary shrink-0 ml-auto" title="Copy"><Copy className="h-3 w-3" /></button>
+                                                                </div>
+                                                            )}
+                                                            {store.contacts.mobile && store.contacts.mobile !== store.contacts.whatsapp && (
+                                                                <div className="flex items-center gap-2 text-xs">
+                                                                    <Phone className="h-3.5 w-3.5 text-blue-500 shrink-0" />
+                                                                    <span className="truncate">{store.contacts.mobile}</span>
+                                                                    <button onClick={() => navigator.clipboard.writeText(store.contacts?.mobile || '')} className="text-muted-foreground hover:text-primary shrink-0 ml-auto" title="Copy"><Copy className="h-3 w-3" /></button>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    ) : <span className="text-muted-foreground/50">-</span>}
+                                                </td>
+                                                <td className="px-4 py-4 align-top max-w-[150px]">
                                                     <div className="space-y-2">
-                                                        {store.contacts && Object.entries(store.contacts).map(([key, value]) => (
+                                                        {store.contacts && Object.entries(store.contacts).filter(([k,v]) => k !== 'whatsapp' && k !== 'mobile').map(([key, value]) => (
                                                             <div key={key} className="flex items-center justify-between gap-3 text-xs border-b border-border/50 pb-1.5 last:border-0 last:pb-0">
                                                                 <div className="flex items-center gap-1.5 capitalize font-medium text-muted-foreground shrink-0">
                                                                     <MessageCircle className="h-3 w-3" />
@@ -404,6 +527,9 @@ export default function StoresIndex({ stores, filter, stats }: Props) {
                                                                 </div>
                                                             </div>
                                                         ))}
+                                                        {!store.full_settings?.data?.store?.social && !Object.keys(store.contacts || {}).some(k => k !== 'whatsapp' && k !== 'mobile') && (
+                                                            <span className="text-muted-foreground/50 text-xs">-</span>
+                                                        )}
                                                     </div>
                                                 </td>
                                                 <td className="px-4 py-4 align-top w-48">
