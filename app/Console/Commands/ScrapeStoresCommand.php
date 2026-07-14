@@ -38,9 +38,11 @@ class ScrapeStoresCommand extends Command
         $this->info("Dispatching jobs for store IDs from {$start} to {$end}...");
 
         $bar = $this->output->createProgressBar($end - $start + 1);
+        $bar->setFormat(' %current%/%max% [%bar%] %percent:3s%% | Current Store ID: %message%');
 
         for ($id = $start; $id <= $end; $id++) {
             CheckStoreJob::dispatch($id);
+            $bar->setMessage((string) $id);
             $bar->advance();
         }
 

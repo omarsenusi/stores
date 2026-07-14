@@ -101,9 +101,8 @@ class CheckStoreJob implements ShouldQueue
                         }
                     }
                 }
-            } elseif (in_array($status, [403, 404, 405, 410])) {
-                $isFound = false;
             } else {
+                $isFound = false;
                 $errorLog = "Unexpected status {$status}: ".substr($response->body(), 0, 500);
                 Log::warning("Unexpected status {$status} for store {$this->storeId}");
             }

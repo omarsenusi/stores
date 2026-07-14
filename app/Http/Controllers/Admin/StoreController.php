@@ -23,9 +23,16 @@ class StoreController extends Controller
 
         $stores = $query->orderBy('id', 'desc')->paginate(50)->withQueryString();
 
+        $stats = [
+            'total' => ScrapedStore::count(),
+            'found' => ScrapedStore::where('is_found', true)->count(),
+            'not_found' => ScrapedStore::where('is_found', false)->count(),
+        ];
+
         return Inertia::render('stores/index', [
             'stores' => $stores,
             'filter' => $request->filter ?? '',
+            'stats' => $stats,
         ]);
     }
 }
