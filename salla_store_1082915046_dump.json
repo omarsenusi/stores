@@ -1,0 +1,2233 @@
+{
+    "languages": {
+        "status": 200,
+        "success": true,
+        "data": [
+            {
+                "id": 1,
+                "name": "العربية",
+                "status": "enabled",
+                "rtl": true,
+                "flag": "https:\/\/assets.salla.sa\/images\/flags\/ar.svg",
+                "iso_code": "ar",
+                "country_code": "sa",
+                "sort_order": 0
+            }
+        ]
+    },
+    "offers": {
+        "status": 200,
+        "success": true,
+        "data": []
+    },
+    "brands": {
+        "status": 200,
+        "success": true,
+        "data": [],
+        "cursor": {
+            "current": 1,
+            "previous": null,
+            "next": null,
+            "count": 0
+        }
+    },
+    "settings": {
+        "store_status": "inactive",
+        "maintenance": {
+            "status": "inactive",
+            "title": "المتجر ليس قيد الصيانة",
+            "message": " عزيزي العميل، المتجر حالياً ليس قيد الصيانة"
+        },
+        "availability": false,
+        "complaint": true,
+        "guest": {
+            "can_directly_publish_comments": false,
+            "can_add_feedback": true
+        },
+        "is_feedback_enabled": true,
+        "is_feedback_reporting_enabled": false,
+        "is_page_feedback_enabled": false,
+        "is_request_offer_price_enabled": false,
+        "auth": {
+            "email_allowed": true,
+            "mobile_allowed": false,
+            "email_required": false,
+            "forced": false
+        },
+        "services": null,
+        "identifications": {
+            "saudi_business_center": null
+        },
+        "can_re_order": true,
+        "providers": [],
+        "quick_checkout": {
+            "status": false,
+            "data": []
+        },
+        "apply_coupon_on_cart": false,
+        "rating": {
+            "testimonials_enabled": true,
+            "shipping_enabled": true,
+            "products_enabled": true
+        },
+        "products": {
+            "show_more_detail": false,
+            "show_price_as_dash": false
+        },
+        "loyalty_program": false,
+        "max_upload_file_size": "2000",
+        "is_wallet_enabled": true,
+        "order_instruction": {
+            "thank_title": "شكرا لتسوّقكم عبر متجرنا ☺️",
+            "order_instructions_payment_waiting": "طلبك حالياً غير مؤكد !<br>نأمل تأكيد الدفع عبر الرابط المرسل لجوالك",
+            "order_instructions_under_review": "تم استقبال طلبك بنجاح<br>ستتم مراجعة الطلب وتأكيده في أقرب وقت",
+            "order_instructions_completed": "تم استقبال طلبك بنجاح<br>سيتم تجهيز الطلب في أقرب وقت"
+        },
+        "languages": {
+            "default": "ar",
+            "supported": [
+                {
+                    "name": "العربية",
+                    "rtl": true,
+                    "iso_code": "ar",
+                    "order": 0
+                }
+            ]
+        }
+    },
+    "coupons": {
+        "status": 200,
+        "success": true,
+        "data": []
+    },
+    "categories": {
+        "status": 200,
+        "success": true,
+        "data": [
+            {
+                "id": "QzjDwz",
+                "id_": 268848185,
+                "name": "يودل",
+                "url": "https:\/\/najd7.com\/يودل\/c268848185",
+                "icon": null,
+                "image": null,
+                "sub_categories": [],
+                "items": []
+            },
+            {
+                "id": "bZlrAn",
+                "id_": 507337255,
+                "name": "خدمات السوشل ميديا",
+                "url": "https:\/\/najd7.com\/خدمات-السوشل-ميديا\/c507337255",
+                "icon": null,
+                "image": null,
+                "sub_categories": [],
+                "items": []
+            },
+            {
+                "id": "xWOrob",
+                "id_": 224134189,
+                "name": "تطبيقات بلس",
+                "url": "https:\/\/najd7.com\/تطبيقات-بلس\/c224134189",
+                "icon": null,
+                "image": null,
+                "sub_categories": [],
+                "items": []
+            },
+            {
+                "id": "vraGoz",
+                "id_": 1203677477,
+                "name": "سناب بلس",
+                "url": "https:\/\/najd7.com\/سناب-بلس\/c1203677477",
+                "icon": null,
+                "image": null,
+                "sub_categories": [],
+                "items": []
+            },
+            {
+                "id": "blog",
+                "name": "المدونة",
+                "url": "https:\/\/najd7.com\/blog"
+            }
+        ],
+        "design": {
+            "type": "default",
+            "show_top_menu": false,
+            "show_side_menu": false,
+            "show_search_bar": false,
+            "side_menu_design": null,
+            "selected_category_color": 4284339652,
+            "unselected_category_color": 4288256409,
+            "grid": {
+                "row_product_count": null,
+                "selected_grid_frame_edges": null
+            },
+            "selected_banner_frame_edges": null,
+            "selected_text_image_frame_edges": null
+        }
+    },
+    "store\/settings": {
+        "status": 200,
+        "success": true,
+        "data": {
+            "store": {
+                "id": 1082915046,
+                "ray": 50,
+                "logo": "https:\/\/cdn.salla.sa\/cdn-cgi\/image\/fit=scale-down,width=400,height=400,onerror=redirect,format=auto\/VxOpQ\/imV92qG9gbZ8FzqoombO24J4wLCaD2LVWCCH7Zci.png",
+                "icon": "https:\/\/cdn.salla.sa\/VxOpQ\/XMbuEQhEtywxd8IbScx6hnorFzP37FCycU6uwhfh.jpg",
+                "name": "نجد بلس 🤩🔥",
+                "username": "tn-19",
+                "store_country": "SA",
+                "country": "SA",
+                "url": "https:\/\/najd7.com\/",
+                "settings": {
+                    "auth": {
+                        "email_allowed": true,
+                        "mobile_allowed": false,
+                        "is_email_required": false,
+                        "countries": [
+                            "sa"
+                        ],
+                        "force_login": false
+                    },
+                    "cart": {
+                        "apply_coupon_enabled": false
+                    },
+                    "product": {
+                        "total_sold_enabled": 1,
+                        "manual_quantity": true,
+                        "fit_type": "cover",
+                        "related_products_enabled": true,
+                        "filters": null,
+                        "show_comments": false,
+                        "user_can_comment": true,
+                        "show_price_as_dash": false,
+                        "notify_options_availability": true,
+                        "show_special_offers": false,
+                        "show_more": false,
+                        "availability_notify": null,
+                        "bought_together": true
+                    },
+                    "category": {
+                        "testimonial_enabled": true
+                    },
+                    "payments": [
+                        "mada",
+                        "credit_card",
+                        "bank",
+                        "stc_pay",
+                        "apple_pay",
+                        "customer_wallet",
+                        "cod"
+                    ],
+                    "arabic_numbers_enabled": true,
+                    "content_copyright": false,
+                    "use_sar_symbol": true,
+                    "is_multilingual": false,
+                    "currencies_enabled": false,
+                    "rating_enabled": true,
+                    "rating": {
+                        "is_enabled": true,
+                        "show_on_category": false,
+                        "show_on_product": false,
+                        "can_rate_store": true,
+                        "can_rate_product": true,
+                        "can_rate_shipping": true,
+                        "show_rating_summary": false,
+                        "show_recommendation": true,
+                        "allow_likes": true,
+                        "allow_attach_images": false,
+                        "required_attach_images": false,
+                        "allow_contact_support": false,
+                        "allow_update": false,
+                        "update_period": 7,
+                        "can_customer_hide_name": true,
+                        "visitor_can_comment": true,
+                        "page_feedback_enabled": false
+                    },
+                    "blog": {
+                        "is_enabled": true,
+                        "allow_likes_and_comments": true
+                    },
+                    "is_loyalty_enabled": false,
+                    "keys": {
+                        "maps": "AIzaSyAZpoNuLbXR-VvGYEP4ZbMD9FqZiwjkIkU",
+                        "gtm": [
+                            "GTM-TGFC6FV"
+                        ]
+                    },
+                    "is_salla_gateway": true,
+                    "upload_size": 2000,
+                    "tax": {
+                        "number": null,
+                        "certificate": null,
+                        "taxable_prices_enabled": false
+                    },
+                    "certificate": null,
+                    "made_in_ksa": false,
+                    "commercial_number": null,
+                    "freelance_number": "FL-667134710",
+                    "buy_now": null,
+                    "installments": null,
+                    "quick_order": null,
+                    "bullet_delivery": null,
+                    "order_options": {
+                        "mandatory": false
+                    }
+                },
+                "meta": {
+                    "title": "نجد بلس  خدمات رقمية وتطبيقات بلس وسوشيال ميديا",
+                    "description": "نجد بلس متجر خدمات رقمية يقدم تطبيقات بلس وخدمات السوشيال ميديا مثل زيادة المتابعين واللايكات والمشاهدات. اطلب خدمتك بسهولة مع تنفيذ سريع وتجربة آمنة وموثوقة",
+                    "keywords": "نجد بلس, تطبيقات بلس, سناب بلس, يودل بلس, خدمات سوشيال ميديا, زيادة متابعين, زيادة لايكات, زيادة مشاهدات, متابعين انستقرام, لايكات انستقرام, مشاهدات"
+                },
+                "scope": null,
+                "template": null,
+                "contacts": {
+                    "whatsapp": "+966504823305",
+                    "mobile": "+966504823305",
+                    "telegram": "https:\/\/t.me\/mafi9"
+                },
+                "social": {
+                    "tiktok": "https:\/\/www.tiktok.com\/@k4d_?_t=8baWFyPeHg1&_r=1"
+                },
+                "description": "برامج تواصل",
+                "apps": [],
+                "features": [
+                    "loyalty-system-v2",
+                    "conditional-offer",
+                    "custom-fields",
+                    "legacy-login-flow",
+                    "customer-wallet",
+                    "guest-checkout",
+                    "embedded-login-checkout",
+                    "salla-account",
+                    "re-captcha-v3",
+                    "tiered-offer",
+                    "bullet-delivery-v2",
+                    "order-options",
+                    "reorder",
+                    "buy_as_gift"
+                ],
+                "is_merchant": false,
+                "support_pickup": false,
+                "order_instruction": {
+                    "thank_title": "شكرا لتسوّقكم عبر متجرنا ☺️",
+                    "order_instructions_payment_waiting": "طلبك حالياً غير مؤكد !<br>نأمل تأكيد الدفع عبر الرابط المرسل لجوالك",
+                    "order_instructions_under_review": "تم استقبال طلبك بنجاح<br>ستتم مراجعة الطلب وتأكيده في أقرب وقت",
+                    "order_instructions_completed": "تم استقبال طلبك بنجاح<br>سيتم تجهيز الطلب في أقرب وقت"
+                },
+                "shipping": {
+                    "delivery_location": null,
+                    "support_pickup": false
+                }
+            },
+            "debug": false,
+            "theme": {
+                "name": "1130931637",
+                "profile": {
+                    "id": 1307728351,
+                    "name": null
+                },
+                "mode": "live",
+                "translations_hash": "178335015235",
+                "is_rtl": true,
+                "color": {
+                    "primary": "#0a4c8a",
+                    "text": "#000000",
+                    "is_dark": true,
+                    "reverse_primary": "#00000b",
+                    "reverse_text": "#d6ffff"
+                },
+                "settings": null,
+                "assets": "https:\/\/cdn.assets.salla.network\/themes\/1034648396\/1.168.0\/:path",
+                "bundle_assets": "https:\/\/cdn.assets.salla.network\/themes\/:bundle\/latest\/:component.js",
+                "customization": {
+                    "css": null,
+                    "js": null
+                }
+            },
+            "trace_console": false,
+            "user": {
+                "id": null,
+                "type": "guest",
+                "email": null,
+                "mobile": null,
+                "language_code": "ar",
+                "currency_code": "SAR",
+                "country_code": "EG",
+                "can_comment": true,
+                "avatar": "https:\/\/cdn.assets.salla.network\/prod\/stores\/themes\/default\/assets\/images\/avatar_male.png",
+                "is_hidden_name": null,
+                "default_geo_location": {
+                    "lat": 31.31104,
+                    "lng": 30.06121
+                },
+                "first_name": null,
+                "last_name": null,
+                "is_notifiable": false,
+                "fetched_at": "2026-07-15",
+                "gender": "",
+                "birthday": null
+            },
+            "currencies": {
+                "SAR": {
+                    "code": "SAR",
+                    "name": "ريال سعودي",
+                    "symbol": "ر.س",
+                    "amount": 1,
+                    "country_code": "sa"
+                }
+            },
+            "languages": {
+                "AR": {
+                    "name": "العربية",
+                    "code": "ar",
+                    "url": "https:\/\/assets.salla.sa\/images\/flags\/ar.svg",
+                    "is_rtl": true,
+                    "country_code": "sa"
+                }
+            },
+            "headers": {
+                "S-Ray": 50,
+                "s-version-id": 1307728351
+            },
+            "login": {
+                "url": "https:\/\/accounts.salla.com",
+                "turnstile_site_key": "0x4AAAAAAAw2tbDBgPI9NUvr",
+                "turnstile": {
+                    "key": "0x4AAAAAAAw2tbDBgPI9NUvr",
+                    "level": "off"
+                },
+                "social": {
+                    "google": true,
+                    "facebook": true,
+                    "apple": true,
+                    "x": false
+                },
+                "mode": "sessionless"
+            },
+            "jitsu": {
+                "host": "https:\/\/st.salla.dev",
+                "key": "yAKBxDDlIeg8c0qsNtlkjo4up1iTv68J:XSd8tVk8rqijFlxTacQv5QlAGcVuYPzy",
+                "events": [
+                    "Order Completed",
+                    "Product Added",
+                    "Product Removed",
+                    "Product Viewed",
+                    "Product Added to Wishlist",
+                    "Product Removed from Wishlist",
+                    "Cart Viewed",
+                    "Products Searched",
+                    "Product List Viewed",
+                    "Signed Up",
+                    "Signed In",
+                    "Signed Out",
+                    "Product Reviewed",
+                    "Product Shared",
+                    "Checkout Started",
+                    "Payment Info Entered",
+                    "Coupon Applied",
+                    "Coupon Denied",
+                    "Coupon Entered",
+                    "Coupon Removed",
+                    "Checkout Step Completed",
+                    "Promotion Viewed",
+                    "Promotion Clicked",
+                    "User Profile Updated",
+                    "Product List Filtered",
+                    "Cart Updated",
+                    "Payment Failed",
+                    "Checkout Step Viewed",
+                    "Market Selected",
+                    "Address Added",
+                    "Address Updated",
+                    "Map Clicked",
+                    "Product Reordered",
+                    "Recommendation List Viewed",
+                    "Product Clicked",
+                    "Payment Submitted",
+                    "Payment Succeeded",
+                    "Payment Pending"
+                ],
+                "track_url": "https:\/\/najd7.com\/_app\/e\/api\/s\/track",
+                "context": {
+                    "extra": {
+                        "version": "1.1039.1",
+                        "headers": []
+                    }
+                }
+            },
+            "affiliate": {
+                "utm_url": "https:\/\/api.salla.dev\/marketing\/v1\/tracking\/visits",
+                "cta_enabled": true
+            },
+            "swoole": [
+                "comments",
+                "rating",
+                "feedback",
+                "loyalty",
+                "advertisements",
+                "menus",
+                "products",
+                "offers",
+                "orders",
+                "reviews",
+                "currencies",
+                "scopes",
+                "languages",
+                "components"
+            ],
+            "policy_url": ""
+        }
+    },
+    "branches": {
+        "status": 200,
+        "success": true,
+        "data": [],
+        "cursor": {
+            "current": 1,
+            "previous": null,
+            "next": null,
+            "count": 0
+        }
+    },
+    "products": {
+        "status": 200,
+        "success": true,
+        "data": [
+            {
+                "id": "624415143",
+                "scope_id": null,
+                "name": "بلياردو 8 Ball Pool",
+                "description": "هاك بلياردو جديد بنسخة مجانية بالكامل استمتع بتجربة لعب أقوى وأسهل مع مجموعة مميزات تساعدك على تحسين التصويب ورفع دقة اللعب داخل لعبة البلياردو أهم مميزات هاك البلياردو • تنبؤ ESP لمسار الكرة • سهم طويل لتوضيح اتجاه التسديدة • توقع مكان وصول الكرة • تحسين دقة التصويب • مساعدة على اختيار الزاوية المناسبة • واجهة سهلة وبسيطة • أداء سريع أثناء اللعب • مجموعة مميزات إضافية لتحسين تجربة اللعب النسخة مجانية بالكامل حمّل النسخة وابدأ التحدي واستمتع بتجربة مختلفة وقوية",
+                "url": "https:\/\/najd7.com\/بلياردو-8-ball-pool\/p624415143",
+                "promotion_title": "هاك البلياردو Ball Pool",
+                "subtitle": "نسخة بمميزات متقدمة لتحسين التصويب",
+                "type": "codes",
+                "status": "sale",
+                "weight": null,
+                "calories": 0,
+                "sku": null,
+                "rating": null,
+                "quantity": null,
+                "sold_quantity": null,
+                "max_quantity": null,
+                "is_taxable": false,
+                "category": {
+                    "name": null,
+                    "url": null
+                },
+                "sale_channels_external": [],
+                "original_image": "https:\/\/cdn.salla.sa\/VxOpQ\/Wr3rR6astPnhADPns3P3zNbIwkekCXpbyCwNguZD.jpg",
+                "image": {
+                    "url": "https:\/\/cdn.salla.sa\/VxOpQ\/9553ef24-09f0-4e68-b7ea-a7fe8f64211a-500x500-Wr3rR6astPnhADPns3P3zNbIwkekCXpbyCwNguZD.jpg"
+                },
+                "brand": {
+                    "id": null,
+                    "url": null,
+                    "name": null
+                },
+                "tags": [
+                    {
+                        "name": "8 ball pool",
+                        "url": null
+                    },
+                    {
+                        "name": "بلياردو 8 ball pool",
+                        "url": null
+                    },
+                    {
+                        "name": "تحميل بلياردو",
+                        "url": null
+                    }
+                ],
+                "can_add_note": false,
+                "can_upload_file": false,
+                "is_on_sale": false,
+                "is_hidded_quantity": false,
+                "is_available": true,
+                "is_donation": false,
+                "is_out_of_stock": false,
+                "is_require_shipping": false,
+                "is_dynamic_pricing": false,
+                "regular_price": 29.99,
+                "price": 29.99,
+                "sale_price": null,
+                "starting_price": null,
+                "currency": "SAR",
+                "mpn": null,
+                "gtin": null,
+                "google_taxonomy_id": null,
+                "discount_ends": null,
+                "discount_starts": null,
+                "has_options": false,
+                "pinned": false,
+                "mahly_category_id": null,
+                "spam_status": 0,
+                "branches": [],
+                "branches_v2": [],
+                "has_preorder_campaign": false,
+                "preorder": [],
+                "custom_url": "بلياردو-8-ball-pool",
+                "unlimited_quantity": false,
+                "features": {
+                    "availability_notify": null,
+                    "show_rating": true
+                }
+            },
+            {
+                "id": "847523262",
+                "scope_id": null,
+                "name": "العب بلوت بدون إعلانات! | اشتراك كملنا السنوي بـ 29 ريال",
+                "description": "طفشت من الإعلانات المزعجة وتبي تلعب براحتك؟ مع اشتراك تطبيق كملنا لمدة سنة كاملة تقدر تستمتع بتجربة لعب أفضل وأكثر سلاسة، بعيدًا عن الإعلانات التي تقطع عليك الحماس وتشتت تركيزك أثناء اللعب. التطبيق مناسب لعشاق البلوت الذين يبحثون عن السرعة، الراحة، والاستمتاع بالمنافسات والتحديات بدون إزعاج. يتيح لك تطبيق كملنا إمكانية التقييد والقطع بكل سهولة، لتعيش أجواء البلوت بصورة ممتعة وقريبة من الجلسات الحقيقية. ويشترط للاستفادة من الخدمة أن يكون مستوى حسابك أعلى من خبير، لذلك تأكد من مستوى حسابك قبل إتمام الطلب لضمان نجاح التفعيل. الاشتراك للايفون مميزات اشتراك تطبيق كملنا: • اشتراك صالح لمدة سنة كاملة • تجربة استخدام سريعة وسهلة • التخلص من الإعلانات المزعجة • إمكانية التقييد والقطع بسهولة • تجربة لعب أكثر راحة وتركيزًا • مناسب لمحبي البلوت والمنافسات • تفعيل سريع بعد إتمام الطلب • سعر اقتصادي ومميز سعر الاشتراك السنوي: 29 ريال فقط بدلًا من ظهور الإعلانات بشكل مستمر أثناء اللعب، يمكنك الآن الاستمتاع بتجربة أكثر هدوءًا وسلاسة، والتركيز على الجولات والتحديات مع اللاعبين. الاشتراك مناسب لكل شخص يستخدم تطبيق كملنا باستمرار ويرغب في الحصول على تجربة محسّنة طوال العام بسعر مناسب. تنبيه مهم قبل الطلب: يجب أن يكون مستوى حسابك في تطبيق كملنا فوق محترف حتى تتمكن من الاستفادة من الخدمة القطع وتقيد يرجى التأكد من المستوى حمّل تطبيق كملنا الآن وابدأ تجربة مختلفة بدون إعلانات مزعجة واستمتع بالتقييد والقطع بكل سهولة طوال سنة كاملة لا تفوّت العرض واحصل على اشتراك كملنا السنوي مقابل 29 ريال فقط مع تفعيل سريع وخدمة",
+                "url": "https:\/\/najd7.com\/لعبة-كملنا-بلس\/p847523262",
+                "promotion_title": "تفعيل سريع وموثوق",
+                "subtitle": "كملنا بلس للعبة بلوت بمميزات إضافية",
+                "type": "codes",
+                "status": "sale",
+                "weight": null,
+                "calories": 0,
+                "sku": null,
+                "rating": {
+                    "count": 94,
+                    "stars": 5
+                },
+                "quantity": null,
+                "sold_quantity": 191,
+                "max_quantity": null,
+                "is_taxable": false,
+                "category": {
+                    "name": "تطبيقات بلس",
+                    "url": null
+                },
+                "sale_channels_external": [],
+                "original_image": "https:\/\/cdn.salla.sa\/VxOpQ\/wZ89qImaHuKABsxdsGfdUEz0AAAQe3Bw6rtPIV76.webp",
+                "image": {
+                    "url": "https:\/\/cdn.salla.sa\/VxOpQ\/5261c01d-a03c-426f-aa36-7938c1eed953-500x500-wZ89qImaHuKABsxdsGfdUEz0AAAQe3Bw6rtPIV76.webp"
+                },
+                "brand": {
+                    "id": null,
+                    "url": null,
+                    "name": null
+                },
+                "tags": [
+                    {
+                        "name": "اشتراك كملنا بلس",
+                        "url": null
+                    },
+                    {
+                        "name": "لعبة بلوت كملنا",
+                        "url": null
+                    },
+                    {
+                        "name": "كملنا بلس موثوق",
+                        "url": null
+                    },
+                    {
+                        "name": "خدمات بلوت كملنا",
+                        "url": null
+                    },
+                    {
+                        "name": "بلوت كملنا بلس",
+                        "url": null
+                    },
+                    {
+                        "name": "خدمة كملنا بلس",
+                        "url": null
+                    },
+                    {
+                        "name": "تفعيل كملنا بلس",
+                        "url": null
+                    },
+                    {
+                        "name": "ترقية بلوت كملنا",
+                        "url": null
+                    },
+                    {
+                        "name": "كملنا بلس سريع",
+                        "url": null
+                    },
+                    {
+                        "name": "كملنا بلس",
+                        "url": null
+                    }
+                ],
+                "can_add_note": true,
+                "can_upload_file": true,
+                "is_on_sale": true,
+                "is_hidded_quantity": false,
+                "is_available": true,
+                "is_donation": false,
+                "is_out_of_stock": false,
+                "is_require_shipping": false,
+                "is_dynamic_pricing": false,
+                "regular_price": 39.99,
+                "price": 29.99,
+                "sale_price": 29.99,
+                "starting_price": null,
+                "currency": "SAR",
+                "mpn": null,
+                "gtin": null,
+                "google_taxonomy_id": null,
+                "discount_ends": 1793923199,
+                "discount_starts": null,
+                "has_options": false,
+                "pinned": false,
+                "mahly_category_id": null,
+                "spam_status": 0,
+                "branches": [],
+                "branches_v2": [],
+                "has_preorder_campaign": false,
+                "preorder": [],
+                "custom_url": "لعبة-كملنا-بلس",
+                "unlimited_quantity": false,
+                "features": {
+                    "availability_notify": null,
+                    "show_rating": true
+                }
+            },
+            {
+                "id": "2575858",
+                "scope_id": null,
+                "name": "بلس للايفون باقة كلاسيك | تفعيل فوري | سعر 19.99",
+                "description": "باقة كلاسيك تطبيقات بلس للآيفون هل تبحث عن متجر تطبيقات بلس للآيفون يمنحك وصولًا سهلًا إلى مجموعة متنوعة من التطبيقات والألعاب في مكان واحد؟ تقدم لك باقة كلاسيك من نجد بلس تجربة عملية ومريحة مع تفعيل سريع ومكتبة تشمل تطبيقات التواصل الاجتماعي والترفيه والتصميم والتصوير والألعاب تم إعداد الباقة لمستخدمي أجهزة iPhone الراغبين في الوصول إلى تطبيقات متنوعة بسهولة دون الحاجة إلى البحث في مصادر متعددة أو اتباع خطوات تثبيت معقدة ماذا توفر لك باقة كلاسيك؟ • تفعيل سريع بعد إكمال الطلب • ضمان لمدة شهرين وفق شروط الضمان • مكتبة متنوعة من تطبيقات بلس والألعاب • تطبيقات تواصل اجتماعي بخصائص إضافية • تطبيقات مشاهدة وترفيه • تطبيقات تصوير وتصميم وتعديل • مجموعة من التطبيقات غير المتوفرة في App Store • إمكانية تثبيت أكثر من تطبيق وفق المتاح • تحديثات للتطبيقات عند توفر الإصدارات الجديدة • دعم فني للمساعدة في التفعيل والاستخدام • شرح واضح لخطوات تثبيت المتجر وتحميل التطبيقات تطبيقات بلس في مكان واحد توفر الباقة مجموعة من تطبيقات التواصل والترفيه التي قد تتضمن بحسب التوفر والتوافق تطبيقات التواصل الاجتماعي يمكنك الوصول إلى إصدارات متنوعة من التطبيقات الاجتماعية مثل • سناب بلس • إنستقرام بلس • تيك توك بلس • واتساب بلس • يوتيوب بلس • تطبيقات X وتيليجرام وغيرها تختلف المميزات من تطبيق إلى آخر وقد تشمل إزالة بعض الإعلانات وخيارات إضافية للحفظ وتحسين تجربة الاستخدام وخصائص أخرى بحسب إصدار التطبيق المتوفر تطبيقات المشاهدة والترفيه تتضمن المكتبة مجموعة من تطبيقات • الأفلام والمسلسلات • الأنمي • المحتوى الرياضي والترفيهي • مشغلات الفيديو والوسائط تطبيقات التصميم والتصوير تتوفر خيارات مناسبة للمستخدمين المهتمين بالمحتوى والتصميم مثل • تطبيقات تعديل الصور • تطبيقات المونتاج • أدوات تحرير الفيديو • تطبيقات التصميم وصناعة المحتوى الألعاب والتطبيقات المتنوعة تضم المكتبة أيضًا مجموعة من الألعاب والتطبيقات المختلفة مع إضافة خيارات جديدة وتحديث المكتبة بحسب المتوفر تفعيل سريع وخطوات سهلة بعد إتمام طلبك تصلك بيانات التفعيل والتعليمات اللازمة عبر بيانات التواصل المسجلة في الطلب اتبع الخطوات الموضحة لتثبيت المتجر ثم اختر التطبيقات التي تحتاجها وابدأ التحميل يُنصح بالتأكد من كتابة رقم الجوال والبريد الإلكتروني بصورة صحيحة لضمان وصول معلومات الطلب والتفعيل لماذا تختار نجد بلس؟ في نجد بلس نحرص على تقديم تجربة واضحة وسهلة من لحظة الشراء وحتى التفعيل مع • خدمة سريعة وواضحة • سعر اقتصادي • تعليمات تثبيت مبسطة • دعم فني عند الحاجة • ضمان لمدة شهرين وفق الشروط • مكتبة متنوعة تناسب استخدامات مختلفة بدلًا من شراء كل تطبيق بشكل منفصل تمنحك باقة كلاسيك وصولًا إلى مجموعة متنوعة من تطبيقات بلس للآيفون ضمن اشتراك واحد بسعر مناسب ملاحظات مهمة قبل الشراء • الباقة مخصصة لأجهزة iPhone المتوافقة • توفر التطبيقات والمميزات قد يتغير حسب التحديثات • بعض التطبيقات قد تتوقف مؤقتًا بسبب تحديثات تقنية خارجة عن إرادة المتجر • مدة معالجة الأعطال تعتمد على نوع المشكلة ومصدر التطبيق • الضمان يخضع لشروط الاستخدام والضمان الموضحة في المتجر • لا تشمل الخدمة ضمان الحسابات الشخصية داخل التطبيقات • يجب الالتزام بسياسات كل تطبيق وعدم استخدام المميزات بطريقة مخالفة الأسئلة الشائعة هل الباقة تعمل على جميع أجهزة الآيفون؟ تعمل على أجهزة iPhone المتوافقة مع إصدار المتجر والتطبيقات المتوفرة وقد تختلف بعض التطبيقات بحسب إصدار iOS كم يستغرق التفعيل؟ يتم التفعيل عادةً بسرعة بعد اكتمال الطلب ووصول بيانات التفعيل وقد يتأخر في بعض الحالات التقنية كم مدة الضمان؟ ضمان باقة كلاسيك لمدة شهرين وفق شروط الضمان المعتمدة في نجد بلس هل التطبيقات ثابتة طوال الوقت؟ تتوفر التطبيقات بحسب حالة التوقيع والتحديثات وقد يتوقف تطبيق مؤقتًا ثم يعود بعد تحديثه أو معالجة المشكلة هل أستطيع تحميل أكثر من تطبيق؟ يمكن تحميل مجموعة من التطبيقات المتاحة داخل المتجر وفق حدود الباقة والتوافق مع جهازك هل توجد تحديثات للتطبيقات؟ تتم إضافة تحديثات وإصدارات جديدة عند توفرها من المصدر كيف تصلني بيانات التفعيل؟ تصل معلومات التفعيل والتعليمات عبر وسيلة التواصل والبريد المسجلين عند الطلب العبارة الختامية اطلب الآن باقة كلاسيك تطبيقات بلس للآيفون من نجد بلس واستمتع بمكتبة متنوعة وتفعيل سريع وسعر مميز وضمان لمدة شهرين",
+                "url": "https:\/\/najd7.com\/classic-plus-apps-iphone\/p2575858",
+                "promotion_title": "تطبيقات بلس بارخص سعر",
+                "subtitle": "ارخص تفعيل فوري لتطبيقات بلس",
+                "type": "codes",
+                "status": "sale",
+                "weight": null,
+                "calories": 0,
+                "sku": null,
+                "rating": {
+                    "count": 108,
+                    "stars": 5
+                },
+                "quantity": null,
+                "sold_quantity": 489,
+                "max_quantity": null,
+                "is_taxable": true,
+                "category": {
+                    "name": "يودل",
+                    "url": null
+                },
+                "sale_channels_external": [],
+                "original_image": "https:\/\/cdn.salla.sa\/VxOpQ\/f1IQvSiWaDrpKaqdbiZhyqPnJ2j9iO1oMe5drZF2.jpg",
+                "image": {
+                    "url": "https:\/\/cdn.salla.sa\/VxOpQ\/50c9f65a-f1a6-4a89-946b-4ec950f5d532-500x500-f1IQvSiWaDrpKaqdbiZhyqPnJ2j9iO1oMe5drZF2.jpg"
+                },
+                "brand": {
+                    "id": null,
+                    "url": null,
+                    "name": null
+                },
+                "tags": [
+                    {
+                        "name": "سناب بلس",
+                        "url": null
+                    },
+                    {
+                        "name": "تطبيقات بلس للايفون",
+                        "url": null
+                    },
+                    {
+                        "name": "اشتراك تطبيقات بلس",
+                        "url": null
+                    },
+                    {
+                        "name": "العاب مهكره",
+                        "url": null
+                    },
+                    {
+                        "name": "استقرام بلس",
+                        "url": null
+                    },
+                    {
+                        "name": "تفعيل فوري",
+                        "url": null
+                    },
+                    {
+                        "name": "يوتيوب بلس",
+                        "url": null
+                    },
+                    {
+                        "name": "تطبيقات معدلة للايفون",
+                        "url": null
+                    },
+                    {
+                        "name": "متجر تطبيقات بلس",
+                        "url": null
+                    },
+                    {
+                        "name": "تيك توك معدل",
+                        "url": null
+                    },
+                    {
+                        "name": "تطبيقات بلس",
+                        "url": null
+                    },
+                    {
+                        "name": "متجر بلس للايفون",
+                        "url": null
+                    },
+                    {
+                        "name": "باقة كلاسيك نجد بلس",
+                        "url": null
+                    },
+                    {
+                        "name": "واتساب بلس",
+                        "url": null
+                    },
+                    {
+                        "name": "برامج معدلة",
+                        "url": null
+                    }
+                ],
+                "can_add_note": true,
+                "can_upload_file": true,
+                "is_on_sale": false,
+                "is_hidded_quantity": false,
+                "is_available": true,
+                "is_donation": false,
+                "is_out_of_stock": false,
+                "is_require_shipping": false,
+                "is_dynamic_pricing": false,
+                "regular_price": 19.99,
+                "price": 19.99,
+                "sale_price": null,
+                "starting_price": null,
+                "currency": "SAR",
+                "mpn": null,
+                "gtin": null,
+                "google_taxonomy_id": null,
+                "discount_ends": null,
+                "discount_starts": null,
+                "has_options": false,
+                "pinned": false,
+                "mahly_category_id": null,
+                "spam_status": 0,
+                "branches": [],
+                "branches_v2": [],
+                "has_preorder_campaign": false,
+                "preorder": [],
+                "custom_url": "classic-plus-apps-iphone",
+                "unlimited_quantity": false,
+                "features": {
+                    "availability_notify": null,
+                    "show_rating": true
+                }
+            },
+            {
+                "id": "345365422",
+                "scope_id": null,
+                "name": "اشتراك سناب يوم",
+                "description": "المميزات: - حفظ السنابات: حفظ السنابات، الديسكفري، الإعلانات، سنابات الدردشة، ومنصة الأضواء إلى ألبوم الكاميرا. - المشاهدة: مشاهدة خفية للسنابات والدردشة، فتح السنابات عدة مرات، تعليم كمقروء بزر \"القراءة\". - الدردشة: تعطيل إشعار لقطات الشاشة، إظهار وقت انتهاء الستريك وعدد السنابات المرسلة، منع إشعارات سحب المحادثة. - الموقع: تفعيل الموقع الوهمي وتحديده يدويًا من الخريطة. - الستريك: تفعيل ستريك وهمي واختيار الأصدقاء وتحديد الأيام. - التزييف والتخصيص: تغيير شكل قائمة اكتشف، تعطيل التنقل التلقائي، تكبير السنابات، سحب المحادثة من أي مكان، إخفاء القنوات، مشاهدة السنابة في مشغل Apple، عرض آخر سنابة مرسلة بالضغط المطول. - رفع الوسائط: تسريع رفع الوسائط وتحسين التصوير (يتطلب إعادة تشغيل). - المنصة والميزات التجريبية: تفعيل الترند وإعادة النشر، إرسال عدة إشعارات لقطة شاشة، تنبيه عند تسلل شخص للمحادثة. - الواجهة: تجربة تصميم سناب شات الجديد، إزالة الإعلانات، التحكم بسطوع الكاميرا. - الأمان: قفل التطبيق بـ Face ID أو Touch ID، والمصادقة عند كل فتح.",
+                "url": "https:\/\/najd7.com\/اشتراك-سناب-يوم\/p345365422",
+                "promotion_title": "",
+                "subtitle": "",
+                "type": "codes",
+                "status": "sale",
+                "weight": null,
+                "calories": 0,
+                "sku": null,
+                "rating": {
+                    "count": 2,
+                    "stars": 5
+                },
+                "quantity": null,
+                "sold_quantity": 392,
+                "max_quantity": null,
+                "is_taxable": true,
+                "category": {
+                    "name": "سناب بلس",
+                    "url": null
+                },
+                "sale_channels_external": [],
+                "original_image": "https:\/\/cdn.salla.sa\/VxOpQ\/vg8axhplKUYFFdjNwGlk0bgQ3FTVwZOua4UkC5Nz.webp",
+                "image": {
+                    "url": "https:\/\/cdn.salla.sa\/VxOpQ\/f2f3ab2f-34ef-45b1-bb64-e6d155e1c485-500x500-vg8axhplKUYFFdjNwGlk0bgQ3FTVwZOua4UkC5Nz.webp"
+                },
+                "brand": {
+                    "id": null,
+                    "url": null,
+                    "name": null
+                },
+                "tags": [],
+                "can_add_note": true,
+                "can_upload_file": true,
+                "is_on_sale": true,
+                "is_hidded_quantity": false,
+                "is_available": true,
+                "is_donation": false,
+                "is_out_of_stock": false,
+                "is_require_shipping": false,
+                "is_dynamic_pricing": false,
+                "regular_price": 9.99,
+                "price": 5.99,
+                "sale_price": 5.99,
+                "starting_price": null,
+                "currency": "SAR",
+                "mpn": null,
+                "gtin": null,
+                "google_taxonomy_id": null,
+                "discount_ends": null,
+                "discount_starts": null,
+                "has_options": false,
+                "pinned": false,
+                "mahly_category_id": null,
+                "spam_status": 0,
+                "branches": [],
+                "branches_v2": [],
+                "has_preorder_campaign": false,
+                "preorder": [],
+                "custom_url": "",
+                "unlimited_quantity": false,
+                "features": {
+                    "availability_notify": null,
+                    "show_rating": true
+                }
+            },
+            {
+                "id": "1432000618",
+                "scope_id": null,
+                "name": "اشتراك سناب اسبوع",
+                "description": "المميزات: - حفظ السنابات: حفظ السنابات، الديسكفري، الإعلانات، سنابات الدردشة، ومنصة الأضواء إلى ألبوم الكاميرا. - المشاهدة: مشاهدة خفية للسنابات والدردشة، فتح السنابات عدة مرات، تعليم كمقروء بزر \"القراءة\". - الدردشة: تعطيل إشعار لقطات الشاشة، إظهار وقت انتهاء الستريك وعدد السنابات المرسلة، منع إشعارات سحب المحادثة. - الموقع: تفعيل الموقع الوهمي وتحديده يدويًا من الخريطة. - الستريك: تفعيل ستريك وهمي واختيار الأصدقاء وتحديد الأيام. - التزييف والتخصيص: تغيير شكل قائمة اكتشف، تعطيل التنقل التلقائي، تكبير السنابات، سحب المحادثة من أي مكان، إخفاء القنوات، مشاهدة السنابة في مشغل Apple، عرض آخر سنابة مرسلة بالضغط المطول. - رفع الوسائط: تسريع رفع الوسائط وتحسين التصوير (يتطلب إعادة تشغيل). - المنصة والميزات التجريبية: تفعيل الترند وإعادة النشر، إرسال عدة إشعارات لقطة شاشة، تنبيه عند تسلل شخص للمحادثة. - الواجهة: تجربة تصميم سناب شات الجديد، إزالة الإعلانات، التحكم بسطوع الكاميرا. - الأمان: قفل التطبيق بـ Face ID أو Touch ID، والمصادقة عند كل فتح.",
+                "url": "https:\/\/najd7.com\/اشتراك-سناب-اسبوع\/p1432000618",
+                "promotion_title": "",
+                "subtitle": "",
+                "type": "codes",
+                "status": "sale",
+                "weight": null,
+                "calories": 0,
+                "sku": null,
+                "rating": null,
+                "quantity": null,
+                "sold_quantity": 211,
+                "max_quantity": null,
+                "is_taxable": true,
+                "category": {
+                    "name": "سناب بلس",
+                    "url": null
+                },
+                "sale_channels_external": [],
+                "original_image": "https:\/\/cdn.salla.sa\/VxOpQ\/6KfugNLBz0jOwHyb5o8Z1z52cSfbTxSMZd3iUFV4.webp",
+                "image": {
+                    "url": "https:\/\/cdn.salla.sa\/VxOpQ\/9168a611-6d8d-44c7-87a6-c60653367049-500x500-6KfugNLBz0jOwHyb5o8Z1z52cSfbTxSMZd3iUFV4.webp"
+                },
+                "brand": {
+                    "id": null,
+                    "url": null,
+                    "name": null
+                },
+                "tags": [],
+                "can_add_note": true,
+                "can_upload_file": true,
+                "is_on_sale": true,
+                "is_hidded_quantity": false,
+                "is_available": true,
+                "is_donation": false,
+                "is_out_of_stock": false,
+                "is_require_shipping": false,
+                "is_dynamic_pricing": false,
+                "regular_price": 19.99,
+                "price": 14.99,
+                "sale_price": 14.99,
+                "starting_price": null,
+                "currency": "SAR",
+                "mpn": null,
+                "gtin": null,
+                "google_taxonomy_id": null,
+                "discount_ends": null,
+                "discount_starts": null,
+                "has_options": false,
+                "pinned": false,
+                "mahly_category_id": null,
+                "spam_status": 0,
+                "branches": [],
+                "branches_v2": [],
+                "has_preorder_campaign": false,
+                "preorder": [],
+                "custom_url": "",
+                "unlimited_quantity": false,
+                "features": {
+                    "availability_notify": null,
+                    "show_rating": true
+                }
+            },
+            {
+                "id": "344531731",
+                "scope_id": null,
+                "name": "اشتراك سناب شهر",
+                "description": "المميزات: - حفظ السنابات: حفظ السنابات، الديسكفري، الإعلانات، سنابات الدردشة، ومنصة الأضواء إلى ألبوم الكاميرا. - المشاهدة: مشاهدة خفية للسنابات والدردشة، فتح السنابات عدة مرات، تعليم كمقروء بزر \"القراءة\". - الدردشة: تعطيل إشعار لقطات الشاشة، إظهار وقت انتهاء الستريك وعدد السنابات المرسلة، منع إشعارات سحب المحادثة. - الموقع: تفعيل الموقع الوهمي وتحديده يدويًا من الخريطة. - الستريك: تفعيل ستريك وهمي واختيار الأصدقاء وتحديد الأيام. - التزييف والتخصيص: تغيير شكل قائمة اكتشف، تعطيل التنقل التلقائي، تكبير السنابات، سحب المحادثة من أي مكان، إخفاء القنوات، مشاهدة السنابة في مشغل Apple، عرض آخر سنابة مرسلة بالضغط المطول. - رفع الوسائط: تسريع رفع الوسائط وتحسين التصوير (يتطلب إعادة تشغيل). - المنصة والميزات التجريبية: تفعيل الترند وإعادة النشر، إرسال عدة إشعارات لقطة شاشة، تنبيه عند تسلل شخص للمحادثة. - الواجهة: تجربة تصميم سناب شات الجديد، إزالة الإعلانات، التحكم بسطوع الكاميرا. - الأمان: قفل التطبيق بـ Face ID أو Touch ID، والمصادقة عند كل فتح.",
+                "url": "https:\/\/najd7.com\/اشتراك-سناب-شهر\/p344531731",
+                "promotion_title": "",
+                "subtitle": "",
+                "type": "codes",
+                "status": "sale",
+                "weight": null,
+                "calories": 0,
+                "sku": null,
+                "rating": {
+                    "count": 7,
+                    "stars": 5
+                },
+                "quantity": null,
+                "sold_quantity": 927,
+                "max_quantity": null,
+                "is_taxable": false,
+                "category": {
+                    "name": "سناب بلس",
+                    "url": null
+                },
+                "sale_channels_external": [],
+                "original_image": "https:\/\/cdn.salla.sa\/VxOpQ\/7Ovz8EJHniwayMfXWMaL3lYyue0T1z53ZSw7IIVn.webp",
+                "image": {
+                    "url": "https:\/\/cdn.salla.sa\/VxOpQ\/9e1c41b2-341c-4652-9c8a-58ce143f9229-500x500-7Ovz8EJHniwayMfXWMaL3lYyue0T1z53ZSw7IIVn.webp"
+                },
+                "brand": {
+                    "id": null,
+                    "url": null,
+                    "name": null
+                },
+                "tags": [],
+                "can_add_note": true,
+                "can_upload_file": true,
+                "is_on_sale": true,
+                "is_hidded_quantity": false,
+                "is_available": true,
+                "is_donation": false,
+                "is_out_of_stock": false,
+                "is_require_shipping": false,
+                "is_dynamic_pricing": false,
+                "regular_price": 49.99,
+                "price": 39.99,
+                "sale_price": 39.99,
+                "starting_price": null,
+                "currency": "SAR",
+                "mpn": null,
+                "gtin": null,
+                "google_taxonomy_id": null,
+                "discount_ends": null,
+                "discount_starts": null,
+                "has_options": false,
+                "pinned": false,
+                "mahly_category_id": null,
+                "spam_status": 0,
+                "branches": [],
+                "branches_v2": [],
+                "has_preorder_campaign": false,
+                "preorder": [],
+                "custom_url": "",
+                "unlimited_quantity": false,
+                "features": {
+                    "availability_notify": null,
+                    "show_rating": true
+                }
+            },
+            {
+                "id": "976860818",
+                "scope_id": null,
+                "name": "اكواد يودل فك حظر",
+                "description": "احصل على خدمة يودل بلس بسرعة وجودة عالية، واستمتع بتجربة استخدام أفضل ومميزات إضافية تجعل التعامل مع التطبيق أسهل وأكثر سلاسة. الخدمة مناسبة للمستخدمين الذين يرغبون في تطوير تجربتهم داخل يودل والاستفادة من خصائص تساعدهم على استخدام التطبيق بصورة أكثر احترافية وراحة. نحرص على تنفيذ طلبك بطريقة سريعة وموثوقة مع خطوات سهلة لا تحتاج إلى تعقيد أو خبرة مسبقة. كل ما عليك هو إدخال البيانات المطلوبة بشكل صحيح عند إتمام الطلب وسيتم العمل على تنفيذ الخدمة في أسرع وقت ممكن. مميزات خدمة يودل بلس: • تنفيذ سريع وسهل&nbsp; • تجربة استخدام أفضل وأكثر سلاسة&nbsp; • مميزات إضافية داخل التطبيق&nbsp; • خدمة مناسبة لمستخدمي يودل&nbsp; • خطوات طلب واضحة وبسيطة&nbsp; • جودة عالية وتنفيذ موثوق&nbsp; • دعم فني مناسب عند الحاجة&nbsp; • سعر منافس مقابل الخدمة&nbsp; تساعدك خدمة يودل بلس على الاستمتاع بتجربة محسّنة داخل التطبيق، مع خيارات إضافية تسهّل عليك الاستخدام وتمنحك مرونة أكبر. كما أنها مناسبة للمستخدمين الجدد والحاليين الذين يبحثون عن طريقة سهلة للحصول على الخدمة دون إجراءات معقدة أو انتظار طويل. تنبيه مهم:&nbsp; تفعيل فوري بتوصلك خطوات بعد الاشتراك في حال واجهت اي صعوبه تواصل معنا واتساب اطلب يودل بلس الآن واستمتع بخدمة سريعة، جودة عالية، وتنفيذ موثوق يمنحك تجربة أفضل داخل التطبيق. نحن نهتم بسرعة تنفيذ الطلب وتقديم الدعم المناسب لضمان حصولك على الخدمة بسهولة ور",
+                "url": "https:\/\/najd7.com\/تفعيل-يودل-بلس\/p976860818",
+                "promotion_title": "تفعيل سريع",
+                "subtitle": "يودل بلس بجودة عالية",
+                "type": "codes",
+                "status": "sale",
+                "weight": null,
+                "calories": 0,
+                "sku": null,
+                "rating": {
+                    "count": 106,
+                    "stars": 5
+                },
+                "quantity": null,
+                "sold_quantity": 284,
+                "max_quantity": null,
+                "is_taxable": false,
+                "category": {
+                    "name": "تطبيقات بلس",
+                    "url": null
+                },
+                "sale_channels_external": [],
+                "original_image": "https:\/\/cdn.salla.sa\/VxOpQ\/ar42VGRgJC8iCI2xbdLXc3AoDQxpmGE51YjOoUAw.png",
+                "image": {
+                    "url": "https:\/\/cdn.salla.sa\/VxOpQ\/5a266475-4795-47bd-a31a-99ee8d8193d7-500x500-ar42VGRgJC8iCI2xbdLXc3AoDQxpmGE51YjOoUAw.png"
+                },
+                "brand": {
+                    "id": null,
+                    "url": null,
+                    "name": null
+                },
+                "tags": [
+                    {
+                        "name": "يودل بلس",
+                        "url": null
+                    },
+                    {
+                        "name": "اشتراك يودل بلس",
+                        "url": null
+                    },
+                    {
+                        "name": "خدمات يودل",
+                        "url": null
+                    },
+                    {
+                        "name": "yodel plus",
+                        "url": null
+                    },
+                    {
+                        "name": "تفعيل يودل بلس",
+                        "url": null
+                    },
+                    {
+                        "name": "خدمة يودل بلس",
+                        "url": null
+                    },
+                    {
+                        "name": "يودل بلس سريع",
+                        "url": null
+                    },
+                    {
+                        "name": "ترقية يودل",
+                        "url": null
+                    },
+                    {
+                        "name": "مميزات يودل بلس",
+                        "url": null
+                    },
+                    {
+                        "name": "يودل بلس موثوق",
+                        "url": null
+                    }
+                ],
+                "can_add_note": true,
+                "can_upload_file": true,
+                "is_on_sale": true,
+                "is_hidded_quantity": false,
+                "is_available": true,
+                "is_donation": false,
+                "is_out_of_stock": false,
+                "is_require_shipping": false,
+                "is_dynamic_pricing": false,
+                "regular_price": 29.99,
+                "price": 19.99,
+                "sale_price": 19.99,
+                "starting_price": null,
+                "currency": "SAR",
+                "mpn": null,
+                "gtin": null,
+                "google_taxonomy_id": null,
+                "discount_ends": null,
+                "discount_starts": null,
+                "has_options": false,
+                "pinned": false,
+                "mahly_category_id": 1006,
+                "spam_status": 0,
+                "branches": [],
+                "branches_v2": [],
+                "has_preorder_campaign": false,
+                "preorder": [],
+                "custom_url": "تفعيل-يودل-بلس",
+                "unlimited_quantity": false,
+                "features": {
+                    "availability_notify": null,
+                    "show_rating": true
+                }
+            },
+            {
+                "id": "1883375994",
+                "scope_id": null,
+                "name": "زيادة مشاهدات انستقرام | شراء مشاهدات Instagram",
+                "description": "زيادة مشاهدات انستقرام بسرعة احصل على خدمة زيادة مشاهدات انستقرام لمقاطع الريلز والفيديوهات بطريقة سهلة وسريعة، وساعد محتواك على الظهور بشكل أكثر نشاطًا أمام الزوار. تساعد زيادة عدد المشاهدات على تحسين مظهر المقطع وجذب انتباه المستخدمين، كما تمنح المحتوى انطباعًا أفضل عند زيارة الحساب وقد تشجع الآخرين على مشاهدة الفيديو والتفاعل معه. الخدمة مناسبة للحسابات الشخصية والمتاجر الإلكترونية وصناع المحتوى وأصحاب المشاريع الذين يرغبون في دعم مقاطعهم وزيادة عدد المشاهدات خلال وقت قصير. مميزات خدمة زيادة مشاهدات انستقرام • تنفيذ سريع يبدأ غالبًا خلال دقائق • قد يستغرق اكتمال الطلب حتى 24 ساعة حسب ضغط الطلبات أو تحديثات انستقرام • لا نحتاج إلى كلمة المرور • المطلوب فقط رابط المقطع أو الريلز • مناسبة لمقاطع الريلز والفيديوهات العامة • خطوات طلب سهلة وواضحة • تساعد على تحسين مظهر المقطع • أسعار مناسبة وتنفيذ سريع طريقة طلب مشاهدات انستقرام • تأكد أن حساب انستقرام عام وليس خاصًا • تأكد أن المقطع عام ويمكن للجميع مشاهدته • انسخ رابط الفيديو أو الريلز بشكل صحيح • لا تحذف المقطع أثناء تنفيذ الطلب • لا تحوّل الحساب إلى خاص قبل اكتمال التنفيذ ملاحظات مهمة • لا يمكن ضمان زيادة اللايكات أو المتابعين بسبب شراء المشاهدات • قد يحدث نقص بسيط بسبب تحديثات انستقرام أو مراجعة بعض الحسابات • لا يمكن إلغاء الطلب بعد بدء التنفيذ • في حال حذف المقطع بعد تنفيذ الطلب لا يوجد تعويض • في حال إدخال رابط خاطئ لا يمكن تحويل الطلب إلى مقطع آخر بعد التنفيذ • التعويض عن النقص يكون حسب نوع الخدمة ومدة الضمان الموضحة عند الطلب لماذا تختار خدمة زيادة مشاهدات انستقرام تساعدك الخدمة على رفع عدد المشاهدات خلال وقت قصير، كما تمنح مقاطعك مظهرًا أكثر نشاطًا أمام الزوار. وللحصول على نتائج أفضل، احرص على نشر محتوى جذاب واختيار عناوين مناسبة وتحسين جودة الفيديو. اطلب الآن خدمة زيادة مشاهدات انستقرام، وأدخل رابط المقطع بشكل صحيح لضمان بدء التنفيذ دون تاخير",
+                "url": "https:\/\/najd7.com\/زيادة-مشاهدات-انستقرام\/p1883375994",
+                "promotion_title": "تسليم سريع",
+                "subtitle": "مشاهدات انستقرام بجودة عالية",
+                "type": "service",
+                "status": "sale",
+                "weight": null,
+                "calories": 0,
+                "sku": null,
+                "rating": {
+                    "count": 106,
+                    "stars": 5
+                },
+                "quantity": null,
+                "sold_quantity": 147,
+                "max_quantity": null,
+                "is_taxable": false,
+                "category": {
+                    "name": "خدمات السوشل ميديا",
+                    "url": null
+                },
+                "sale_channels_external": [],
+                "original_image": "https:\/\/cdn.salla.sa\/VxOpQ\/230R3rOUWOTQEsiVnpSVEgYKTOWeh452juig67Nx.webp",
+                "image": {
+                    "url": "https:\/\/cdn.salla.sa\/VxOpQ\/95e71120-9838-4135-aac2-8e64c2a7de21-500x500-230R3rOUWOTQEsiVnpSVEgYKTOWeh452juig67Nx.webp"
+                },
+                "brand": {
+                    "id": null,
+                    "url": null,
+                    "name": null
+                },
+                "tags": [
+                    {
+                        "name": "مشاهدات instagram",
+                        "url": null
+                    },
+                    {
+                        "name": "مشاهدات انستقرام",
+                        "url": null
+                    },
+                    {
+                        "name": "زيادة مشاهدات انستقرام",
+                        "url": null
+                    },
+                    {
+                        "name": "زيادة مشاهدات instagram",
+                        "url": null
+                    },
+                    {
+                        "name": "دعم مشاهدات انستقرام",
+                        "url": null
+                    },
+                    {
+                        "name": "مشاهدات انستقرام حقيقية",
+                        "url": null
+                    },
+                    {
+                        "name": "شراء مشاهدات انستقرام",
+                        "url": null
+                    },
+                    {
+                        "name": "رفع مشاهدات انستقرام",
+                        "url": null
+                    }
+                ],
+                "can_add_note": false,
+                "can_upload_file": false,
+                "is_on_sale": false,
+                "is_hidded_quantity": false,
+                "is_available": true,
+                "is_donation": false,
+                "is_out_of_stock": false,
+                "is_require_shipping": false,
+                "is_dynamic_pricing": false,
+                "regular_price": 1,
+                "price": 1,
+                "sale_price": null,
+                "starting_price": null,
+                "currency": "SAR",
+                "mpn": null,
+                "gtin": null,
+                "google_taxonomy_id": null,
+                "discount_ends": null,
+                "discount_starts": null,
+                "has_options": false,
+                "pinned": false,
+                "mahly_category_id": null,
+                "spam_status": 0,
+                "branches": [],
+                "branches_v2": [],
+                "has_preorder_campaign": false,
+                "preorder": [],
+                "custom_url": "زيادة-مشاهدات-انستقرام",
+                "unlimited_quantity": true,
+                "features": {
+                    "availability_notify": null,
+                    "show_rating": true
+                }
+            },
+            {
+                "id": "1629676599",
+                "scope_id": null,
+                "name": "زيادة لايكات انستقرام | شراء لايكات Instagram",
+                "description": "زيادة لايكات انستقرام بسرعة احصل على خدمة زيادة لايكات انستقرام لمقاطعك ومنشوراتك بطريقة سهلة وسريعة، وساعد حسابك على الظهور بشكل أكثر نشاطًا واحترافية أمام الزوار. تساعد زيادة عدد اللايكات على تحسين مظهر المنشور وجذب انتباه المستخدمين، كما تمنح المحتوى انطباعًا أفضل وتشجع الزوار على مشاهدة المنشور والتفاعل معه. الخدمة مناسبة للحسابات الشخصية، والمتاجر الإلكترونية، وصناع المحتوى، وأصحاب المشاريع الذين يرغبون في دعم منشوراتهم وزيادة التفاعل عليها خلال وقت قصير. مميزات خدمة زيادة لايكات انستقرام • تنفيذ سريع يبدأ غالبًا خلال دقائق • قد يستغرق اكتمال الطلب حتى 24 ساعة حسب ضغط الطلبات أو تحديثات انستقرام • لا نحتاج إلى كلمة المرور • المطلوب فقط رابط المنشور أو المقطع • مناسبة للصور ومقاطع الريلز والمنشورات العامة • خطوات طلب سهلة وواضحة • تساعد على تحسين مظهر المنشور • أسعار مناسبة وخدمة سريعة طريقة طلب لايكات انستقرام • تأكد أن حساب انستقرام عام وليس خاصًا • تأكد أن المنشور أو المقطع عام ويمكن للجميع مشاهدته • انسخ رابط المنشور بشكل صحيح • لا تحذف المنشور أثناء تنفيذ الطلب • لا تغيّر رابط المنشور أو تحوّل الحساب إلى خاص قبل اكتمال التنفيذ ملاحظات مهمة • لا يمكن ضمان التفاعل الإضافي أو زيادة المتابعين بسبب شراء اللايكات • قد يحدث نقص بسيط بسبب تحديثات انستقرام أو إزالة بعض الحسابات • لا يمكن إلغاء الطلب بعد بدء التنفيذ • في حال حذف المنشور بعد تنفيذ الطلب لا يوجد تعويض • في حال إدخال رابط خاطئ لا يمكن تحويل الطلب إلى منشور آخر بعد التنفيذ • التعويض عن النقص يكون حسب نوع الخدمة ومدة الضمان الموضحة عند الطلب لماذا تختار خدمة زيادة لايكات انستقرام تساعدك الخدمة على رفع عدد اللايكات خلال وقت قصير، كما تمنح منشوراتك مظهرًا أكثر تفاعلًا أمام الزوار. وللحصول على نتائج أفضل، احرص على نشر محتوى جذاب والاستمرار في تحسين جودة الصور والمقاطع. اطلب الآن خدمة زيادة لايكات انستقرام، وأدخل رابط المنشور بشكل صحيح لضمان بدء التنفيذ دون",
+                "url": "https:\/\/najd7.com\/زيادة-لايكات-انستقرام\/p1629676599",
+                "promotion_title": "تسليم سريع",
+                "subtitle": "لايكات انستقرام بجودة عالية",
+                "type": "service",
+                "status": "sale",
+                "weight": null,
+                "calories": 0,
+                "sku": null,
+                "rating": {
+                    "count": 106,
+                    "stars": 5
+                },
+                "quantity": null,
+                "sold_quantity": 142,
+                "max_quantity": null,
+                "is_taxable": false,
+                "category": {
+                    "name": "خدمات السوشل ميديا",
+                    "url": null
+                },
+                "sale_channels_external": [],
+                "original_image": "https:\/\/cdn.salla.sa\/VxOpQ\/peiOoSFFYaraW40cNHO5WzMaa8MseF7QPKecCMP0.webp",
+                "image": {
+                    "url": "https:\/\/cdn.salla.sa\/VxOpQ\/4bcd0c84-6110-46ff-bb67-356f23ca4ad6-500x500-peiOoSFFYaraW40cNHO5WzMaa8MseF7QPKecCMP0.webp"
+                },
+                "brand": {
+                    "id": null,
+                    "url": null,
+                    "name": null
+                },
+                "tags": [
+                    {
+                        "name": "خدمات انستقرام",
+                        "url": null
+                    },
+                    {
+                        "name": "لايكات انستقرام",
+                        "url": null
+                    },
+                    {
+                        "name": "زيادة لايكات انستقرام",
+                        "url": null
+                    },
+                    {
+                        "name": "لايكات instagram",
+                        "url": null
+                    },
+                    {
+                        "name": "لايكات انستقرام حقيقية",
+                        "url": null
+                    },
+                    {
+                        "name": "شراء لايكات انستقرام",
+                        "url": null
+                    },
+                    {
+                        "name": "لايكات انستقرام فورية",
+                        "url": null
+                    },
+                    {
+                        "name": "رفع لايكات انستقرام",
+                        "url": null
+                    },
+                    {
+                        "name": "زيادة لايكات instagram",
+                        "url": null
+                    },
+                    {
+                        "name": "دعم منشورات انستقرام",
+                        "url": null
+                    }
+                ],
+                "can_add_note": false,
+                "can_upload_file": false,
+                "is_on_sale": false,
+                "is_hidded_quantity": false,
+                "is_available": true,
+                "is_donation": false,
+                "is_out_of_stock": false,
+                "is_require_shipping": false,
+                "is_dynamic_pricing": false,
+                "regular_price": 1,
+                "price": 1,
+                "sale_price": null,
+                "starting_price": null,
+                "currency": "SAR",
+                "mpn": null,
+                "gtin": null,
+                "google_taxonomy_id": null,
+                "discount_ends": null,
+                "discount_starts": null,
+                "has_options": false,
+                "pinned": false,
+                "mahly_category_id": null,
+                "spam_status": 0,
+                "branches": [],
+                "branches_v2": [],
+                "has_preorder_campaign": false,
+                "preorder": [],
+                "custom_url": "زيادة-لايكات-انستقرام",
+                "unlimited_quantity": true,
+                "features": {
+                    "availability_notify": null,
+                    "show_rating": true
+                }
+            },
+            {
+                "id": "1462516521",
+                "scope_id": null,
+                "name": "زيادة متابعين انستقرام حقيقيين | رشق متابعين انستا",
+                "description": "رشق متابعين انستقرام بسرعة هل ترغب في شراء متابعين انستقرام وزيادة عدد متابعي حسابك بسعر مناسب؟ نقدم لك خدمة زيادة متابعين انستقرام بطريقة سهلة وسريعة، حيث يكفي اختيار العدد المناسب وإدخال اسم المستخدم بشكل صحيح، وسيبدأ تنفيذ الطلب خلال المدة المحددة. تساعد زيادة عدد المتابعين على تحسين مظهر الحساب وإظهاره بصورة أكثر احترافية أمام الزوار، كما أن العدد المرتفع قد يشجع المستخدمين الجدد على تصفح منشوراتك والتعرف على محتواك. مميزات خدمة زيادة متابعين انستقرام • تنفيذ سريع يبدأ غالبًا خلال ساعات • قد يستغرق اكتمال الطلب حتى 24 ساعة حسب ضغط الطلبات وتحديثات انستقرام • لا نحتاج إلى كلمة المرور • المطلوب فقط اسم المستخدم أو رابط الحساب • متابعون من دول مختلفة حول العالم • أسعار مناسبة ومنافسة • مناسبة للحسابات الشخصية والتجارية والمتاجر وصناع المحتوى • دعم فني متوفر عند الحاجة الفرق بين المتابعين الحقيقيين والوهميين المتابعون الوهميون هم حسابات قد تكون غير نشطة، ولذلك قد يتم حذف بعضها عند قيام انستقرام بتحديث أنظمته أو إزالة الحسابات غير الحقيقية، وقد يظهر النقص بعد أيام أو أسابيع أو أشهر. أما المتابعون الحقيقيون فهم مستخدمون فعليون، وعادة يكونون أكثر ثباتًا من الحسابات الوهمية، ولكن لا يمكن ضمان تفاعل جميع المتابعين مع المنشورات، لأن التفاعل يعتمد على جودة المحتوى واستمرارية النشر واهتمامات الجمهور. شروط خدمة زيادة متابعين انستقرام • يجب أن يكون الحساب عامًا وليس خاصًا • تأكد من كتابة اسم المستخدم بشكل صحيح قبل تأكيد الطلب • لا تغيّر اسم المستخدم أثناء تنفيذ الطلب • لا تحوّل الحساب إلى خاص قبل اكتمال التنفيذ • لا يمكن ضمان التفاعل أو الإعجابات أو المشاهدات من جميع المتابعين • قد يحدث نقص بسبب تحديثات انستقرام أو حذف الحسابات غير النشطة • التعويض عن النقص يكون حسب نوع الباقة ومدة الضمان الموضحة عند الطلب • في حال تغيير اسم المستخدم أو جعل الحساب خاصًا أثناء التنفيذ فقد يتوقف الطلب ولا يتوفر تعويض كم سعر رشق متابعين انستقرام؟ نوفر خدمة زيادة متابعين انستقرام بأسعار مناسبة تختلف حسب عدد المتابعين ونوع الخدمة المختارة. يمكنك تحديد الباقة المناسبة لحسابك والاطلاع على السعر قبل إتمام عملية الشراء. لماذا تختار متجرنا؟ نحرص على تقديم خدمة سريعة وخطوات طلب واضحة، مع متابعة الطلب وتوفير الدعم الفني عند حدوث أي مشكلة. اطلب الآن خدمة رشق متابعين انستقرام وساعد حسابك على الظهور بشكل أقوى وأكثر احترافية أمام ا",
+                "url": "https:\/\/najd7.com\/زيادة-متابعين-انستقرام\/p1462516521",
+                "promotion_title": "تسليم سريع",
+                "subtitle": "متابعين انستقرام بجودة عالية",
+                "type": "service",
+                "status": "sale",
+                "weight": null,
+                "calories": 0,
+                "sku": null,
+                "rating": {
+                    "count": 107,
+                    "stars": 5
+                },
+                "quantity": null,
+                "sold_quantity": 229,
+                "max_quantity": null,
+                "is_taxable": false,
+                "category": {
+                    "name": "خدمات السوشل ميديا",
+                    "url": null
+                },
+                "sale_channels_external": [],
+                "original_image": "https:\/\/cdn.salla.sa\/VxOpQ\/l3on7JlfPy6u1fY4UDrb7D2I0g9Tc608F44Jb5Pa.webp",
+                "image": {
+                    "url": "https:\/\/cdn.salla.sa\/VxOpQ\/e49e2e15-b58c-4030-957c-1165a4075fb7-500x500-l3on7JlfPy6u1fY4UDrb7D2I0g9Tc608F44Jb5Pa.webp"
+                },
+                "brand": {
+                    "id": null,
+                    "url": null,
+                    "name": null
+                },
+                "tags": [
+                    {
+                        "name": "رفع متابعين انستقرام",
+                        "url": null
+                    },
+                    {
+                        "name": "خدمات انستقرام",
+                        "url": null
+                    },
+                    {
+                        "name": "زيادة متابعين instagram",
+                        "url": null
+                    },
+                    {
+                        "name": "متابعين انستقرام فوري",
+                        "url": null
+                    },
+                    {
+                        "name": "متابعين انستقرام",
+                        "url": null
+                    },
+                    {
+                        "name": "متابعين انستقرام حقيقيين",
+                        "url": null
+                    },
+                    {
+                        "name": "متابعين instagram",
+                        "url": null
+                    },
+                    {
+                        "name": "شراء متابعين انستقرام",
+                        "url": null
+                    },
+                    {
+                        "name": "دعم حساب انستقرام",
+                        "url": null
+                    },
+                    {
+                        "name": "زيادة متابعين انستقرام",
+                        "url": null
+                    }
+                ],
+                "can_add_note": false,
+                "can_upload_file": false,
+                "is_on_sale": false,
+                "is_hidded_quantity": false,
+                "is_available": true,
+                "is_donation": false,
+                "is_out_of_stock": false,
+                "is_require_shipping": false,
+                "is_dynamic_pricing": false,
+                "regular_price": 1,
+                "price": 1,
+                "sale_price": null,
+                "starting_price": null,
+                "currency": "SAR",
+                "mpn": null,
+                "gtin": null,
+                "google_taxonomy_id": null,
+                "discount_ends": null,
+                "discount_starts": null,
+                "has_options": false,
+                "pinned": false,
+                "mahly_category_id": null,
+                "spam_status": 0,
+                "branches": [],
+                "branches_v2": [],
+                "has_preorder_campaign": false,
+                "preorder": [],
+                "custom_url": "زيادة-متابعين-انستقرام",
+                "unlimited_quantity": true,
+                "features": {
+                    "availability_notify": null,
+                    "show_rating": true
+                }
+            },
+            {
+                "id": "1844550893",
+                "scope_id": null,
+                "name": "زيادة لايكات تيك توك | شراء لايكات TikTok",
+                "description": "كيفية زيادة لايكات تيك توك بسرعة احصل على لايكات تيك توك لمقاطعك بطريقة سريعة وسهلة وساعد حسابك على زيادة التفاعل وتحسين ظهور المحتوى أمام المستخدمين تسليم الخدمة يبدأ تنفيذ الطلب خلال دقائق وقد يستغرق حتى 24 ساعة كحد أقصى عادة يتم تنفيذ الطلب خلال دقائق لأن الخدمة تعمل بشكل آلي وقد يتأخر التنفيذ في حال وجود ضغط على الطلبات أو تحديثات داخل تطبيق تيك توك ملاحظات مهمة • يجب أن يكون حساب تيك توك مفتوحا • يجب أن يكون المقطع عاما وليس خاصا • تأكد من أن المقطع لا يحتوي على مشاهد مخالفة لسياسات تيك توك مثل الدم أو إطلاق النار أو التحريض • في حال حذف المقطع بعد تنفيذ الطلب لا يوجد تعويض • لا تطلب الخدمة على مقطع يحتوي مسبقا على أكثر من 50 ألف لايك • قد تنخفض بعض اللايكات في حال قيام تيك توك بمراجعة الحساب أو المقطع وسيتم التعويض بعد انتهاء المراقبة وفقا لشروط الخدمة أصبحت زيادة لايكات تيك توك من الأمور المهمة للمستخدمين الذين يرغبون في تحسين التفاعل على مقاطعهم والوصول إلى عدد أكبر من المشاهدين تساعد زيادة اللايكات على منح المقطع مظهرا أكثر تفاعلا وقد تشجع المستخدمين على مشاهدة المحتوى والتفاعل معه كما يمكن أن تساهم في دعم ظهور الحساب وجذب متابعين جدد تقدم الخدمة لايكات تيك توك بسرعة وتنفيذ آلي لتوفير الوقت والحصول على النتائج خلال مدة قصيرة الخدمة مناسبة لصناع المحتوى وأصحاب المتاجر والحسابات الشخصية وكل شخص يرغب في دعم مقاطعه وزيادة التفاعل عليها احرص على اختيار المقطع المناسب وكتابة رابطه بشكل صحيح قبل تأكيد الطلب حتى يتم تنفيذ الخدمة دون تأخير اطلب الآن خدمة زيادة لايكات تيك توك واستمتع بتنفيذ سريع وخطوات سهلة ودعم مناسب عند الحاجة",
+                "url": "https:\/\/najd7.com\/زيادة-لايكات-تيك-توك\/p1844550893",
+                "promotion_title": "زيادة لايكات تيك توك بشكل",
+                "subtitle": "زيادة لايكات تيك توك بشكل آمن",
+                "type": "service",
+                "status": "sale",
+                "weight": null,
+                "calories": 0,
+                "sku": null,
+                "rating": {
+                    "count": 105,
+                    "stars": 5
+                },
+                "quantity": null,
+                "sold_quantity": 1729,
+                "max_quantity": null,
+                "is_taxable": false,
+                "category": {
+                    "name": "خدمات السوشل ميديا",
+                    "url": null
+                },
+                "sale_channels_external": [],
+                "original_image": "https:\/\/cdn.salla.sa\/VxOpQ\/i2jFN1RDxNN5sat97CUCNOYw0qhSwJsLvxraigu5.webp",
+                "image": {
+                    "url": "https:\/\/cdn.salla.sa\/VxOpQ\/1d1253a9-7836-4c51-a5b0-cff500445f5a-500x500-i2jFN1RDxNN5sat97CUCNOYw0qhSwJsLvxraigu5.webp"
+                },
+                "brand": {
+                    "id": null,
+                    "url": null,
+                    "name": null
+                },
+                "tags": [
+                    {
+                        "name": "لايكات tiktok",
+                        "url": null
+                    },
+                    {
+                        "name": "رفع لايكات تيك توك",
+                        "url": null
+                    },
+                    {
+                        "name": "لايكات تيك توك",
+                        "url": null
+                    },
+                    {
+                        "name": "زيادة لايكات تيك توك",
+                        "url": null
+                    },
+                    {
+                        "name": "لايكات تيك توك فورية",
+                        "url": null
+                    },
+                    {
+                        "name": "تيك توك",
+                        "url": null
+                    },
+                    {
+                        "name": "شراء لايكات تيك توك",
+                        "url": null
+                    },
+                    {
+                        "name": "لايكات حقيقي",
+                        "url": null
+                    },
+                    {
+                        "name": "زيادة لايكات",
+                        "url": null
+                    },
+                    {
+                        "name": "دعم لايكات تيك توك",
+                        "url": null
+                    },
+                    {
+                        "name": "شراء لايكات",
+                        "url": null
+                    },
+                    {
+                        "name": "لايكات تيك توك حقيقية",
+                        "url": null
+                    },
+                    {
+                        "name": "زيادة لايكات tiktok",
+                        "url": null
+                    },
+                    {
+                        "name": "تفاعل تيك توك",
+                        "url": null
+                    },
+                    {
+                        "name": "خدمات تيك توك",
+                        "url": null
+                    }
+                ],
+                "can_add_note": true,
+                "can_upload_file": false,
+                "is_on_sale": false,
+                "is_hidded_quantity": false,
+                "is_available": true,
+                "is_donation": false,
+                "is_out_of_stock": false,
+                "is_require_shipping": false,
+                "is_dynamic_pricing": false,
+                "regular_price": 1,
+                "price": 1,
+                "sale_price": null,
+                "starting_price": null,
+                "currency": "SAR",
+                "mpn": null,
+                "gtin": null,
+                "google_taxonomy_id": null,
+                "discount_ends": null,
+                "discount_starts": null,
+                "has_options": false,
+                "pinned": false,
+                "mahly_category_id": null,
+                "spam_status": 0,
+                "branches": [],
+                "branches_v2": [],
+                "has_preorder_campaign": false,
+                "preorder": [],
+                "custom_url": "زيادة-لايكات-تيك-توك",
+                "unlimited_quantity": true,
+                "features": {
+                    "availability_notify": null,
+                    "show_rating": true
+                }
+            },
+            {
+                "id": "1220538848",
+                "scope_id": null,
+                "name": "زيادة مشاهدات تيك توك | شراء مشاهدات TikTok",
+                "description": "تسليم الخدمة يبدأ تنفيذ الطلب خلال دقيقة وقد يستغرق حتى 24 ساعة كحد أقصى، وقد تطول المدة في حال وجود تحديثات في تطبيق تيك توك. عادة يتم تنفيذ الطلب خلال دقائق فقط لأن التسليم آلي ومؤتمت، وقد يتأخر قليلًا في حال وجود ضغط على الطلبات. شروط الخدمة • تأكد أن حساب تيك توك مفتوح وليس خاصًا • تأكد أن المقطع عام ويمكن للجميع مشاهدته • مدة ضمان التعويض 30 يومًا فقط من تاريخ تنفيذ الطلب • تأكد أن المقطع لا يحتوي على مشاهد مخالفة لسياسات تيك توك مثل الدم أو إطلاق النار أو التفحيط أو التحريض • في حال حذف المقطع بعد تنفيذ الطلب لا يوجد تعويض • قد تنخفض المشاهدات أحيانًا بسبب تحديثات تيك توك أو مراجعة الحسابات • في حال حدوث نقص خلال مدة الضمان يتم طلب التعويض عن طريق التواصل مع الدعم الفني عبر واتساب • لا تقم بتغيير رابط المقطع أو تحويل الحساب إلى خاص أثناء تنفيذ الطلب • تأكد من إدخال رابط المقطع بشكل صحيح قبل تأكيد الطلب • لا يمكن إلغاء الطلب أو تحويله إلى مقطع آخر بعد بدء",
+                "url": "https:\/\/najd7.com\/زيادة-مشاهدات-تيك-توك\/p1220538848",
+                "promotion_title": "مشاهدات تيك توك بأفضل جود",
+                "subtitle": "احصل على مشاهدات تيك توك حقيقية !",
+                "type": "service",
+                "status": "sale",
+                "weight": null,
+                "calories": 0,
+                "sku": null,
+                "rating": {
+                    "count": 105,
+                    "stars": 5
+                },
+                "quantity": null,
+                "sold_quantity": 2108,
+                "max_quantity": null,
+                "is_taxable": false,
+                "category": {
+                    "name": "خدمات السوشل ميديا",
+                    "url": null
+                },
+                "sale_channels_external": [],
+                "original_image": "https:\/\/cdn.salla.sa\/VxOpQ\/mBrpkaAQRziDTMT7g90J3lDbPGZS6UsqHXi7SMwL.webp",
+                "image": {
+                    "url": "https:\/\/cdn.salla.sa\/VxOpQ\/278b3bd5-85b7-4537-a9f0-4c83da1cd2cf-500x500-mBrpkaAQRziDTMT7g90J3lDbPGZS6UsqHXi7SMwL.webp"
+                },
+                "brand": {
+                    "id": null,
+                    "url": null,
+                    "name": null
+                },
+                "tags": [
+                    {
+                        "name": "دعم مشاهدات تيك توك",
+                        "url": null
+                    },
+                    {
+                        "name": "زيادة مشاهدات تيك توك بسرعة",
+                        "url": null
+                    },
+                    {
+                        "name": "مشاهدات تيك توك حقيقية",
+                        "url": null
+                    },
+                    {
+                        "name": "زيادة مشاهدات تيك توك",
+                        "url": null
+                    },
+                    {
+                        "name": "رفع مشاهدات",
+                        "url": null
+                    },
+                    {
+                        "name": "شراء مشاهدات تيك توك",
+                        "url": null
+                    },
+                    {
+                        "name": "مشاهدات تيك توك فورية",
+                        "url": null
+                    },
+                    {
+                        "name": "خدمات تيك توك",
+                        "url": null
+                    },
+                    {
+                        "name": "مشاهدات تيك توك",
+                        "url": null
+                    },
+                    {
+                        "name": "رفع مشاهدات تيك توك",
+                        "url": null
+                    },
+                    {
+                        "name": "زيادة مشاهدات tiktok",
+                        "url": null
+                    },
+                    {
+                        "name": "مشاهدات حقيقية خدمات تيك توك",
+                        "url": null
+                    },
+                    {
+                        "name": "مشاهدات tiktok",
+                        "url": null
+                    }
+                ],
+                "can_add_note": false,
+                "can_upload_file": false,
+                "is_on_sale": false,
+                "is_hidded_quantity": false,
+                "is_available": true,
+                "is_donation": false,
+                "is_out_of_stock": false,
+                "is_require_shipping": false,
+                "is_dynamic_pricing": false,
+                "regular_price": 1,
+                "price": 1,
+                "sale_price": null,
+                "starting_price": null,
+                "currency": "SAR",
+                "mpn": null,
+                "gtin": null,
+                "google_taxonomy_id": null,
+                "discount_ends": null,
+                "discount_starts": null,
+                "has_options": false,
+                "pinned": false,
+                "mahly_category_id": null,
+                "spam_status": 0,
+                "branches": [],
+                "branches_v2": [],
+                "has_preorder_campaign": false,
+                "preorder": [],
+                "custom_url": "زيادة-مشاهدات-تيك-توك",
+                "unlimited_quantity": true,
+                "features": {
+                    "availability_notify": null,
+                    "show_rating": true
+                }
+            },
+            {
+                "id": "1344584341",
+                "scope_id": null,
+                "name": "زيادة متابعين تيك توك شراء متابعين TikTok تسليم فوري",
+                "description": "زيادة متابعين تيك توك بسرعة وجودة عالية هل تبحث عن خدمة زيادة متابعين تيك توك بشكل سريع وسهل وتساعدك على تحسين مظهر حسابك وزيادة حضوره أمام الزوار؟ نوفر لك خدمة شراء متابعين تيك توك بخطوات بسيطة وبدون الحاجة إلى كلمة المرور أو تسجيل الدخول إلى الحساب كل ما عليك هو اختيار العدد المناسب ثم إضافة رابط الحساب أو اسم المستخدم بشكل صحيح وبعد إتمام الطلب يبدأ التنفيذ تلقائيا حسب سرعة الخدمة والضغط على الطلبات خدمة متابعين تيك توك مناسبة للحسابات الشخصية وحسابات المتاجر وصناع المحتوى والمؤثرين وكل من يرغب في تقوية حضور حسابه وتحسين شكله أمام العملاء والمتابعين الجدد مميزات خدمة زيادة متابعين تيك توك بدء تنفيذ سريع بعد إتمام الطلب لا تحتاج إلى كلمة المرور لا تحتاج إلى تسجيل الدخول إلى حسابك سهولة الطلب والتنفيذ مناسبة لجميع حسابات تيك توك العامة أسعار مناسبة ومنافسة تنفيذ تلقائي على مدار الساعة إمكانية اختيار العدد المناسب لحسابك خدمة مناسبة للحسابات الشخصية والتجارية تعويض النقص حسب شروط وضمان المنتج دعم فني عند وجود مشكلة في الطلب لماذا تحتاج إلى زيادة متابعين تيك توك عدد المتابعين من أول الأشياء التي يلاحظها الزائر عند دخوله إلى حسابك لذلك فإن زيادة العدد قد تساعد في جعل الحساب يظهر بشكل أفضل وأكثر نشاطا واحترافية كما أن الحساب الذي يحتوي على عدد جيد من المتابعين قد يمنح الزائر انطباعا أقوى ويشجعه على مشاهدة المقاطع والتعرف على المحتوى والخدمات التي تقدمها خدمة شراء متابعين تيك توك يمكن أن تكون خطوة مساعدة في بداية الحساب أو عند الرغبة في تحسين مظهره ولكن النجاح الحقيقي يعتمد أيضا على الاستمرار في نشر محتوى جيد والتفاعل مع الجمهور واختيار أفكار تناسب اهتمامات المتابعين خدمة متابعين تيك توك للحسابات الشخصية إذا كان لديك حساب شخصي وترغب في زيادة حضوره فإن خدمة زيادة متابعين TikTok تساعدك على تحسين شكل الحساب ومنحه بداية أفضل يمكن استخدام الخدمة للحسابات الجديدة أو القديمة بشرط أن يكون الحساب عاما أثناء التنفيذ وأن يكون رابط الحساب أو اسم المستخدم مكتوبا بشكل صحيح متابعين تيك توك للمتاجر والمشاريع تعتبر تيك توك من أهم المنصات التي تستخدمها المتاجر والمشاريع للوصول إلى العملاء وعرض المنتجات والخدمات عندما يزور العميل حساب المتجر ويشاهد عددا مناسبا من المتابعين فقد يشعر بثقة أكبر تجاه الحساب لذلك فإن خدمة زيادة متابعين تيك توك للمتاجر تساعد في تحسين مظهر الحساب ودعم هويته الرقمية ولكن للحصول على نتائج أفضل يفضل الجمع بين زيادة المتابعين ونشر مقاطع واضحة وتصوير المنتجات بشكل احترافي وكتابة وصف مناسب واستخدام كلمات ووسوم مرتبطة بمجال المتجر متابعين تيك توك لصناع المحتوى إذا كنت صانع محتوى وتبحث عن طريقة تساعدك في تحسين حضورك على تيك توك فإن خدمة شحن متابعين تيك توك تمنح حسابك مظهرا أقوى يمكن للخدمة أن تساعد الحساب في البداية ولكن من المهم الاستمرار في صناعة محتوى مفيد وممتع والرد على التعليقات وتحليل المقاطع التي تحقق أفضل أداء كلما كان المحتوى جيدا ومستمرا زادت فرصة الاحتفاظ بالمتابعين الحقيقيين وتحقيق نمو أفضل على المدى الطويل طريقة طلب متابعين تيك توك اختر العدد المناسب من المتابعين أضف رابط حساب تيك توك أو اسم المستخدم تأكد من أن الحساب عام وليس خاصا أكمل عملية الدفع يبدأ تنفيذ الطلب تلقائيا تابع الحساب حتى يكتمل العدد المطلوب شروط تنفيذ الطلب يجب أن يكون الحساب عاما أثناء التنفيذ يجب كتابة رابط الحساب بشكل صحيح لا تقم بتغيير اسم المستخدم بعد إرسال الطلب لا تجعل الحساب خاصا قبل اكتمال التنفيذ لا ترسل طلبين لنفس الحساب في نفس الوقت انتظر اكتمال الطلب الأول قبل إرسال طلب جديد لا تحذف الحساب أو تغير الرابط أثناء التنفيذ مدة تنفيذ زيادة متابعين تيك توك يبدأ تنفيذ طلب زيادة متابعين تيك توك عادة بعد تأكيد الدفع وقد يختلف وقت البدء والاكتمال حسب عدد المتابعين المطلوب وحالة النظام والضغط على الطلبات بعض الطلبات تبدأ خلال وقت قصير وبعضها قد يحتاج وقتا أطول لذلك يفضل عدم تغيير بيانات الحساب حتى اكتمال التنفيذ هل الخدمة تحتاج إلى كلمة المرور لا خدمة شراء متابعين تيك توك لا تحتاج إلى كلمة المرور ولا تحتاج إلى رمز التحقق أو تسجيل الدخول المطلوب فقط هو رابط الحساب أو اسم المستخدم الصحيح وهذا يجعل خطوات الطلب أسهل وأكثر أمانا هل يجب أن يكون الحساب عاما نعم يجب أن يكون حساب تيك توك عاما حتى يتمكن النظام من تنفيذ الطلب وإضافة العدد المطلوب إذا كان الحساب خاصا فقد لا يبدأ التنفيذ لذلك تأكد من تغيير إعداد الخصوصية إلى حساب عام قبل إرسال الطلب هل يمكن تغيير اسم المستخدم أثناء التنفيذ لا يفضل تغيير اسم المستخدم أو رابط الحساب أثناء تنفيذ الطلب لأن ذلك قد يؤدي إلى توقفه أو إرسال المتابعين إلى الرابط القديم انتظر حتى يكتمل العدد ثم يمكنك تعديل بيانات الحساب بعد ذلك هل يوجد تعويض في حالة النقص يعتمد التعويض على نوع الخدمة والضمان الموضح في صفحة المنتج إذا كان المنتج يشمل ضمانا فيتم التعويض حسب المدة والشروط المحددة بشرط عدم تغيير اسم المستخدم وعدم جعل الحساب خاصا وعدم استخدام أكثر من خدمة على الحساب في نفس الوقت هل المتابعون يساعدون في زيادة التفاعل زيادة عدد المتابعين لا تعني بالضرورة زيادة المشاهدات أو الإعجابات أو التعليقات لأن التفاعل يعتمد بشكل أساسي على جودة المحتوى واهتمام الجمهور الخدمة مخصصة لزيادة عدد المتابعين وتحسين مظهر الحساب أما التفاعل فيحتاج إلى نشر مستمر ومحتوى جذاب واستخدام أفكار مناسبة للجمهور نصائح للاستفادة من زيادة متابعين تيك توك انشر محتوى بشكل مستمر اختر عناوين جذابة للمقاطع استخدم إضاءة وصوتا واضحا ابدأ الفيديو بلقطة تشد الانتباه استخدم وسوم مرتبطة بالمحتوى تفاعل مع التعليقات انشر في الأوقات التي يكون فيها جمهورك نشطا راقب المقاطع التي تحصل على أفضل نتائج كرر الأفكار الناجحة بطريقة جديدة اهتم بصورة الحساب والوصف والرابط الفرق بين زيادة المتابعين وصناعة المحتوى زيادة المتابعين تساعد في تحسين شكل الحساب وزيادة العدد الظاهر للزائر أما صناعة المحتوى فهي التي تساعد على بناء جمهور مهتم ومستمر لذلك أفضل طريقة للنمو هي الجمع بين خدمة زيادة متابعين تيك توك وبين المحتوى الجيد والتفاعل المستمر مع الجمهور شراء متابعين تيك توك في السعودية نوفر خدمة شراء متابعين تيك توك في السعودية بخطوات سهلة وأسعار مناسبة مع إمكانية الطلب في أي وقت يمكنك اختيار العدد المناسب لحسابك وإضافة الرابط ثم إكمال الدفع ليبدأ التنفيذ بشكل تلقائي الخدمة مناسبة لأصحاب المتاجر وصناع المحتوى والحسابات الشخصية والمشاريع التي ترغب في تحسين حضورها على تيك توك أفضل متجر زيادة متابعين تيك توك عند البحث عن أفضل متجر متابعين تيك توك يجب الاهتمام بسهولة الطلب ووضوح شروط الخدمة وسرعة التنفيذ ووجود دعم فني في متجر نجد بلس نحرص على توفير تجربة طلب واضحة وسهلة مع عرض جميع التعليمات المهمة قبل الشراء حتى يعرف العميل طريقة الاستخدام ومدة التنفيذ وشروط الضمان لماذا تختار نجد بلس سهولة وسرعة في الطلب خدمات رقمية متنوعة أسعار مناسبة تنفيذ تلقائي دعم فني خيارات متعددة تناسب احتياجك وضوح الشروط قبل الشراء طرق دفع سهلة تجربة شراء منظمة تنبيه مهم قبل الطلب يرجى مراجعة رابط الحساب والتأكد من صحته قبل الدفع لا يمكن تعديل الرابط بعد بدء التنفيذ في بعض الحالات لا ترسل أكثر من طلب لنفس الحساب في الوقت نفسه لا تقم بشراء نفس الخدمة من أكثر من متجر أثناء تنفيذ الطلب أي تغيير في اسم المستخدم أو خصوصية الحساب قد يؤثر في التنفيذ أو الضمان قد تختلف سرعة التنفيذ من طلب إلى آخر حسب الضغط والكمية أسئلة شائعة متى يبدأ الطلب يبدأ الطلب عادة بعد تأكيد الدفع وقد تختلف سرعة البدء حسب حالة الخدمة هل أحتاج إلى إرسال كلمة المرور لا تحتاج إلى كلمة المرور أو رمز التحقق هل الخدمة مناسبة للحسابات الجديدة نعم ولكن يفضل أن يكون الحساب مجهزا بصورة ووصف وبعض المقاطع قبل طلب الخدمة هل أستطيع طلب كمية أخرى بعد اكتمال الطلب نعم يمكنك إرسال طلب جديد بعد التأكد من اكتمال الطلب السابق ماذا أفعل إذا لم يبدأ الطلب تأكد من أن الحساب عام وأن الرابط صحيح ثم تواصل مع الدعم وأرسل رقم الطلب هل يمكن تنفيذ الطلب لحساب خاص لا يجب فتح الحساب وجعله عاما طوال مدة التنفيذ اطلب متابعين تيك توك الآن اختر العدد المناسب لحسابك وابدأ في تحسين حضورك الرقمي مع خدمة زيادة متابعين تيك توك السريعة والسهلة أدخل رابط الحساب بشكل صحيح وأكمل الطلب وسيبدأ التنفيذ تلقائيا دون الحاجة إلى كلمة مرور أو تسجيل دخو",
+                "url": "https:\/\/najd7.com\/buy-tiktok-followers\/p1344584341",
+                "promotion_title": "زد متابعين تيك توك الآن",
+                "subtitle": "احصل على متابعين تيك توك حقيقيين خل",
+                "type": "service",
+                "status": "sale",
+                "weight": null,
+                "calories": 0,
+                "sku": null,
+                "rating": {
+                    "count": 107,
+                    "stars": 5
+                },
+                "quantity": null,
+                "sold_quantity": 3034,
+                "max_quantity": null,
+                "is_taxable": false,
+                "category": {
+                    "name": "خدمات السوشل ميديا",
+                    "url": null
+                },
+                "sale_channels_external": [],
+                "original_image": "https:\/\/cdn.salla.sa\/VxOpQ\/h8G9m9IzmT8xFVpLM3LSrg6v5qfALd6FgxmCQjXX.webp",
+                "image": {
+                    "url": "https:\/\/cdn.salla.sa\/VxOpQ\/0d7743fd-8231-4c58-9a88-33edcee710f0-500x500-h8G9m9IzmT8xFVpLM3LSrg6v5qfALd6FgxmCQjXX.webp"
+                },
+                "brand": {
+                    "id": null,
+                    "url": null,
+                    "name": null
+                },
+                "tags": [
+                    {
+                        "name": "زيادة متابعين تيك توك",
+                        "url": null
+                    },
+                    {
+                        "name": "شراء متابعين تيك توك",
+                        "url": null
+                    },
+                    {
+                        "name": "متابعين تيك توك السعودية",
+                        "url": null
+                    },
+                    {
+                        "name": "دعم تيك توك",
+                        "url": null
+                    },
+                    {
+                        "name": "رفع متابعين تيك توك",
+                        "url": null
+                    },
+                    {
+                        "name": "متابعين تيك توك",
+                        "url": null
+                    },
+                    {
+                        "name": "زيادة حساب تيك توك",
+                        "url": null
+                    },
+                    {
+                        "name": "خدمات تيك توك",
+                        "url": null
+                    },
+                    {
+                        "name": "متابعين تيك توك حقيقيين",
+                        "url": null
+                    },
+                    {
+                        "name": "متابعين تيك توك سريع",
+                        "url": null
+                    }
+                ],
+                "can_add_note": false,
+                "can_upload_file": false,
+                "is_on_sale": false,
+                "is_hidded_quantity": false,
+                "is_available": true,
+                "is_donation": false,
+                "is_out_of_stock": false,
+                "is_require_shipping": false,
+                "is_dynamic_pricing": false,
+                "regular_price": 1,
+                "price": 1,
+                "sale_price": null,
+                "starting_price": null,
+                "currency": "SAR",
+                "mpn": null,
+                "gtin": null,
+                "google_taxonomy_id": null,
+                "discount_ends": null,
+                "discount_starts": null,
+                "has_options": false,
+                "pinned": false,
+                "mahly_category_id": null,
+                "spam_status": 0,
+                "branches": [],
+                "branches_v2": [],
+                "has_preorder_campaign": false,
+                "preorder": [],
+                "custom_url": "buy-tiktok-followers",
+                "unlimited_quantity": true,
+                "features": {
+                    "availability_notify": null,
+                    "show_rating": true
+                }
+            },
+            {
+                "id": "2103644215",
+                "scope_id": null,
+                "name": "اشتراك تطبيقات بلس للايفون لمدة سنة | تفعيل فوري | سعر 29.99",
+                "description": "اشتراك تطبيقات بلس لمدة سنة كاملة بدون أكواد السعر: 29.99 اشترك في تطبيقات بلس لمدة سنة كاملة واستمتع بأكثر من 4900+ تطبيق مميز ومطور للآيفون بدون إعلانات مزعجة وبأفضل أداء ممكن. مميزات اشتراك تطبيقات بلس: • سناب بلس.&nbsp; • يوتيوب بلس بدون إعلانات.&nbsp; • تطبيقات السوشال ميديا المطورة.&nbsp; • تطبيقات الأفلام والمسلسلات.&nbsp; • تطبيقات الأنمي.&nbsp; • تطبيقات التصميم المدفوعة ومفتوحة المزايا.&nbsp; • تطبيقات محذوفة من متجر App Store.&nbsp; • تطبيقات الجيلبريك.&nbsp; • تحديثات مستمرة للتطبيقات.&nbsp; • التوقيع التلقائي.&nbsp; • مكتبة ضخمة تضم أكثر من 900 تطبيق. تطبيقات التصميم والمونتاج استمتع بمجموعة مميزة من تطبيقات التصميم وتحرير الصور وصناعة الفيديو، المناسبة للمصممين وصناع المحتوى وأصحاب المتاجر والحسابات الشخصية. ومن أشهر تطبيقات التصميم المتوفرة: • Video Star — لإنشاء وتعديل الفيديوهات وإضافة المؤثرات والانتقالات الاحترافية. • Picsart — لتحرير الصور وإضافة الفلاتر والتأثيرات والنصوص وصناعة التصاميم بسهولة. • Cute CUT Pro — لتعديل ومونتاج الفيديو وإضافة المقاطع والصور والنصوص والمؤثرات. • Infltr — لتحرير الصور وإضافة الفلاتر والتعديلات المتنوعة. توفر تطبيقات التصميم خيارات وأدوات إضافية تساعدك على إنشاء الصور والفيديوهات بطريقة أسرع وأكثر احترافية تطبيقات التواصل الاجتماعي المطورة يحتوي الاشتراك على مجموعة من تطبيقات التواصل الاجتماعي المطورة التي توفر مزايا إضافية مقارنة بالإصدارات التقليدية. قد تشمل المزايا حسب التطبيق والإصدار: • تحميل الصور ومقاطع الفيديو. • حفظ مقاطع الفيديو داخل الجهاز. • تشغيل الفيديو في الخلفية. • تقليل الإعلانات أو إزالتها في بعض التطبيقات. • خيارات إضافية للتحكم في الخصوصية. • إمكانية تشغيل أو إيقاف بعض المميزات من إعدادات التطبيق. • أدوات إضافية لتحسين تجربة الاستخدام. تختلف المميزات المتوفرة من تطبيق إلى آخر، وقد تتغير حسب تحديثات التطبيقات تطبيقات الأفلام والمسلسلات والأنمي استمتع بمجموعة متنوعة من تطبيقات الترفيه ومشاهدة المحتوى، والتي تشمل تطبيقات للأفلام والمسلسلات والأنمي. ومن التطبيقات التي قد تتوفر داخل المكتبة: • Anime Cloud. • Anime Slayer. • HDO Player. • MediaBox. • تطبيقات ترفيه ومشاهدة متنوعة. يتم تحديث قائمة التطبيقات بشكل مستمر، وقد يتم إضافة تطبيقات جديدة أو تغيير بعض التطبيقات حسب توفرها. الألعاب وتطبيقات الترفيه يضم اشتراك تطبيقات بلس مجموعة متنوعة من الألعاب والتطبيقات الترفيهية، وتشمل: • ألعاب الآيفون الشهيرة. • ألعاب الأركيد. • ألعاب بإضافات ومزايا متنوعة. • تطبيقات ترفيه غير متوفرة داخل متجر App Store. • ألعاب وتطبيقات يتم إضافتها وتحديثها باستمرار. تطبيقات غير متوفرة في App Store يوفر المتجر مجموعة من التطبيقات التي قد لا تكون متاحة داخل متجر App Store، مما يمنحك خيارات إضافية وتجربة استخدام متنوعة من خلال اشتراك واحد. تحديثات مستمرة للتطبيقات تتم متابعة وتحديث مكتبة تطبيقات بلس بشكل مستمر للمحافظة على توفر أحدث الإصدارات وإضافة المزيد من التطبيقات والمميزات عند توفرها. قد تختلف بعض التطبيقات أو المميزات بسبب تحديثات التطبيقات أو تغييرات أنظمة الآيفون. مميزات إضافية لاشتراك تطبيقات بلس • اشتراك لمدة سنة كاملة. • أكثر من 4800 تطبيق متنوع. • تطبيقات مطورة ومدفوعة. • تطبيقات تصميم ومونتاج. • تطبيقات أفلام ومسلسلات وأنمي. • تطبيقات تواصل اجتماعي مطورة. • ألعاب وتطبيقات ترفيه متنوعة. • تطبيقات غير متوفرة في App Store. • تحديثات مستمرة للمكتبة. • يعمل على أجهزة الآيفون. • لا يحتاج إلى جلبريك. • تفعيل سريع وسهل لمن يناسب الاشتراك؟ يناسب اشتراك تطبيقات بلس مستخدمي الآيفون الراغبين في الحصول على تطبيقات مطورة وبرامج تصميم ومونتاج وتطبيقات ترفيه وألعاب متنوعة من خلال اشتراك واحد. 2) قسم: لماذا تختار نجد بلس؟ مهم جدًا للثقة: عند الاشتراك من نجد بلس تحصل على تفعيل سريع وشرح واضح لطريقة الاستخدام ودعم فني للمساعدة بالإضافة إلى مكتبة متنوعة يتم تحديثها باستمرار. • متجر بخبرة أكثر من 7 سنوات • أكثر من 10 آلاف عملية شراء للمنتج • تفعيل سريع • دعم فني بعد الشراء • شرح كامل لطريقة التثبيت 3) الأسئلة الشائعة هل يعمل الاشتراك على الآيفون؟ نعم الاشتراك مخصص لأجهزة الآيفون المتوافقة. هل يحتاج جلبريك؟ لا لا يحتاج إلى جلبريك. كم مدة الاشتراك؟ مدة الاشتراك سنة كاملة من تاريخ التفعيل. متى يصل الاشتراك؟ يتم إرسال بيانات وخطوات التفعيل بعد إتمام الطلب. هل التطبيقات تتحدث؟ يتم تحديث مكتبة التطبيقات وإضافة الإصدارات المتوفرة بصورة مستمرة طريقة التفعيل: بعد الشراء تصلك رسالة تحتوي على شرح التفعيل الكامل وخطوات الاستخدام بالتفصيل. ملاحظات مهمة: • الاشتراك مخصص للآيفون.&nbsp; • التسليم فوري 100%&nbsp; • دعم فني للمساعدة عند الحاجة. لماذا تطبيقات بلس؟ إذا كنت تبحث عن أفضل اشتراك تطبيقات بلس للايفون، فإن هذه الخدمة تمنحك الوصول إلى أشهر التطبيقات المعدلة والمدفوعة في مكان واحد. يمكنك الاستمتاع باستخدام سناب بلس ويوتيوب بلس وتطبيقات التواصل الاجتماعي والأفلام والمسلسلات بدون قيود، مع تحديثات مستمرة وتجربة استخدام مستقرة وآمنة.",
+                "url": "https:\/\/najd7.com\/اشتراك-تطبيقات-بلس-للايفون-سنة-تفعيل-فوري\/p2103644215",
+                "promotion_title": "تطبيقات معدلة ، ومتفوعه",
+                "subtitle": "تطبيقات بلس تفعيل فوري",
+                "type": "codes",
+                "status": "sale",
+                "weight": null,
+                "calories": 0,
+                "sku": null,
+                "rating": {
+                    "count": 154,
+                    "stars": 5
+                },
+                "quantity": null,
+                "sold_quantity": 10734,
+                "max_quantity": null,
+                "is_taxable": false,
+                "category": {
+                    "name": "تطبيقات بلس",
+                    "url": null
+                },
+                "sale_channels_external": [],
+                "original_image": "https:\/\/cdn.salla.sa\/VxOpQ\/oqZhScHbBoQduXzlaJY8qZetNBrttHGxUo2IoNjH.jpg",
+                "image": {
+                    "url": "https:\/\/cdn.salla.sa\/VxOpQ\/144f2e35-0ba4-4e8b-a34b-006beb97aff6-500x500-oqZhScHbBoQduXzlaJY8qZetNBrttHGxUo2IoNjH.jpg"
+                },
+                "brand": {
+                    "id": null,
+                    "url": null,
+                    "name": null
+                },
+                "tags": [
+                    {
+                        "name": "اشتراك بلس للايفون",
+                        "url": null
+                    },
+                    {
+                        "name": "سناب بلس",
+                        "url": null
+                    },
+                    {
+                        "name": "تطبيقات بلس للايفون",
+                        "url": null
+                    },
+                    {
+                        "name": "اشتراك تطبيقات بلس",
+                        "url": null
+                    },
+                    {
+                        "name": "تطبيقات للايفون",
+                        "url": null
+                    },
+                    {
+                        "name": "ارخص تطبيقات بلس",
+                        "url": null
+                    },
+                    {
+                        "name": "متجر بلس",
+                        "url": null
+                    },
+                    {
+                        "name": "تفعيل فوري",
+                        "url": null
+                    },
+                    {
+                        "name": "تيك توك بلس",
+                        "url": null
+                    },
+                    {
+                        "name": "اشتراك سنة",
+                        "url": null
+                    },
+                    {
+                        "name": "متجر تطبيقات بلس",
+                        "url": null
+                    },
+                    {
+                        "name": "تطبيقات بلس ب",
+                        "url": null
+                    },
+                    {
+                        "name": "تطبيقات بلس",
+                        "url": null
+                    },
+                    {
+                        "name": "خدمات ايفون",
+                        "url": null
+                    },
+                    {
+                        "name": "واتساب بلس",
+                        "url": null
+                    },
+                    {
+                        "name": "تطبيقات ايفون",
+                        "url": null
+                    }
+                ],
+                "can_add_note": true,
+                "can_upload_file": true,
+                "is_on_sale": true,
+                "is_hidded_quantity": false,
+                "is_available": true,
+                "is_donation": false,
+                "is_out_of_stock": false,
+                "is_require_shipping": false,
+                "is_dynamic_pricing": false,
+                "regular_price": 59.99,
+                "price": 29.99,
+                "sale_price": 29.99,
+                "starting_price": null,
+                "currency": "SAR",
+                "mpn": null,
+                "gtin": null,
+                "google_taxonomy_id": null,
+                "discount_ends": null,
+                "discount_starts": null,
+                "has_options": false,
+                "pinned": false,
+                "mahly_category_id": 1006,
+                "spam_status": 4,
+                "branches": [],
+                "branches_v2": [],
+                "has_preorder_campaign": false,
+                "preorder": [],
+                "custom_url": "اشتراك-تطبيقات-بلس-للايفون-سنة-تفعيل-فوري",
+                "unlimited_quantity": false,
+                "features": {
+                    "availability_notify": null,
+                    "show_rating": true
+                }
+            }
+        ],
+        "filters": null,
+        "cursor": {
+            "current": 1,
+            "next": null
+        }
+    },
+    "reviews": {
+        "status": 200,
+        "success": true,
+        "data": [
+            {
+                "id": 442745839,
+                "replies": [],
+                "content": "ممتاز لكن اتمنى سرعه الرد لمن نرسل على الواتس وحل اي مشكله",
+                "type": "customer",
+                "avatar": "https:\/\/cdn.assets.salla.network\/prod\/stores\/themes\/default\/assets\/images\/avatar_male.png",
+                "name": "ايمان ",
+                "stars": 5,
+                "is_pending": false,
+                "has_order": true,
+                "likes_count": null,
+                "customer_id": 2106805699,
+                "city": "تبوك",
+                "date": 1784062994,
+                "images": [],
+                "text": "ممتاز لكن اتمنى سرعه الرد لمن نرسل على الواتس وحل اي مشكله",
+                "can_update": false,
+                "product": {
+                    "id": 2103644215,
+                    "name": "اشتراك تطبيقات بلس للايفون لمدة سنة | تفعيل فوري | سعر 29.99",
+                    "image": {
+                        "url": "https:\/\/cdn.salla.sa\/VxOpQ\/144f2e35-0ba4-4e8b-a34b-006beb97aff6-500x500-oqZhScHbBoQduXzlaJY8qZetNBrttHGxUo2IoNjH.jpg",
+                        "alt": "اشتراك تطبيقات بلس للايفون لمدة سنة  تفعيل فوري  سعر 29.99"
+                    },
+                    "url": "https:\/\/najd7.com\/اشتراك-تطبيقات-بلس-للايفون-سنة-تفعيل-فوري\/p2103644215",
+                    "sold_quantity": 10731,
+                    "can_show_sold": true
+                },
+                "shipping": null,
+                "is_pinned": false,
+                "created_at": {
+                    "date": "2026-07-15 00:03:14.000000",
+                    "timezone_type": 3,
+                    "timezone": "Asia\/Riyadh"
+                },
+                "factor_reviews": []
+            },
+            {
+                "id": 2024919967,
+                "replies": [],
+                "content": "رووعه وسريعيين بالتنفيذ",
+                "type": "customer",
+                "avatar": "https:\/\/cdn.assets.salla.network\/prod\/stores\/themes\/default\/assets\/images\/avatar_male.png",
+                "name": "ايمان ",
+                "stars": 5,
+                "is_pending": false,
+                "has_order": true,
+                "likes_count": null,
+                "customer_id": 2106805699,
+                "city": "تبوك",
+                "date": 1784062938,
+                "images": [],
+                "text": "رووعه وسريعيين بالتنفيذ",
+                "can_update": false,
+                "product": null,
+                "shipping": null,
+                "is_pinned": false,
+                "created_at": {
+                    "date": "2026-07-15 00:02:18.000000",
+                    "timezone_type": 3,
+                    "timezone": "Asia\/Riyadh"
+                },
+                "factor_reviews": []
+            },
+            {
+                "id": 1924804166,
+                "replies": [],
+                "content": "",
+                "type": "customer",
+                "avatar": "https:\/\/cdn.assets.salla.network\/prod\/stores\/themes\/default\/assets\/images\/avatar_male.png",
+                "name": "عادل الزبيدي",
+                "stars": 5,
+                "is_pending": false,
+                "has_order": true,
+                "likes_count": null,
+                "customer_id": 12095609,
+                "city": "العقدة (جبل السودان)",
+                "date": 1784047775,
+                "images": [],
+                "text": null,
+                "can_update": false,
+                "product": null,
+                "shipping": null,
+                "is_pinned": false,
+                "created_at": {
+                    "date": "2026-07-14 19:49:35.000000",
+                    "timezone_type": 3,
+                    "timezone": "Asia\/Riyadh"
+                },
+                "factor_reviews": []
+            },
+            {
+                "id": 690162971,
+                "replies": [
+                    {
+                        "id": 1080842870,
+                        "rating": 0,
+                        "content": "نتشرف فيك ي شيخ في اي وقت ♥️🫡",
+                        "status": "approved",
+                        "created_at": {
+                            "date": "2026-07-14 13:40:55.000000",
+                            "timezone_type": 3,
+                            "timezone": "Asia\/Riyadh"
+                        },
+                        "replies": [],
+                        "images": [],
+                        "text": "نتشرف فيك ي شيخ في اي وقت ♥️🫡",
+                        "type": "admin",
+                        "avatar": "https:\/\/cdn.salla.sa\/VxOpQ\/imV92qG9gbZ8FzqoombO24J4wLCaD2LVWCCH7Zci.png",
+                        "name": "نجد بلس 🤩🔥",
+                        "stars": 0,
+                        "is_pending": false,
+                        "has_order": false,
+                        "likes_count": null,
+                        "kind": "page",
+                        "session_id": null,
+                        "customer_id": null,
+                        "city": null,
+                        "date": 1784025655,
+                        "can_update": false,
+                        "product": {
+                            "id": 2103644215,
+                            "name": "اشتراك تطبيقات بلس للايفون لمدة سنة | تفعيل فوري | سعر 29.99",
+                            "image": {
+                                "url": "https:\/\/cdn.salla.sa\/VxOpQ\/144f2e35-0ba4-4e8b-a34b-006beb97aff6-500x500-oqZhScHbBoQduXzlaJY8qZetNBrttHGxUo2IoNjH.jpg",
+                                "alt": "اشتراك تطبيقات بلس للايفون لمدة سنة  تفعيل فوري  سعر 29.99"
+                            },
+                            "url": "https:\/\/najd7.com\/اشتراك-تطبيقات-بلس-للايفون-سنة-تفعيل-فوري\/p2103644215",
+                            "sold_quantity": 10731,
+                            "can_show_sold": true
+                        },
+                        "is_pinned": false,
+                        "factor_reviews": []
+                    }
+                ],
+                "content": "افضل موقع صراحه واشكركم عليه وخدمة العملاء من افضل الناس اللي تقابلهم ردهم سريع ولا ياخذ وقت ويحلون لك المشاكل في اسرع وقت نشكركم🤍🤍🤍.",
+                "type": "customer",
+                "avatar": "https:\/\/cdn.assets.salla.network\/prod\/stores\/themes\/default\/assets\/images\/avatar_male.png",
+                "name": "فهد الحربي",
+                "stars": 0,
+                "is_pending": false,
+                "has_order": false,
+                "likes_count": null,
+                "customer_id": 617177471,
+                "city": "حفر الباطن",
+                "date": 1784025568,
+                "images": [],
+                "text": "افضل موقع صراحه واشكركم عليه وخدمة العملاء من افضل الناس اللي تقابلهم ردهم سريع ولا ياخذ وقت ويحلون لك المشاكل في اسرع وقت نشكركم🤍🤍🤍.",
+                "can_update": false,
+                "product": {
+                    "id": 2103644215,
+                    "name": "اشتراك تطبيقات بلس للايفون لمدة سنة | تفعيل فوري | سعر 29.99",
+                    "image": {
+                        "url": "https:\/\/cdn.salla.sa\/VxOpQ\/144f2e35-0ba4-4e8b-a34b-006beb97aff6-500x500-oqZhScHbBoQduXzlaJY8qZetNBrttHGxUo2IoNjH.jpg",
+                        "alt": "اشتراك تطبيقات بلس للايفون لمدة سنة  تفعيل فوري  سعر 29.99"
+                    },
+                    "url": "https:\/\/najd7.com\/اشتراك-تطبيقات-بلس-للايفون-سنة-تفعيل-فوري\/p2103644215",
+                    "sold_quantity": 10731,
+                    "can_show_sold": true
+                },
+                "shipping": null,
+                "is_pinned": false,
+                "created_at": {
+                    "date": "2026-07-14 13:39:28.000000",
+                    "timezone_type": 3,
+                    "timezone": "Asia\/Riyadh"
+                },
+                "factor_reviews": []
+            },
+            {
+                "id": 11841184,
+                "replies": [
+                    {
+                        "id": 1009140282,
+                        "rating": 0,
+                        "content": "نتشرف فيك ي شيخ",
+                        "status": "approved",
+                        "created_at": {
+                            "date": "2026-07-13 21:07:22.000000",
+                            "timezone_type": 3,
+                            "timezone": "Asia\/Riyadh"
+                        },
+                        "replies": [],
+                        "images": [],
+                        "text": "نتشرف فيك ي شيخ",
+                        "type": "admin",
+                        "avatar": "https:\/\/cdn.salla.sa\/VxOpQ\/imV92qG9gbZ8FzqoombO24J4wLCaD2LVWCCH7Zci.png",
+                        "name": "نجد بلس 🤩🔥",
+                        "stars": 0,
+                        "is_pending": false,
+                        "has_order": false,
+                        "likes_count": null,
+                        "kind": "page",
+                        "session_id": null,
+                        "customer_id": null,
+                        "city": null,
+                        "date": 1783966042,
+                        "can_update": false,
+                        "product": {
+                            "id": 847523262,
+                            "name": "العب بلوت بدون إعلانات! | اشتراك كملنا السنوي بـ 29 ريال",
+                            "image": {
+                                "url": "https:\/\/cdn.salla.sa\/VxOpQ\/5261c01d-a03c-426f-aa36-7938c1eed953-500x500-wZ89qImaHuKABsxdsGfdUEz0AAAQe3Bw6rtPIV76.webp",
+                                "alt": "العب بلوت بدون إعلانات شتراك كملنا السنوي بـ 29 ريال"
+                            },
+                            "url": "https:\/\/najd7.com\/لعبة-كملنا-بلس\/p847523262",
+                            "sold_quantity": 189,
+                            "can_show_sold": true
+                        },
+                        "is_pinned": false,
+                        "factor_reviews": []
+                    }
+                ],
+                "content": "ممتازيين وكفو هاذا الشعب الي نفخر فيه",
+                "type": "customer",
+                "avatar": "https:\/\/cdn.assets.salla.network\/prod\/stores\/themes\/default\/assets\/images\/avatar_male.png",
+                "name": "Aziz Almutairi 2s",
+                "stars": 5,
+                "is_pending": false,
+                "has_order": true,
+                "likes_count": null,
+                "customer_id": 2130184283,
+                "city": "",
+                "date": 1783964443,
+                "images": [],
+                "text": "ممتازيين وكفو هاذا الشعب الي نفخر فيه",
+                "can_update": false,
+                "product": {
+                    "id": 847523262,
+                    "name": "العب بلوت بدون إعلانات! | اشتراك كملنا السنوي بـ 29 ريال",
+                    "image": {
+                        "url": "https:\/\/cdn.salla.sa\/VxOpQ\/5261c01d-a03c-426f-aa36-7938c1eed953-500x500-wZ89qImaHuKABsxdsGfdUEz0AAAQe3Bw6rtPIV76.webp",
+                        "alt": "العب بلوت بدون إعلانات شتراك كملنا السنوي بـ 29 ريال"
+                    },
+                    "url": "https:\/\/najd7.com\/لعبة-كملنا-بلس\/p847523262",
+                    "sold_quantity": 189,
+                    "can_show_sold": true
+                },
+                "shipping": null,
+                "is_pinned": false,
+                "created_at": {
+                    "date": "2026-07-13 20:40:43.000000",
+                    "timezone_type": 3,
+                    "timezone": "Asia\/Riyadh"
+                },
+                "factor_reviews": []
+            }
+        ],
+        "pagination": {
+            "count": 5,
+            "total": 1548,
+            "perPage": 5,
+            "currentPage": 1,
+            "totalPages": 310,
+            "links": {
+                "next": "https:\/\/api.salla.dev\/store\/v1\/reviews?page=2"
+            }
+        }
+    }
+}

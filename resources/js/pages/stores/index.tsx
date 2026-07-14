@@ -11,13 +11,18 @@ import {
     CalendarClock,
     LayoutGrid,
     List,
-    SearchX
+    SearchX,
+    MessageCircle
 } from 'lucide-react';
 
 interface Store {
     id: number;
     store_id: string;
     domain: string | null;
+    store_name: string | null;
+    store_logo: string | null;
+    store_description: string | null;
+    contacts: Record<string, string> | null;
     product_name: string | null;
     product_description: string | null;
     product_url: string | null;
@@ -204,11 +209,16 @@ export default function StoresIndex({ stores, filter, stats }: Props) {
                                                 )}
                                             </div>
 
-                                            <div className="flex-1 space-y-2">
-                                                {store.product_name ? (
+                                            <div className="flex-1 space-y-2 mt-2">
+                                                {store.store_logo && (
+                                                    <div className="mb-4">
+                                                        <img src={store.store_logo} alt={store.store_name || 'Store Logo'} className="h-16 w-16 rounded-full object-cover border border-border bg-muted" />
+                                                    </div>
+                                                )}
+                                                {store.store_name || store.product_name || store.domain ? (
                                                     <>
-                                                        <h3 className="font-semibold leading-none tracking-tight line-clamp-1" title={store.product_name}>
-                                                            {store.product_name}
+                                                        <h3 className="font-semibold leading-none tracking-tight line-clamp-1" title={store.store_name || store.product_name || ''}>
+                                                            {store.store_name || store.product_name || store.domain}
                                                         </h3>
                                                         {store.domain && (
                                                             <div className="flex items-center text-xs text-muted-foreground gap-1">
@@ -216,16 +226,16 @@ export default function StoresIndex({ stores, filter, stats }: Props) {
                                                                 <span className="truncate">{store.domain}</span>
                                                             </div>
                                                         )}
-                                                        {store.product_description && (
+                                                        {(store.store_description || store.product_description) && (
                                                             <p className="text-sm text-muted-foreground line-clamp-2 mt-2">
-                                                                {store.product_description}
+                                                                {store.store_description || store.product_description}
                                                             </p>
                                                         )}
                                                     </>
                                                 ) : (
                                                     <div className="flex h-full flex-col items-center justify-center space-y-2 py-6 text-muted-foreground/50">
                                                         <StoreIcon className="h-8 w-8" />
-                                                        <span className="text-xs font-medium">No Product Data</span>
+                                                        <span className="text-xs font-medium">No Data Available</span>
                                                     </div>
                                                 )}
                                             </div>
@@ -243,25 +253,29 @@ export default function StoresIndex({ stores, filter, stats }: Props) {
                                                         <CalendarClock className="h-3.5 w-3.5" />
                                                         {new Date(store.created_at).toLocaleDateString()}
                                                     </div>
-                                                    {store.product_url ? (
-                                                        <a 
-                                                            href={store.product_url} 
-                                                            target="_blank" 
-                                                            rel="noreferrer" 
-                                                            className="inline-flex items-center gap-1 font-medium text-primary hover:underline"
-                                                        >
-                                                            Visit <ExternalLink className="h-3 w-3" />
-                                                        </a>
-                                                    ) : store.domain ? (
-                                                        <a 
-                                                            href={`https://${store.domain}`} 
-                                                            target="_blank" 
-                                                            rel="noreferrer" 
-                                                            className="inline-flex items-center gap-1 font-medium text-primary hover:underline"
-                                                        >
-                                                            Visit <ExternalLink className="h-3 w-3" />
-                                                        </a>
-                                                    ) : null}
+                                                    <div className="flex items-center gap-3">
+                                                        {store.contacts?.whatsapp && (
+                                                            <a 
+                                                                href={`https://wa.me/${store.contacts.whatsapp.replace(/[^0-9]/g, '')}`} 
+                                                                target="_blank" 
+                                                                rel="noreferrer" 
+                                                                className="inline-flex items-center gap-1 font-medium text-emerald-500 hover:underline"
+                                                                title="Contact on WhatsApp"
+                                                            >
+                                                                <MessageCircle className="h-4 w-4" />
+                                                            </a>
+                                                        )}
+                                                        {store.product_url || store.domain ? (
+                                                            <a 
+                                                                href={store.product_url || `https://${store.domain}`} 
+                                                                target="_blank" 
+                                                                rel="noreferrer" 
+                                                                className="inline-flex items-center gap-1 font-medium text-primary hover:underline"
+                                                            >
+                                                                Visit <ExternalLink className="h-3 w-3" />
+                                                            </a>
+                                                        ) : null}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -276,7 +290,7 @@ export default function StoresIndex({ stores, filter, stats }: Props) {
                                         <tr>
                                             <th className="px-4 py-3 font-medium">Store ID</th>
                                             <th className="px-4 py-3 font-medium">Status</th>
-                                            <th className="px-4 py-3 font-medium">Product Name</th>
+                                            <th className="px-4 py-3 font-medium">Store / Product</th>
                                             <th className="px-4 py-3 font-medium">Domain</th>
                                             <th className="px-4 py-3 font-medium">Error / Log</th>
                                             <th className="px-4 py-3 font-medium">Date</th>
@@ -300,8 +314,8 @@ export default function StoresIndex({ stores, filter, stats }: Props) {
                                                         </span>
                                                     )}
                                                 </td>
-                                                <td className="px-4 py-3 max-w-[200px] truncate" title={store.product_name || ''}>
-                                                    {store.product_name || <span className="text-muted-foreground/50">-</span>}
+                                                <td className="px-4 py-3 max-w-[200px] truncate" title={store.store_name || store.product_name || ''}>
+                                                    {store.store_name || store.product_name || <span className="text-muted-foreground/50">-</span>}
                                                 </td>
                                                 <td className="px-4 py-3 max-w-[150px] truncate" title={store.domain || ''}>
                                                     {store.domain ? (

@@ -53,9 +53,6 @@ class CheckStoreJob implements ShouldQueue
                 'accept-language' => 'ar',
                 'cache-control' => 'no-cache',
                 'currency' => 'SAR',
-                'origin' => 'https://najd7.com',
-                'priority' => 'u=1, i',
-                'referer' => 'https://najd7.com/',
                 's-anonymous-id' => 'a0112d9b-77c9-4f9c-b300-4ef13266460a',
                 's-app-os' => 'browser',
                 's-app-version' => '2.14.499',
@@ -74,31 +71,35 @@ class CheckStoreJob implements ShouldQueue
                 'store-identifier' => $this->storeId,
                 'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36',
                 'x-requested-with' => 'XMLHttpRequest',
-            ])->get('https://api.salla.dev/store/v1/products', [
-                'limit' => 4,
-            ]);
+            ])->get('https://api.salla.dev/store/v1/store/settings');
 
             $status = $response->status();
             $data = $response->json();
 
             $isFound = false;
             $domain = null;
-            $productName = null;
-            $productDescription = null;
-            $productUrl = null;
+            $storeName = null;
+            $storeLogo = null;
+            $storeDescription = null;
+            $contacts = null;
+            $features = null;
+            $fullSettings = null;
             $errorLog = null;
 
             if ($status === 200 && isset($data['success']) && $data['success']) {
                 $isFound = true;
+                $store = $data['data']['store'] ?? null;
+                if ($store) {
+                    $storeName = $store['meta']['title'] ?? null;
+                    $storeDescription = $store['meta']['description'] ?? null;
+                    $storeLogo = $store['logo'] ?? null;
+                    $contacts = $store['contacts'] ?? null;
+                    $features = $store['features'] ?? null;
+                    $fullSettings = $data;
 
-                if (! empty($data['data'])) {
-                    $firstProduct = $data['data'][0];
-                    $productUrl = $firstProduct['url'] ?? null;
-                    $productName = $firstProduct['name'] ?? null;
-                    $productDescription = $firstProduct['description'] ?? null;
-
-                    if ($productUrl) {
-                        $parsedUrl = parse_url($productUrl);
+                    $trackUrl = $data['data']['jitsu']['track_url'] ?? null;
+                    if ($trackUrl) {
+                        $parsedUrl = parse_url($trackUrl);
                         if (isset($parsedUrl['host'])) {
                             $domain = $parsedUrl['host'];
                         }
@@ -114,9 +115,12 @@ class CheckStoreJob implements ShouldQueue
                 ['store_id' => (string) $this->storeId],
                 [
                     'domain' => $domain,
-                    'product_name' => $productName,
-                    'product_description' => $productDescription,
-                    'product_url' => $productUrl,
+                    'store_name' => $storeName,
+                    'store_logo' => $storeLogo,
+                    'store_description' => $storeDescription,
+                    'contacts' => $contacts,
+                    'features' => $features,
+                    'full_settings' => $fullSettings,
                     'error_log' => $errorLog,
                     'is_found' => $isFound,
                 ]
