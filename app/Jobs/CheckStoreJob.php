@@ -31,7 +31,15 @@ class CheckStoreJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $this->processStore();
+        Redis::throttle('salla-api')
+            ->allow(15)
+            ->every(30)
+            ->then(function () {
+                $this->processStore();
+            }, function () {
+                // Could not obtain lock; release back to the queue after 30 seconds
+                $this->release(30);
+            });
     }
 
     protected function processStore(): void
