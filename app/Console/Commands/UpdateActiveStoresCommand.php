@@ -33,7 +33,7 @@ class UpdateActiveStoresCommand extends Command
 
         foreach ($stores as $store) {
             try {
-                $response = \Illuminate\Support\Facades\Http::withOptions([
+                $response = \Illuminate\Support\Facades\Http::withoutVerifying()->withOptions([
                     'version' => 2.0,
                 ])->withHeaders([
                     'accept' => 'application/json, text/plain, */*',
@@ -66,19 +66,21 @@ class UpdateActiveStoresCommand extends Command
                 if ($status === 200 && isset($data['success']) && $data['success']) {
                     $storeData = $data['data']['store'] ?? null;
                     if ($storeData) {
-                        $storeName = $storeData['meta']['title'] ?? null;
-                        $storeDescription = $storeData['meta']['description'] ?? null;
-                        $storeLogo = $storeData['logo'] ?? null;
+                        $storeName = !empty($storeData['meta']['title']) ? $storeData['meta']['title'] : ($storeData['name'] ?? null);
+                        $storeDescription = !empty($storeData['meta']['description']) ? $storeData['meta']['description'] : ($storeData['description'] ?? null);
+                        $storeLogo = !empty($storeData['logo']) ? $storeData['logo'] : ($storeData['avatar'] ?? null);
                         $contacts = $storeData['contacts'] ?? null;
                         $features = $storeData['features'] ?? null;
                         $fullSettings = $data;
 
-                        $trackUrl = $data['data']['jitsu']['track_url'] ?? null;
+                        $trackUrl = $data['data']['jitsu']['track_url'] ?? ($storeData['url'] ?? null);
                         $domain = $store->domain;
                         if ($trackUrl) {
                             $parsedUrl = parse_url($trackUrl);
                             if (isset($parsedUrl['host'])) {
                                 $domain = $parsedUrl['host'];
+                            } else if (isset($parsedUrl['path'])) {
+                                $domain = $parsedUrl['path'];
                             }
                         }
 
@@ -95,7 +97,7 @@ class UpdateActiveStoresCommand extends Command
                 }
 
                 // Fetch products to verify active products exist
-                $productsResponse = \Illuminate\Support\Facades\Http::withOptions([
+                $productsResponse = \Illuminate\Support\Facades\Http::withoutVerifying()->withOptions([
                     'version' => 2.0,
                 ])->withHeaders([
                     'accept' => 'application/json, text/plain, */*',

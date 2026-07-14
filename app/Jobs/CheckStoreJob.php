@@ -46,7 +46,7 @@ class CheckStoreJob implements ShouldQueue
     protected function processStore(): void
     {
         try {
-            $response = Http::withOptions([
+            $response = Http::withoutVerifying()->withOptions([
                 'version' => 2.0,
             ])->withHeaders([
                 'accept' => 'application/json, text/plain, */*',
@@ -95,24 +95,27 @@ class CheckStoreJob implements ShouldQueue
                 $isFound = true;
                 $store = $data['data']['store'] ?? null;
                 if ($store) {
-                    $storeName = $store['meta']['title'] ?? null;
-                    $storeDescription = $store['meta']['description'] ?? null;
-                    $storeLogo = $store['logo'] ?? null;
+                    $storeName = !empty($store['meta']['title']) ? $store['meta']['title'] : ($store['name'] ?? null);
+                    $storeDescription = !empty($store['meta']['description']) ? $store['meta']['description'] : ($store['description'] ?? null);
+                    $storeLogo = !empty($store['logo']) ? $store['logo'] : ($store['avatar'] ?? null);
                     $contacts = $store['contacts'] ?? null;
                     $features = $store['features'] ?? null;
                     $fullSettings = $data;
 
-                    $trackUrl = $data['data']['jitsu']['track_url'] ?? null;
+                    $trackUrl = $data['data']['jitsu']['track_url'] ?? ($store['url'] ?? null);
                     if ($trackUrl) {
                         $parsedUrl = parse_url($trackUrl);
                         if (isset($parsedUrl['host'])) {
                             $domain = $parsedUrl['host'];
+                        } else if (isset($parsedUrl['path'])) {
+                            // in case it's just a domain string without scheme
+                            $domain = $parsedUrl['path'];
                         }
                     }
                 }
 
                 // Fetch products to verify active products exist
-                $productsResponse = Http::withOptions([
+                $productsResponse = Http::withoutVerifying()->withOptions([
                     'version' => 2.0,
                 ])->withHeaders([
                     'accept' => 'application/json, text/plain, */*',
