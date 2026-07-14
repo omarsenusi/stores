@@ -36,6 +36,7 @@ interface Store {
     full_settings?: {
         data?: {
             store?: {
+                url?: string;
                 settings?: {
                     freelance_number?: string;
                 };
@@ -245,10 +246,10 @@ export default function StoresIndex({ stores, filter, stats }: Props) {
                                                         <h3 className="font-semibold leading-none tracking-tight line-clamp-1" title={store.store_name || store.product_name || ''}>
                                                             {store.store_name || store.product_name || store.domain}
                                                         </h3>
-                                                        {store.domain && (
+                                                        {(store.full_settings?.data?.store?.url || store.domain) && (
                                                             <div className="flex items-center text-xs text-muted-foreground gap-1">
-                                                                <LinkIcon className="h-3 w-3" />
-                                                                <span className="truncate">{store.domain}</span>
+                                                                <LinkIcon className="h-3 w-3 shrink-0" />
+                                                                <span className="truncate" title={store.full_settings?.data?.store?.url || store.domain || ''}>{store.full_settings?.data?.store?.url || store.domain}</span>
                                                             </div>
                                                         )}
                                                         {(store.store_description || store.product_description) && (
@@ -290,9 +291,9 @@ export default function StoresIndex({ stores, filter, stats }: Props) {
                                                                 <MessageCircle className="h-4 w-4" />
                                                             </a>
                                                         )}
-                                                        {store.product_url || store.domain ? (
+                                                        {store.product_url || store.full_settings?.data?.store?.url || store.domain ? (
                                                             <a 
-                                                                href={store.product_url || `https://${store.domain}`} 
+                                                                href={store.product_url || store.full_settings?.data?.store?.url || `https://${store.domain}`} 
                                                                 target="_blank" 
                                                                 rel="noreferrer" 
                                                                 className="inline-flex items-center gap-1 font-medium text-primary hover:underline"
@@ -353,9 +354,9 @@ export default function StoresIndex({ stores, filter, stats }: Props) {
                                                         )}
                                                         <div className="flex flex-col min-w-0 max-w-[250px]">
                                                             <div className="flex items-center gap-2">
-                                                                <span className="font-semibold truncate" title={store.store_name || store.domain || ''}>
-                                                                    {store.store_name || store.domain || '-'}
-                                                                </span>
+                                                            <span className="font-semibold truncate" title={store.store_name || store.full_settings?.data?.store?.url || store.domain || ''}>
+                                                                {store.store_name || store.full_settings?.data?.store?.url || store.domain || '-'}
+                                                            </span>
                                                                 {store.full_settings?.data?.maintenance === true && (
                                                                     <Lock className="h-3 w-3 text-amber-500 shrink-0" title="Maintenance Mode" />
                                                                 )}
@@ -439,9 +440,9 @@ export default function StoresIndex({ stores, filter, stats }: Props) {
                                                         >
                                                             <ExternalLink className="h-4 w-4" />
                                                         </a>
-                                                    ) : store.domain ? (
+                                                    ) : store.full_settings?.data?.store?.url || store.domain ? (
                                                         <a 
-                                                            href={`https://${store.domain}`} 
+                                                            href={store.full_settings?.data?.store?.url || `https://${store.domain}`} 
                                                             target="_blank" 
                                                             rel="noreferrer" 
                                                             className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:text-primary bg-primary/10 p-2"
