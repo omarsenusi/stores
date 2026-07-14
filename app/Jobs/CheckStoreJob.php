@@ -47,17 +47,33 @@ class CheckStoreJob implements ShouldQueue
         try {
             $response = Http::withHeaders([
                 'accept' => 'application/json, text/plain, */*',
-                's-anonymous-id' => '5aee9542-9f2a-4393-910d-bbcb3b5c74bb',
+                'accept-language' => 'ar',
+                'cache-control' => 'no-cache',
+                'currency' => 'SAR',
+                'origin' => 'https://najd7.com',
+                'priority' => 'u=1, i',
+                'referer' => 'https://najd7.com/',
+                's-anonymous-id' => 'a0112d9b-77c9-4f9c-b300-4ef13266460a',
                 's-app-os' => 'browser',
                 's-app-version' => '2.14.499',
                 's-country' => 'EG',
                 's-ray' => '50',
                 's-source' => 'twilight',
                 's-store-api-version' => 'swoole',
+                's-user-id' => 'FfuSe8KENcaVTETwoNKfS0CLbCDXBTnNIvIDplKz',
+                's-version-id' => '1307728351',
+                'sec-ch-ua' => '"Not;A=Brand";v="8", "Chromium";v="150", "Google Chrome";v="150"',
+                'sec-ch-ua-mobile' => '?0',
+                'sec-ch-ua-platform' => '"Windows"',
+                'sec-fetch-dest' => 'empty',
+                'sec-fetch-mode' => 'cors',
+                'sec-fetch-site' => 'cross-site',
                 'store-identifier' => $this->storeId,
-                'user-agent' => 'Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Mobile Safari/537.36',
+                'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36',
                 'x-requested-with' => 'XMLHttpRequest',
-            ])->get('https://api.salla.dev/store/v1/products?limit=3');
+            ])->get('https://api.salla.dev/store/v1/products', [
+                'limit' => 4,
+            ]);
 
             $status = $response->status();
             $data = $response->json();
@@ -85,7 +101,7 @@ class CheckStoreJob implements ShouldQueue
                         }
                     }
                 }
-            } elseif (in_array($status, [404, 405])) {
+            } elseif (in_array($status, [403, 404, 405, 410])) {
                 $isFound = false;
             } else {
                 $errorLog = "Unexpected status {$status}: ".substr($response->body(), 0, 500);
