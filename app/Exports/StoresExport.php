@@ -8,12 +8,13 @@ use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithStyles;
-use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
-class StoresExport implements FromQuery, WithHeadings, WithMapping, WithStyles, ShouldAutoSize
+class StoresExport implements FromQuery, WithHeadings, WithMapping, WithStyles, WithColumnWidths
 {
     protected $request;
 
@@ -83,6 +84,10 @@ class StoresExport implements FromQuery, WithHeadings, WithMapping, WithStyles, 
         $contacts = is_array($store->contacts) ? $store->contacts : json_decode($store->contacts, true) ?? [];
         $whatsapp = $contacts['whatsapp'] ?? '';
         $mobile = $contacts['mobile'] ?? '';
+        
+        // Add a space before phone numbers to force Excel to treat them as text and avoid scientific notation (e.g. 9.66E+11)
+        $whatsapp = $whatsapp ? ' ' . $whatsapp : '';
+        $mobile = $mobile ? ' ' . $mobile : '';
 
         $features = $data['store']['features'] ?? [];
         $loyalty = in_array('loyalty-system-v2', $features) || in_array('loyalty-system', $features) ? 'Yes' : 'No';
@@ -103,8 +108,35 @@ class StoresExport implements FromQuery, WithHeadings, WithMapping, WithStyles, 
         ];
     }
 
+    public function columnWidths(): array
+    {
+        return [
+            'A' => 10, // ID
+            'B' => 30, // Store Name
+            'C' => 45, // URL / Domain
+            'D' => 20, // Freelance Number
+            'E' => 20, // WhatsApp
+            'F' => 20, // Mobile
+            'G' => 15, // Maintenance
+            'H' => 25, // Theme Name
+            'I' => 15, // Theme Mode
+            'J' => 15, // Loyalty System
+            'K' => 50, // Description
+            'L' => 22, // Scraped At
+        ];
+    }
+
     public function styles(Worksheet $sheet)
     {
+        // Add AutoFilter to the first row (A to L)
+        $sheet->setAutoFilter('A1:L1');
+
+        // Apply alignment to all cells
+        $sheet->getStyle('A2:L'.$sheet->getHighestRow())
+              ->getAlignment()
+              ->setVertical(Alignment::VERTICAL_CENTER)
+              ->setWrapText(true); // Allow description to wrap if it's too long
+
         return [
             1 => [
                 'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
@@ -117,6 +149,10 @@ class StoresExport implements FromQuery, WithHeadings, WithMapping, WithStyles, 
                         'borderStyle' => Border::BORDER_MEDIUM,
                         'color' => ['rgb' => '000000'],
                     ],
+                ],
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                    'vertical' => Alignment::VERTICAL_CENTER,
                 ],
             ],
         ];
