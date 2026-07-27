@@ -73,7 +73,7 @@ class CheckStoreJob implements ShouldQueue
 
         // Pre-check: If store already exists and is_found is true, skip API call and update campaign stats
         $existing = ScrapedStore::where('store_id', (string) $this->storeId)
-            ->orWhere('store_id', $cleanIdentifier)
+            ->orWhere('slug', $cleanIdentifier)
             ->orWhere('domain', 'like', "%{$cleanIdentifier}%")
             ->first();
 
@@ -151,6 +151,7 @@ class CheckStoreJob implements ShouldQueue
             $productImage = null;
 
             $actualStoreId = (string) $this->storeId;
+            $extractedSlug = ! preg_match('/^\d+$/', $cleanIdentifier) ? $cleanIdentifier : null;
 
             if ($status === 200 && isset($data['success']) && $data['success']) {
                 $isFound = true;
@@ -158,6 +159,10 @@ class CheckStoreJob implements ShouldQueue
                 if ($store) {
                     if (isset($store['id'])) {
                         $actualStoreId = (string) $store['id'];
+                    }
+
+                    if (! empty($store['username'])) {
+                        $extractedSlug = $store['username'];
                     }
 
                     $storeName = ! empty($store['meta']['title']) ? $store['meta']['title'] : ($store['name'] ?? null);
@@ -248,6 +253,7 @@ class CheckStoreJob implements ShouldQueue
             ScrapedStore::updateOrCreate(
                 ['store_id' => $actualStoreId],
                 [
+                    'slug' => $extractedSlug,
                     'domain' => $domain ?: $cleanIdentifier,
                     'product_name' => $productName,
                     'product_description' => $productDescription,
@@ -271,6 +277,7 @@ class CheckStoreJob implements ShouldQueue
             ScrapedStore::updateOrCreate(
                 ['store_id' => (string) $this->storeId],
                 [
+                    'slug' => $cleanIdentifier,
                     'error_log' => $errorMsg,
                 ]
             );
