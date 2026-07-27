@@ -270,45 +270,80 @@ class ProcessSerpApiCampaignJob implements ShouldQueue
 
     private function extractStoreIdFromWebsite(string $url): array
     {
-        try {
-            $response = Http::withHeaders([
-                'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-                'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                'Accept-Language' => 'ar-SA,ar;q=0.9,en-US;q=0.8,en;q=0.7',
-            ])
-                ->withoutVerifying()
-                ->timeout(12)
-                ->get($url);
+        $urlsToTry = [$url];
 
-            if ($response->failed()) {
-                return ['store_id' => null, 'error' => "فشل زيارة الموقع (HTTP {$response->status()})"];
+        $parsed = parse_url($url);
+        $host = strtolower($parsed['host'] ?? '');
+        $path = trim($parsed['path'] ?? '', '/');
+
+        if (str_ends_with($host, '.salla.sa')) {
+            $sub = str_replace('.salla.sa', '', $host);
+            $fallbackUrl = "https://salla.sa/{$sub}";
+            if (! in_array($fallbackUrl, $urlsToTry, true)) {
+                $urlsToTry[] = $fallbackUrl;
             }
-
-            $html = $response->body();
-
-            // Pattern 1: "store":{"id":1347911590
-            if (preg_match('/["\']store["\']\s*:\s*\{\s*["\']id["\']\s*:\s*(\d{5,12})/i', $html, $matches)) {
-                return ['store_id' => $matches[1], 'error' => null];
+        } elseif ($host === 'salla.sa' && ! empty($path)) {
+            $firstSegment = explode('/', $path)[0];
+            $fallbackUrl = "https://{$firstSegment}.salla.sa";
+            if (! in_array($fallbackUrl, $urlsToTry, true)) {
+                $urlsToTry[] = $fallbackUrl;
             }
-
-            // Pattern 2: "store_id": 1347911590 or storeId: 1347911590
-            if (preg_match('/["\']?(?:store_id|storeId|merchant_id|merchantId)["\']?\s*[:=]\s*["\']?(\d{5,12})["\']?/i', $html, $matches)) {
-                return ['store_id' => $matches[1], 'error' => null];
-            }
-
-            // Pattern 3: data-store-id="1347911590"
-            if (preg_match('/data-store-id=["\'](\d{5,12})["\']/i', $html, $matches)) {
-                return ['store_id' => $matches[1], 'error' => null];
-            }
-
-            // Pattern 4: salla.sa/.../123456
-            if (preg_match('/salla\.sa\/[^\/]+\/(\d{5,12})/i', $html, $matches)) {
-                return ['store_id' => $matches[1], 'error' => null];
-            }
-
-            return ['store_id' => null, 'error' => 'تعذر العثور على store_id في كود الصفحة (HTML) للمتجر'];
-        } catch (\Throwable $e) {
-            return ['store_id' => null, 'error' => 'خطأ أثناء الاتصال بالمتجر: '.$e->getMessage()];
         }
+
+        $lastError = null;
+
+        foreach ($urlsToTry as $targetUrl) {
+            try {
+                $response = Http::withHeaders([
+                    'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+                    'Accept-Language' => 'ar-SA,ar;q=0.9,en-US;q=0.8,en;q=0.7',
+                    'Sec-Ch-Ua' => '"Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"',
+                    'Sec-Ch-Ua-Mobile' => '?0',
+                    'Sec-Ch-Ua-Platform' => '"Windows"',
+                    'Sec-Fetch-Dest' => 'document',
+                    'Sec-Fetch-Mode' => 'navigate',
+                    'Sec-Fetch-Site' => 'none',
+                    'Sec-Fetch-User' => '?1',
+                    'Upgrade-Insecure-Requests' => '1',
+                ])
+                    ->withoutVerifying()
+                    ->timeout(12)
+                    ->get($targetUrl);
+
+                if ($response->failed()) {
+                    $lastError = "فشل زيارة الموقع (HTTP {$response->status()})";
+                    continue;
+                }
+
+                $html = $response->body();
+
+                // Pattern 1: "store":{"id":1347911590
+                if (preg_match('/["\']store["\']\s*:\s*\{\s*["\']id["\']\s*:\s*(\d{5,12})/i', $html, $matches)) {
+                    return ['store_id' => $matches[1], 'error' => null];
+                }
+
+                // Pattern 2: "store_id": 1347911590 or storeId: 1347911590
+                if (preg_match('/["\']?(?:store_id|storeId|merchant_id|merchantId)["\']?\s*[:=]\s*["\']?(\d{5,12})["\']?/i', $html, $matches)) {
+                    return ['store_id' => $matches[1], 'error' => null];
+                }
+
+                // Pattern 3: data-store-id="1347911590"
+                if (preg_match('/data-store-id=["\'](\d{5,12})["\']/i', $html, $matches)) {
+                    return ['store_id' => $matches[1], 'error' => null];
+                }
+
+                // Pattern 4: salla.sa/.../123456
+                if (preg_match('/salla\.sa\/[^\/]+\/(\d{5,12})/i', $html, $matches)) {
+                    return ['store_id' => $matches[1], 'error' => null];
+                }
+
+                $lastError = 'تعذر العثور على store_id في كود الصفحة (HTML) للمتجر';
+            } catch (\Throwable $e) {
+                $lastError = 'خطأ أثناء الاتصال بالمتجر: '.$e->getMessage();
+            }
+        }
+
+        return ['store_id' => null, 'error' => $lastError];
     }
 }
