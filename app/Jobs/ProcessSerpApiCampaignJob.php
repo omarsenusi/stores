@@ -264,7 +264,11 @@ class ProcessSerpApiCampaignJob implements ShouldQueue
             $response = Http::withOptions([
                 'curl' => [
                     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_2_0,
+                    CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
+                    CURLOPT_SSL_CIPHER_LIST => 'ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305',
                     CURLOPT_ENCODING => '',
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_MAXREDIRS => 5,
                 ],
             ])->withHeaders([
                 'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
@@ -283,24 +287,6 @@ class ProcessSerpApiCampaignJob implements ShouldQueue
                 ->withoutVerifying()
                 ->timeout(15)
                 ->get($url);
-
-            if ($response->failed()) {
-                // Fallback to Mobile Safari User Agent with HTTP/2 if Chrome headers hit 403
-                $response = Http::withOptions([
-                    'curl' => [
-                        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_2_0,
-                        CURLOPT_ENCODING => '',
-                    ],
-                ])->withHeaders([
-                    'User-Agent' => 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4.1 Mobile/15E148 Safari/604.1',
-                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                    'Accept-Language' => 'ar-SA,ar;q=0.9',
-                    'Referer' => 'https://www.google.com/',
-                ])
-                    ->withoutVerifying()
-                    ->timeout(15)
-                    ->get($url);
-            }
 
             if ($response->failed()) {
                 return ['store_id' => null, 'error' => "فشل زيارة الموقع (HTTP {$response->status()})"];
