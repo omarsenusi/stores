@@ -1,6 +1,5 @@
 import { Head, useForm, router } from '@inertiajs/react';
 import React, { useState, useEffect } from 'react';
-import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -212,10 +211,11 @@ export default function CampaignsIndex({ campaigns: initialCampaigns, stats: ini
     };
 
     return (
-        <AppLayout breadcrumbs={[{ title: 'Dashboard', href: '/dashboard' }, { title: 'الحملات', href: '/campaigns' }]}>
+        <>
             <Head title="إدارة حملات الاستخراج والفحص" />
 
-            <div dir="rtl" className="p-6 space-y-6 max-w-7xl mx-auto">
+            <div dir="rtl" className="p-6 space-y-6 max-w-7xl mx-auto w-full">
+
                 {/* Top Header */}
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 p-6 rounded-2xl text-white shadow-xl">
                     <div className="space-y-1">
@@ -577,6 +577,7 @@ export default function CampaignsIndex({ campaigns: initialCampaigns, stats: ini
                     </DialogContent>
                 </Dialog>
             </div>
-        </AppLayout>
+        </>
     );
 }
+
