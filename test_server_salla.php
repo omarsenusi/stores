@@ -1,33 +1,56 @@
 <?php
 
 /**
- * Advanced Salla Store Resolver Tester
- * Testing: Direct Custom Domains, Salla API Endpoints, and Google SERP URLs
+ * Salla URL Redirect & Header Inspection Test
+ * Starting STRICTLY from https://salla.sa/{slug} without any hardcoded custom domains!
  * Run on server: php test_server_salla.php
  */
 header('Content-Type: text/plain; charset=utf-8');
 
-$stores = [
-    'kawnroaster' => 'https://kawnroaster.com',
-    'caltpro' => 'https://caltpro.com',
-    'bassamtune' => 'https://bassamhp.com',
+$sallaUrls = [
+    'https://salla.sa/kawnroaster',
+    'https://salla.sa/caltpro',
+    'https://salla.sa/bassamtune',
 ];
 
-echo "=== Advanced Salla Store Resolver Tester ===\n\n";
+echo "=== Testing Salla URL Redirects & Headers (No Hardcoded Domains) ===\n\n";
 
-foreach ($stores as $slug => $customDomain) {
-    echo "--- Testing Store: {$slug} ---\n";
+foreach ($sallaUrls as $url) {
+    echo "--- Input URL: {$url} ---\n";
 
-    // Test 1: Direct Custom Domain (which is what Google SERP actually returns!)
-    echo "1. Direct Custom Domain: {$customDomain}\n";
-    $ch1 = curl_init();
-    curl_setopt_array($ch1, [
-        CURLOPT_URL => $customDomain,
+    // Test A: Get HTTP Headers only (curl -I / CURLOPT_NOBODY)
+    $chHead = curl_init();
+    curl_setopt_array($chHead, [
+        CURLOPT_URL => $url,
+        CURLOPT_NOBODY => true,
+        CURLOPT_HEADER => true,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT => 6,
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_SSL_VERIFYHOST => false,
+        CURLOPT_HTTPHEADER => [
+            'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+            'Accept: */*',
+            'Referer: https://www.google.com/',
+        ],
+    ]);
+    $headResponse = curl_exec($chHead);
+    $headCode = curl_getinfo($chHead, CURLINFO_HTTP_CODE);
+    $redirectUrl = curl_getinfo($chHead, CURLINFO_REDIRECT_URL);
+    curl_close($chHead);
+
+    echo "HEAD Request Status: {$headCode}\n";
+    echo 'Redirect URL (Location header): '.($redirectUrl ?: 'None')."\n";
+    echo "HEAD Response Sample:\n".substr($headResponse, 0, 300)."\n\n";
+
+    // Test B: GET with Follow Location
+    $chGet = curl_init();
+    curl_setopt_array($chGet, [
+        CURLOPT_URL => $url,
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_MAXREDIRS => 3,
-        CURLOPT_CONNECTTIMEOUT => 4,
-        CURLOPT_TIMEOUT => 6,
+        CURLOPT_MAXREDIRS => 5,
+        CURLOPT_TIMEOUT => 8,
         CURLOPT_SSL_VERIFYPEER => false,
         CURLOPT_SSL_VERIFYHOST => false,
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_2_0,
@@ -39,48 +62,31 @@ foreach ($stores as $slug => $customDomain) {
             'Referer: https://www.google.com/',
         ],
     ]);
-    $res1 = curl_exec($ch1);
-    $code1 = curl_getinfo($ch1, CURLINFO_HTTP_CODE);
-    curl_close($ch1);
 
-    echo "   Custom Domain Status: {$code1} | Length: ".strlen($res1)." bytes\n";
+    $getResponse = curl_exec($chGet);
+    $getCode = curl_getinfo($chGet, CURLINFO_HTTP_CODE);
+    $effectiveUrl = curl_getinfo($chGet, CURLINFO_EFFECTIVE_URL);
+    curl_close($chGet);
+
+    echo "GET Request Status: {$getCode}\n";
+    echo "Effective Final URL reached: {$effectiveUrl}\n";
 
     $storeId = null;
-    if ($res1 && $code1 === 200) {
-        if (preg_match('/["\']store["\']\s*:\s*\{\s*["\']id["\']\s*:\s*(\d{5,12})/i', $res1, $m)) {
+    if ($getResponse) {
+        if (preg_match('/["\']store["\']\s*:\s*\{\s*["\']id["\']\s*:\s*(\d{5,12})/i', $getResponse, $m)) {
             $storeId = $m[1];
-        } elseif (preg_match('/["\']?(?:store_id|storeId|merchant_id|merchantId)["\']?\s*[:=]\s*["\']?(\d{5,12})["\']?/i', $res1, $m)) {
+        } elseif (preg_match('/["\']?(?:store_id|storeId|merchant_id|merchantId)["\']?\s*[:=]\s*["\']?(\d{5,12})["\']?/i', $getResponse, $m)) {
             $storeId = $m[1];
-        } elseif (preg_match('/data-store-id=["\'](\d{5,12})["\']/i', $res1, $m)) {
+        } elseif (preg_match('/data-store-id=["\'](\d{5,12})["\']/i', $getResponse, $m)) {
             $storeId = $m[1];
         }
     }
 
     if ($storeId) {
-        echo "   --> SUCCESS via Custom Domain! Store ID: {$storeId}\n";
+        echo "--> SUCCESS! Store ID: {$storeId}\n";
     } else {
-        echo "   --> Custom Domain failed or store_id not matched.\n";
+        echo "--> Failed to extract Store ID.\n";
     }
-
-    // Test 2: Salla Store API Resolution (Public CDN / API Endpoint)
-    $cdnApiUrl = "https://salla.sa/api/v1/store/slug/{$slug}";
-    echo "2. Public Salla API: {$cdnApiUrl}\n";
-    $ch2 = curl_init();
-    curl_setopt_array($ch2, [
-        CURLOPT_URL => $cdnApiUrl,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_TIMEOUT => 5,
-        CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_SSL_VERIFYHOST => false,
-        CURLOPT_HTTPHEADER => [
-            'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-            'Accept: application/json',
-        ],
-    ]);
-    $res2 = curl_exec($ch2);
-    $code2 = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
-    curl_close($ch2);
-    echo "   API Status: {$code2} | Response: ".substr($res2, 0, 150)."\n";
 
     echo "--------------------------------------------------\n\n";
 }
