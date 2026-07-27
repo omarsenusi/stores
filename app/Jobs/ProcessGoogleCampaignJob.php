@@ -160,11 +160,39 @@ class ProcessGoogleCampaignJob implements ShouldQueue
                 ]);
             }
 
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             Log::error("ProcessGoogleCampaignJob error for campaign {$this->campaignId}: ".$e->getMessage());
+            if (isset($campaign)) {
+                $campaign->update([
+                    'status' => 'failed',
+                    'status_message' => 'فشلت حملة البحث: '.$e->getMessage(),
+                    'error_message' => $e->getMessage(),
+                ]);
+                CampaignStoreError::create([
+                    'campaign_id' => $campaign->id,
+                    'error_message' => 'فشل كشط محرك البحث Google: '.$e->getMessage(),
+                ]);
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Handle a job failure.
+     */
+    public function failed(\Throwable $exception): void
+    {
+        Log::error("ProcessGoogleCampaignJob failed callback for campaign {$this->campaignId}: ".$exception->getMessage());
+        $campaign = Campaign::find($this->campaignId);
+        if ($campaign) {
             $campaign->update([
                 'status' => 'failed',
-                'error_message' => 'خطأ في كشط محرك البحث: '.$e->getMessage(),
+                'status_message' => 'فشلت حملة البحث: '.$exception->getMessage(),
+                'error_message' => $exception->getMessage(),
+            ]);
+            CampaignStoreError::create([
+                'campaign_id' => $campaign->id,
+                'error_message' => 'تعذر إكمال كشط محرك البحث: '.$exception->getMessage(),
             ]);
         }
     }

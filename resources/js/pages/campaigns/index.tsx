@@ -479,6 +479,15 @@ export default function CampaignsIndex({ campaigns: initialCampaigns, stats: ini
                                                 </div>
                                             ) : null}
 
+                                            {/* Detailed Error Message if Failed */}
+                                            {campaign.error_message ? (
+                                                <div className="text-xs font-medium text-red-600 dark:text-red-400 bg-red-500/10 border border-red-200 dark:border-red-900/40 p-2.5 rounded-lg flex items-start gap-2">
+                                                    <AlertCircle className="h-4 w-4 text-red-500 shrink-0 mt-0.5" />
+                                                    <span className="font-mono text-[11px] break-all">{campaign.error_message}</span>
+                                                </div>
+                                            ) : null}
+
+
                                             {/* Progress bar */}
                                             {total > 0 ? (
                                                 <div className="space-y-1.5">

@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Campaign;
+use App\Models\CampaignStoreError;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -113,6 +114,7 @@ class ProcessExcelCampaignJob implements ShouldQueue
             if ($totalCount === 0) {
                 $campaign->update([
                     'status' => 'failed',
+                    'status_message' => 'لم يتم العثور على أرقام معرفات متاجر صحيحة في الملف',
                     'error_message' => 'لم يتم العثور على أرقام معرفات متاجر صحيحة في الملف',
                 ]);
 
@@ -139,11 +141,39 @@ class ProcessExcelCampaignJob implements ShouldQueue
                 Queue::bulk($chunk);
             }
 
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             Log::error("ProcessExcelCampaignJob error for campaign {$this->campaignId}: ".$e->getMessage());
+            if (isset($campaign)) {
+                $campaign->update([
+                    'status' => 'failed',
+                    'status_message' => 'فشلت معالجة الملف: '.$e->getMessage(),
+                    'error_message' => $e->getMessage(),
+                ]);
+                CampaignStoreError::create([
+                    'campaign_id' => $campaign->id,
+                    'error_message' => 'فشلت معالجة ملف Excel: '.$e->getMessage(),
+                ]);
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Handle a job failure.
+     */
+    public function failed(\Throwable $exception): void
+    {
+        Log::error("ProcessExcelCampaignJob failed callback for campaign {$this->campaignId}: ".$exception->getMessage());
+        $campaign = Campaign::find($this->campaignId);
+        if ($campaign) {
             $campaign->update([
                 'status' => 'failed',
-                'error_message' => 'خطأ في معالجة الملف: '.$e->getMessage(),
+                'status_message' => 'فشلت معالجة الحملة: '.$exception->getMessage(),
+                'error_message' => $exception->getMessage(),
+            ]);
+            CampaignStoreError::create([
+                'campaign_id' => $campaign->id,
+                'error_message' => 'تعذر إكمال معالجة الحملة: '.$exception->getMessage(),
             ]);
         }
     }
