@@ -22,21 +22,27 @@ class CheckStoreJob implements ShouldQueue
 
     public $campaignId;
 
+    public $slug;
+
     /**
      * Create a new job instance.
-     * $storeId can be a numeric ID (e.g. 1578880010) or a store slug (e.g. kawnroaster, salla.sa/kawnroaster)
      */
-    public function __construct($storeId, $campaignId = null)
+    public function __construct($storeId = null, $campaignId = null, $slug = null)
     {
         $this->storeId = $storeId;
         $this->campaignId = $campaignId;
+        $this->slug = $slug;
     }
 
     /**
      * Clean store identifier (extract slug or numeric ID from raw string/URL)
      */
-    protected function cleanIdentifier(string $identifier): string
+    protected function cleanIdentifier(?string $identifier): string
     {
+        if (! $identifier) {
+            return '';
+        }
+
         $identifier = trim($identifier);
 
         if (preg_match('/^\d+$/', $identifier)) {
@@ -69,13 +75,25 @@ class CheckStoreJob implements ShouldQueue
             }
         }
 
-        $cleanIdentifier = $this->cleanIdentifier((string) $this->storeId);
+        $rawIdentifier = $this->slug ?: (string) $this->storeId;
+        $cleanIdentifier = $this->cleanIdentifier($rawIdentifier);
+
+        if (! $cleanIdentifier) {
+            Log::error('CheckStoreJob called without valid storeId or slug');
+
+            return;
+        }
 
         // Pre-check: If store already exists and is_found is true, skip API call and update campaign stats
-        $existing = ScrapedStore::where('store_id', (string) $this->storeId)
-            ->orWhere('slug', $cleanIdentifier)
-            ->orWhere('domain', 'like', "%{$cleanIdentifier}%")
-            ->first();
+        $existing = ScrapedStore::where(function ($q) use ($cleanIdentifier) {
+            if ($this->storeId) {
+                $q->where('store_id', (string) $this->storeId);
+            }
+            if ($this->slug || $cleanIdentifier) {
+                $q->orWhere('slug', $this->slug ?: $cleanIdentifier);
+            }
+            $q->orWhere('domain', 'like', "%{$cleanIdentifier}%");
+        })->first();
 
         if ($existing && $existing->is_found) {
             if ($this->campaignId) {
@@ -150,8 +168,8 @@ class CheckStoreJob implements ShouldQueue
             $productUrl = null;
             $productImage = null;
 
-            $actualStoreId = (string) $this->storeId;
-            $extractedSlug = ! preg_match('/^\d+$/', $cleanIdentifier) ? $cleanIdentifier : null;
+            $actualStoreId = $this->storeId ? (string) $this->storeId : null;
+            $extractedSlug = $this->slug ?: (! preg_match('/^\d+$/', $cleanIdentifier) ? $cleanIdentifier : null);
 
             if ($status === 200 && isset($data['success']) && $data['success']) {
                 $isFound = true;
@@ -243,16 +261,20 @@ class CheckStoreJob implements ShouldQueue
                     }
                     CampaignStoreError::create([
                         'campaign_id' => $this->campaignId,
-                        'store_id' => (string) $this->storeId,
+                        'store_id' => $actualStoreId ?: $cleanIdentifier,
                         'error_message' => $errorLog,
-                        'details' => ['status' => $status],
+                        'details' => ['status' => $status, 'slug' => $extractedSlug],
                     ]);
                 }
             }
 
+            // Save to ScrapedStore using actualStoreId if numeric, or slug as fallback key
+            $key = $actualStoreId ? ['store_id' => $actualStoreId] : ['slug' => $extractedSlug];
+
             ScrapedStore::updateOrCreate(
-                ['store_id' => $actualStoreId],
+                $key,
                 [
+                    'store_id' => $actualStoreId ?: $cleanIdentifier,
                     'slug' => $extractedSlug,
                     'domain' => $domain ?: $cleanIdentifier,
                     'product_name' => $productName,
@@ -274,10 +296,12 @@ class CheckStoreJob implements ShouldQueue
             $errorMsg = $e->getMessage();
             Log::error("Error processing store {$cleanIdentifier}: ".$errorMsg);
 
+            $key = $this->storeId ? ['store_id' => (string) $this->storeId] : ['slug' => $cleanIdentifier];
+
             ScrapedStore::updateOrCreate(
-                ['store_id' => (string) $this->storeId],
+                $key,
                 [
-                    'slug' => $cleanIdentifier,
+                    'slug' => $this->slug ?: $cleanIdentifier,
                     'error_log' => $errorMsg,
                 ]
             );
@@ -291,7 +315,7 @@ class CheckStoreJob implements ShouldQueue
                 }
                 CampaignStoreError::create([
                     'campaign_id' => $this->campaignId,
-                    'store_id' => (string) $this->storeId,
+                    'store_id' => $this->storeId ? (string) $this->storeId : $cleanIdentifier,
                     'error_message' => $errorMsg,
                 ]);
             }

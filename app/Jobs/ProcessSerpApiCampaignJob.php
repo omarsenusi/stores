@@ -181,7 +181,11 @@ class ProcessSerpApiCampaignJob implements ShouldQueue
                         $campaign->increment('google_links_processed');
                         $campaign->increment('total_stores');
 
-                        CheckStoreJob::dispatch($storeIdentifier, $campaign->id);
+                        if (preg_match('/^\d+$/', $storeIdentifier)) {
+                            CheckStoreJob::dispatch($storeIdentifier, $campaign->id, null);
+                        } else {
+                            CheckStoreJob::dispatch(null, $campaign->id, $storeIdentifier);
+                        }
                     } else {
                         $campaign->increment('google_links_processed');
                         $campaign->increment('failure_count');
