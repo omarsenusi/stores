@@ -9,11 +9,16 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Queue;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class ProcessExcelCampaignJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    public $timeout = 1800; // 30 minutes timeout for processing huge excel files (44k+ stores)
+
+    public $tries = 3;
 
     public $campaignId;
 
@@ -30,6 +35,8 @@ class ProcessExcelCampaignJob implements ShouldQueue
      */
     public function handle(): void
     {
+        ini_set('memory_limit', '1024M'); // Allow up to 1GB RAM for parsing 44k+ row spreadsheets
+
         $campaign = Campaign::find($this->campaignId);
 
         if (! $campaign || $campaign->status === 'cancelled') {
@@ -53,7 +60,13 @@ class ProcessExcelCampaignJob implements ShouldQueue
                 return;
             }
 
-            $spreadsheet = IOFactory::load($fullPath);
+            // High performance reading: read data only, skip styles & formatting to save 80% RAM
+            $reader = IOFactory::createReaderForFile($fullPath);
+            if (method_exists($reader, 'setReadDataOnly')) {
+                $reader->setReadDataOnly(true);
+            }
+
+            $spreadsheet = $reader->load($fullPath);
             $worksheet = $spreadsheet->getActiveSheet();
             $rows = $worksheet->toArray();
 
@@ -90,6 +103,10 @@ class ProcessExcelCampaignJob implements ShouldQueue
                 }
             }
 
+            // Free memory of raw spreadsheet
+            unset($rows, $spreadsheet, $worksheet);
+            gc_collect_cycles();
+
             $storeIds = array_unique($storeIds);
             $totalCount = count($storeIds);
 
@@ -108,12 +125,18 @@ class ProcessExcelCampaignJob implements ShouldQueue
                 'status_message' => "تم اكتشاف عدد {$totalCount} متاجر",
             ]);
 
+            // High-speed bulk queueing into Redis using array_chunk & Queue::bulk
+            $jobs = [];
             foreach ($storeIds as $storeId) {
-                // Re-check status in loop in case cancelled
+                $jobs[] = new CheckStoreJob($storeId, $campaign->id);
+            }
+
+            // Push in chunks of 1000 jobs at a time (e.g. 44k stores = 44 Redis calls instead of 44,000)
+            foreach (array_chunk($jobs, 1000) as $chunk) {
                 if (Campaign::where('id', $campaign->id)->value('status') === 'cancelled') {
                     break;
                 }
-                CheckStoreJob::dispatch($storeId, $campaign->id);
+                Queue::bulk($chunk);
             }
 
         } catch (\Exception $e) {
