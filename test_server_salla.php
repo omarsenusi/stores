@@ -1,10 +1,9 @@
 <?php
 
 /**
- * Standalone Salla 403 & Store ID Tester (Payload & Redirect Extraction)
+ * Standalone Salla 403 & Store ID Tester (HTTP/3 & HTML Analysis)
  * Run on server: php test_server_salla.php
  */
-
 header('Content-Type: text/plain; charset=utf-8');
 
 $testUrls = [
@@ -13,11 +12,14 @@ $testUrls = [
     'https://salla.sa/bassamtune',
 ];
 
-echo "=== Deep Inspection of 'جاري تحويلك' Page & Redirect Extraction ===\n\n";
+$http3Version = defined('CURL_HTTP_VERSION_3') ? CURL_HTTP_VERSION_3 : (defined('CURL_HTTP_VERSION_3ONLY') ? CURL_HTTP_VERSION_3ONLY : 30);
+
+echo "=== Testing HTTP/3 (Version Constant: {$http3Version}) & Deep HTML Parsing ===\n\n";
 
 foreach ($testUrls as $url) {
     echo "--- Testing URL: {$url} ---\n";
 
+    // Attempt 1: HTTP/3
     $ch = curl_init();
     curl_setopt_array($ch, [
         CURLOPT_URL => $url,
@@ -27,7 +29,7 @@ foreach ($testUrls as $url) {
         CURLOPT_TIMEOUT => 15,
         CURLOPT_SSL_VERIFYPEER => false,
         CURLOPT_SSL_VERIFYHOST => false,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_2_0,
+        CURLOPT_HTTP_VERSION => $http3Version,
         CURLOPT_ENCODING => '',
         CURLOPT_HTTPHEADER => [
             'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
@@ -39,53 +41,53 @@ foreach ($testUrls as $url) {
 
     $response = curl_exec($ch);
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $curlErr = curl_error($ch);
     curl_close($ch);
 
-    echo "HTTP Status: {$httpCode} | Length: " . strlen($response) . " bytes\n";
-
-    // Search for window.location, href, or canonical links in JS/HTML
-    if (preg_match_all('/(?:window\.location|location\.href|location\.replace)\s*=\s*["\']([^"\']+)["\']/i', $response, $locMatches)) {
-        echo "JS Redirect Locations Found: " . implode(', ', array_unique($locMatches[1])) . "\n";
+    echo "HTTP Status: {$httpCode} | Length: ".strlen($response)." bytes\n";
+    if ($curlErr) {
+        echo "cURL Error (HTTP/3): {$curlErr}\n";
     }
 
-    if (preg_match_all('/<meta[^>]+http-equiv=["\']refresh["\'][^>]+content=["\']\d+;\s*url=([^"\']+)["\']/i', $response, $metaMatches)) {
-        echo "Meta Refresh URLs Found: " . implode(', ', array_unique($metaMatches[1])) . "\n";
+    if (empty($response)) {
+        echo "--------------------------------------------------\n\n";
+
+        continue;
     }
 
-    if (preg_match_all('/href=["\'](https?:\/\/[^"\']+)["\']/i', $response, $hrefMatches)) {
-        $storeLinks = array_filter(array_unique($hrefMatches[1]), function($l) {
-            return !str_contains($l, 'google') && !str_contains($l, 'gstatic') && !str_contains($l, 'schema.org') && !str_contains($l, 'w3.org');
-        });
-        echo "Clean Href Links Found: " . implode(' | ', array_slice($storeLinks, 0, 5)) . "\n";
+    // 1. Search for Salla store ID in any JSON object or window.salla or script
+    $storeId = null;
+
+    if (preg_match('/["\']store["\']\s*:\s*\{\s*["\']id["\']\s*:\s*(\d{5,12})/i', $response, $m)) {
+        $storeId = 'Pattern 1 (store.id): '.$m[1];
+    } elseif (preg_match('/["\']?(?:store_id|storeId|merchant_id|merchantId)["\']?\s*[:=]\s*["\']?(\d{5,12})["\']?/i', $response, $m)) {
+        $storeId = 'Pattern 2 (store_id): '.$m[1];
+    } elseif (preg_match('/data-store-id=["\'](\d{5,12})["\']/i', $response, $m)) {
+        $storeId = 'Pattern 3 (data-store-id): '.$m[1];
+    } elseif (preg_match('/salla\.sa\/[^\/]+\/(\d{5,12})/i', $response, $m)) {
+        $storeId = 'Pattern 4 (salla.sa path): '.$m[1];
     }
 
-    // Check if store domain or destination URL is embedded in script tags
-    if (preg_match_all('/https?:\/\/[a-z0-9\.\-]+\.(?:com|sa|net|org|site|shop)[^\s"\'\`<>]*/i', $response, $allUrls)) {
-        $filteredUrls = array_filter(array_unique($allUrls[0]), function($u) {
-            return !str_contains($u, 'google') && !str_contains($u, 'gstatic') && !str_contains($u, 'schema.org') && !str_contains($u, 'w3.org') && !str_contains($u, 'salla.network') && !str_contains($u, 'cloudflare');
-        });
-        echo "Unique Target Domains/URLs in JS: " . implode(' | ', array_slice($filteredUrls, 0, 8)) . "\n";
+    if ($storeId) {
+        echo "--> SUCCESS! {$storeId}\n";
+    } else {
+        echo "--> Store ID NOT matched by standard patterns.\n";
     }
 
-    // Now test visiting target custom domain or trailing slash directly if extracted!
-    $slug = basename(parse_url($url, PHP_URL_PATH));
-    echo "\nTesting direct Salla Store Info API: https://salla.sa/api/v1/store/slug/{$slug}\n";
-    $chApi = curl_init("https://salla.sa/api/v1/store/slug/{$slug}");
-    curl_setopt_array($chApi, [
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_TIMEOUT => 10,
-        CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_SSL_VERIFYHOST => false,
-        CURLOPT_HTTPHEADER => [
-            'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-            'Accept: application/json',
-            'Referer: https://salla.sa/',
-        ],
-    ]);
-    $apiRes = curl_exec($chApi);
-    $apiCode = curl_getinfo($chApi, CURLINFO_HTTP_CODE);
-    curl_close($chApi);
-    echo "API Status: {$apiCode} | Response: " . substr($apiRes, 0, 200) . "\n";
+    // 2. Extract window.Salla or window.App or inline JS config data
+    if (preg_match_all('/window\.[a-zA-Z0-9_\.]+\s*=\s*(\{.*?\});/s', $response, $jsObjMatches)) {
+        echo 'JS Window Config Objects Found: '.count($jsObjMatches[0])."\n";
+        foreach ($jsObjMatches[1] as $idx => $jsonSnippet) {
+            if (str_contains($jsonSnippet, 'id') || str_contains($jsonSnippet, 'store')) {
+                echo 'Snippet '.($idx + 1).': '.substr($jsonSnippet, 0, 300)."...\n";
+            }
+        }
+    }
+
+    // 3. Extract canonical link or target store URL
+    if (preg_match('/<link[^>]+rel=["\']canonical["\'][^>]+href=["\']([^"\']+)["\']/i', $response, $canMatch)) {
+        echo 'Canonical Target URL: '.$canMatch[1]."\n";
+    }
 
     echo "--------------------------------------------------\n\n";
 }
