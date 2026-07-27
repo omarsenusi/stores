@@ -1,43 +1,36 @@
 <?php
 
-require __DIR__.'/vendor/autoload.php';
+require __DIR__ . '/vendor/autoload.php';
 
-$app = require_once __DIR__.'/bootstrap/app.php';
-$kernel = $app->make(Kernel::class);
+$app = require_once __DIR__ . '/bootstrap/app.php';
+$kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
 $kernel->bootstrap();
 
-use GuzzleHttp\Cookie\CookieJar;
-use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Support\Facades\Http;
 
-$query = 'site:salla.sa تمور';
-$searchUrl = 'https://www.google.com/search?q='.urlencode($query).'&hl=ar';
+$urls = [
+    'https://demostore.salla.sa',
+    'https://complaint.salla.sa',
+];
 
-echo "--- Step 1: Initial search request ---\n";
-$jar = new CookieJar;
-$client = Http::withoutVerifying()->withOptions(['cookies' => $jar])->withHeaders([
-    'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-    'Accept-Language' => 'ar-SA,ar;q=0.9,en;q=0.8',
-    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-]);
+foreach ($urls as $url) {
+    echo "--- Testing Subdomain URL: {$url} ---\n";
+    $res = Http::withHeaders([
+        'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+    ])->withoutVerifying()->get($url);
 
-$resp1 = $client->get($searchUrl);
-$html1 = $resp1->body();
-echo 'Step 1 status: '.$resp1->status().' | Length: '.strlen($html1)."\n";
+    echo "Status: " . $res->status() . " | Length: " . strlen($res->body()) . "\n";
+    $html = $res->body();
+    file_put_contents(__DIR__ . '/salla_subdomain.html', $html);
 
-if (preg_match('/href="(\/httpservice\/retry\/enablejs\?[^"]+)"/i', $html1, $m)) {
-    $retryUrl = 'https://www.google.com'.html_entity_decode($m[1]);
-    echo "Found enablejs redirect URL: {$retryUrl}\n";
+    // Look for Salla Store ID in HTML
+    if (preg_match_all('/(?:store_id|storeId|merchant_id|merchantId|store)\s*[:=]\s*["\']?(\d{5,12})["\']?/i', $html, $m)) {
+        echo "Found IDs:\n";
+        print_r(array_slice(array_unique($m[1]), 0, 10));
+    }
 
-    echo "--- Step 2: Following enablejs retry URL ---\n";
-    $resp2 = $client->withHeaders(['Referer' => $searchUrl])->get($retryUrl);
-    $html2 = $resp2->body();
-    echo 'Step 2 status: '.$resp2->status().' | Length: '.strlen($html2)."\n";
-    file_put_contents(__DIR__.'/google_enablejs.html', $html2);
-
-    preg_match_all('/https?:\/\/[a-zA-Z0-9\.-]+\.salla\.sa[^\s"\'<>&]*/i', $html2, $m2);
-    echo 'Salla links after enablejs: '.count($m2[0])."\n";
-    print_r(array_slice(array_unique($m2[0]), 0, 10));
-} else {
-    echo "No enablejs link found\n";
+    if (preg_match_all('/"id"\s*:\s*(\d{5,10})/', $html, $m3)) {
+        echo "Found JSON IDs:\n";
+        print_r(array_slice(array_unique($m3[1]), 0, 10));
+    }
 }

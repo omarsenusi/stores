@@ -89,6 +89,28 @@ class CampaignController extends Controller
         return redirect()->back()->with('success', 'تم إنشاء حملة بحث Google بنجاح وبدأت المعالجة');
     }
 
+    public function storeSerpApi(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'query' => 'required|string|max:255',
+            'api_key' => 'nullable|string|max:255',
+        ]);
+
+        $campaign = Campaign::create([
+            'name' => $request->name,
+            'type' => 'serpapi',
+            'status' => 'pending',
+            'status_message' => 'جارٍ الاتصال بـ SerpApi...',
+            'search_query' => $request->input('query'),
+        ]);
+
+        ProcessSerpApiCampaignJob::dispatch($campaign->id, $request->input('api_key'));
+
+        return redirect()->back()->with('success', 'تم إنشاء حملة بحث SerpApi (Google) بنجاح وبدأت المعالجة');
+    }
+
+
     public function stats(Campaign $campaign)
     {
         return response()->json([

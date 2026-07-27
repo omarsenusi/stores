@@ -81,36 +81,58 @@ class ProcessGoogleCampaignJob implements ShouldQueue
                     'status_message' => "جارٍ كشط نتائج بحث Google (الصفحة {$page})...",
                 ]);
 
-                // Try fetching via OpenSERP API first
+                // Fetch Google Search results via OpenSERP /google/search
                 $links = [];
-                $serpResponse = Http::timeout(25)->get("{$openSerpUrl}/search", [
-                    'engine' => 'google',
-                    'q' => $query,
+                $serpResponse = Http::timeout(30)->get("{$openSerpUrl}/google/search", [
+                    'text' => $query,
+                    'lang' => 'AR',
                     'page' => $page,
                 ]);
 
                 $campaign->increment('google_pages_scraped');
 
                 if ($serpResponse->successful()) {
-                    $items = $serpResponse->json();
-                    if (is_array($items) && ! empty($items)) {
-                        foreach ($items as $item) {
-                            if (! empty($item['url'])) {
-                                $links[] = $item['url'];
+                    $json = $serpResponse->json();
+
+                    // OpenSERP returns JSON array of items on success
+                    if (is_array($json)) {
+                        // Check if OpenSERP returned an error payload inside JSON
+                        if (isset($json['error'])) {
+                            $errMsg = $json['message'] ?? $json['error'] ?? 'Google CAPTCHA / Circuit Open';
+                            Log::warning("OpenSERP Google Error: {$errMsg}");
+
+                            $campaign->update([
+                                'status' => 'failed',
+                                'status_message' => "خطأ في محرك Google: {$errMsg} (يتطلب بروكسي في OpenSERP)",
+                                'error_message' => "OpenSERP Google Error: {$errMsg}. يرجى توفير Proxy لـ OpenSERP ليتجاوز الـ CAPTCHA الخاصة بـ Google.",
+                            ]);
+
+                            return;
+                        }
+
+                        // OpenSERP results format: results key or array of items
+                        $items = isset($json['results']) ? $json['results'] : $json;
+                        if (is_array($items)) {
+                            foreach ($items as $item) {
+                                $targetUrl = $item['url'] ?? $item['link'] ?? $item['href'] ?? null;
+                                if ($targetUrl && is_string($targetUrl)) {
+                                    $links[] = $targetUrl;
+                                }
                             }
                         }
                     }
                 } else {
-                    // Fallback to direct HTML scrape if OpenSERP is not running
-                    Log::warning("OpenSERP API failed or not running on page {$page}. Falling back to direct HTML request.");
-                    $searchUrl = 'https://www.google.com/search?q='.urlencode($query).'&start='.(($page - 1) * 10).'&hl=ar';
-                    $directResp = Http::withHeaders([
-                        'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-                    ])->withoutVerifying()->timeout(15)->get($searchUrl);
+                    $resJson = $serpResponse->json();
+                    $errMsg = $resJson['message'] ?? $resJson['error'] ?? 'OpenSERP HTTP Error '.$serpResponse->status();
+                    Log::warning("OpenSERP Google HTTP Error: {$errMsg}");
 
-                    if ($directResp->successful()) {
-                        $links = $this->extractLinksFromGoogleHtml($directResp->body());
-                    }
+                    $campaign->update([
+                        'status' => 'failed',
+                        'status_message' => "فشل الاتصال بـ Google عبر OpenSERP: {$errMsg}",
+                        'error_message' => "OpenSERP HTTP {$serpResponse->status()}: {$errMsg}. سبب الخطأ: IP السيرفر محظور من Google (CAPTCHA).",
+                    ]);
+
+                    return;
                 }
 
                 // If no links found at all for this page, we've reached the last page of Google results!

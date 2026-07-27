@@ -27,7 +27,9 @@ import {
     Layers,
     Activity,
     Info,
+    Key,
 } from 'lucide-react';
+
 
 interface CampaignItem {
     id: number;
@@ -81,6 +83,7 @@ export default function CampaignsIndex({ campaigns: initialCampaigns, stats: ini
     const [campaignList, setCampaignList] = useState<CampaignItem[]>(initialCampaigns.data);
     const [excelModalOpen, setExcelModalOpen] = useState(false);
     const [googleModalOpen, setGoogleModalOpen] = useState(false);
+    const [serpApiModalOpen, setSerpApiModalOpen] = useState(false);
     const [selectedErrorCampaign, setSelectedErrorCampaign] = useState<CampaignItem | null>(null);
     const [campaignErrors, setCampaignErrors] = useState<CampaignError[]>([]);
     const [loadingErrors, setLoadingErrors] = useState(false);
@@ -146,6 +149,25 @@ export default function CampaignsIndex({ campaigns: initialCampaigns, stats: ini
             },
         });
     };
+
+    // SerpApi Form
+    const serpApiForm = useForm<{ name: string; query: string; api_key: string }>({
+        name: '',
+        query: 'site:salla.sa ',
+        api_key: '',
+    });
+
+    const handleSerpApiSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        serpApiForm.post('/campaigns/serpapi', {
+            onSuccess: () => {
+                setSerpApiModalOpen(false);
+                serpApiForm.reset();
+            },
+        });
+    };
+
+
 
     const handleCancel = (id: number) => {
         if (confirm('هل أنت تأكد من إيقاف وإلغاء هذه الحملة؟')) {
@@ -339,8 +361,77 @@ export default function CampaignsIndex({ campaigns: initialCampaigns, stats: ini
                                 </form>
                             </DialogContent>
                         </Dialog>
+
+                        {/* SerpApi Search Modal Trigger */}
+                        <Dialog open={serpApiModalOpen} onOpenChange={setSerpApiModalOpen}>
+                            <DialogTrigger asChild>
+                                <Button className="bg-purple-600 hover:bg-purple-700 text-white gap-2 font-medium shadow-md">
+                                    <Key className="h-4 w-4" />
+                                    <span>حملة SerpApi (Google)</span>
+                                </Button>
+                            </DialogTrigger>
+                            <DialogContent dir="rtl" className="sm:max-w-md">
+                                <form onSubmit={handleSerpApiSubmit}>
+                                    <DialogHeader>
+                                        <DialogTitle className="flex items-center gap-2 text-purple-600">
+                                            <Key className="h-5 w-5" />
+                                            <span>إنشاء حملة SerpApi (Google API)</span>
+                                        </DialogTitle>
+                                        <DialogDescription>
+                                            استخرج المتاجر من Google باستخدام SerpApi API لتجاوز أي حظر أو كابتشا نهائياً.
+                                        </DialogDescription>
+                                    </DialogHeader>
+
+                                    <div className="space-y-4 py-4">
+                                        <div className="space-y-2">
+                                            <Label htmlFor="serpapi_name">اسم الحملة</Label>
+                                            <Input
+                                                id="serpapi_name"
+                                                placeholder="مثال: بحث عبايات سلة via SerpApi"
+                                                value={serpApiForm.data.name}
+                                                onChange={e => serpApiForm.setData('name', e.target.value)}
+                                                required
+                                            />
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <Label htmlFor="serpapi_query">استعلام البحث في Google</Label>
+                                            <Input
+                                                id="serpapi_query"
+                                                placeholder="site:salla.sa تمور"
+                                                value={serpApiForm.data.query}
+                                                onChange={e => serpApiForm.setData('query', e.target.value)}
+                                                required
+                                            />
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <Label htmlFor="serpapi_key">SerpApi API Key (اختياري)</Label>
+                                            <Input
+                                                id="serpapi_key"
+                                                type="password"
+                                                placeholder="أدخله هنا أو اتركه فارغاً لاستخدام SERPAPI_KEY من .env"
+                                                value={serpApiForm.data.api_key}
+                                                onChange={e => serpApiForm.setData('api_key', e.target.value)}
+                                            />
+                                            <p className="text-xs text-muted-foreground">
+                                                إذا تركته فارغاً، سيتم استخدام <code className="bg-muted px-1 py-0.5 rounded">SERPAPI_KEY</code> من ملف المعلمات المعتمد.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <DialogFooter className="gap-2 sm:gap-0">
+                                        <Button type="submit" disabled={serpApiForm.processing} className="bg-purple-600 hover:bg-purple-700 text-white">
+                                            {serpApiForm.processing ? <Loader2 className="h-4 w-4 animate-spin ml-2" /> : null}
+                                            بدء كشط SerpApi
+                                        </Button>
+                                    </DialogFooter>
+                                </form>
+                            </DialogContent>
+                        </Dialog>
                     </div>
                 </div>
+
 
                 {/* Overall Stats Cards */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -420,6 +511,10 @@ export default function CampaignsIndex({ campaigns: initialCampaigns, stats: ini
                                                         <div className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-600">
                                                             <FileSpreadsheet className="h-5 w-5" />
                                                         </div>
+                                                    ) : campaign.type === 'serpapi' ? (
+                                                        <div className="p-2.5 rounded-xl bg-purple-500/10 text-purple-600">
+                                                            <Key className="h-5 w-5" />
+                                                        </div>
                                                     ) : (
                                                         <div className="p-2.5 rounded-xl bg-indigo-500/10 text-indigo-600">
                                                             <Globe className="h-5 w-5" />
@@ -427,12 +522,12 @@ export default function CampaignsIndex({ campaigns: initialCampaigns, stats: ini
                                                     )}
 
                                                     <div>
-                                                        <CardTitle className="text-base font-bold flex items-center gap-2">
-                                                            <span>{campaign.name}</span>
-                                                            <Badge variant="outline" className="text-xs font-normal">
-                                                                {campaign.type === 'excel' ? 'ملف Excel' : 'بحث Google'}
+                                                        <div className="flex items-center gap-2">
+                                                            <CardTitle className="text-base font-bold">{campaign.name}</CardTitle>
+                                                            <Badge variant="outline" className="text-xs px-2 py-0.5">
+                                                                {campaign.type === 'excel' ? 'ملف Excel' : campaign.type === 'serpapi' ? 'SerpApi (Google)' : 'بحث Google'}
                                                             </Badge>
-                                                        </CardTitle>
+                                                        </div>
                                                         <CardDescription className="text-xs mt-1">
                                                             {campaign.search_query ? (
                                                                 <span>الاستعلام: <code className="text-indigo-600 dark:text-indigo-400">{campaign.search_query}</code></span>

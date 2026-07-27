@@ -25,6 +25,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('campaigns', [CampaignController::class, 'index'])->name('campaigns.index');
     Route::post('campaigns/excel', [CampaignController::class, 'storeExcel'])->name('campaigns.store_excel');
     Route::post('campaigns/google', [CampaignController::class, 'storeGoogle'])->name('campaigns.store_google');
+    Route::post('campaigns/serpapi', [CampaignController::class, 'storeSerpApi'])->name('campaigns.store_serpapi');
+
     Route::get('campaigns/{campaign}/stats', [CampaignController::class, 'stats'])->name('campaigns.stats');
     Route::post('campaigns/{campaign}/cancel', [CampaignController::class, 'cancel'])->name('campaigns.cancel');
     Route::delete('campaigns/{campaign}', [CampaignController::class, 'destroy'])->name('campaigns.destroy');
