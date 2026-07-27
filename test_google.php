@@ -1,36 +1,84 @@
 <?php
 
-require __DIR__ . '/vendor/autoload.php';
+require __DIR__.'/vendor/autoload.php';
 
-$app = require_once __DIR__ . '/bootstrap/app.php';
-$kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
-$kernel->bootstrap();
+function normalizeSallaDomain(string $url): ?string
+{
+    $parts = parse_url($url);
+    $host = isset($parts['host']) ? strtolower(trim($parts['host'])) : '';
+    $host = preg_replace('/^www\./', '', $host);
+    $path = isset($parts['path']) ? trim($parts['path'], '/') : '';
 
-use Illuminate\Support\Facades\Http;
+    if (! $host) {
+        return null;
+    }
 
-$urls = [
-    'https://demostore.salla.sa',
-    'https://complaint.salla.sa',
+    $globalExcludedHosts = ['google.com', 'google.com.sa', 'youtube.com', 'wikipedia.org', 'facebook.com', 'twitter.com', 'instagram.com'];
+    if (in_array($host, $globalExcludedHosts, true)) {
+        return null;
+    }
+
+    if ($host === 'salla.sa') {
+        $pathSegments = explode('/', $path);
+        $firstSegment = strtolower($pathSegments[0] ?? '');
+        $excludedPaths = ['', 'appstore-sa', 'community', 'help', 'developer', 'apps', 'blog', 'privacy', 'terms', 'complaint', 'affiliates'];
+
+        if (empty($firstSegment) || in_array($firstSegment, $excludedPaths, true)) {
+            return null;
+        }
+
+        return "{$firstSegment}.salla.sa";
+    }
+
+    if (str_ends_with($host, '.salla.sa')) {
+        $sub = str_replace('.salla.sa', '', $host);
+        $excludedSubs = ['community', 'help', 'developer', 'apps', 'complaint', 'affiliates', 'demo'];
+        if (in_array($sub, $excludedSubs, true)) {
+            return null;
+        }
+
+        return $host;
+    }
+
+    return $host;
+}
+
+function extractStoreId(string $html): ?string
+{
+    // Pattern 1: "store":{"id":1347911590
+    if (preg_match('/["\']store["\']\s*:\s*\{\s*["\']id["\']\s*:\s*(\d{5,12})/i', $html, $m)) {
+        return $m[1];
+    }
+
+    // Pattern 2: "store_id": 1347911590
+    if (preg_match('/["\']store_?id["\']\s*:\s*["\']?(\d{5,12})["\']?/i', $html, $m)) {
+        return $m[1];
+    }
+
+    // Pattern 3: merchant_id: 1347911590
+    if (preg_match('/["\']merchant_?id["\']\s*:\s*["\']?(\d{5,12})["\']?/i', $html, $m)) {
+        return $m[1];
+    }
+
+    // Pattern 4: data-store-id="1347911590"
+    if (preg_match('/data-store-id=["\'](\d{5,12})["\']/i', $html, $m)) {
+        return $m[1];
+    }
+
+    return null;
+}
+
+$urlsToTest = [
+    'https://salla.sa/mzajistore/ZlmRBW',
+    'https://mzajistore.salla.sa',
+    'https://salla.sa/foodworldmarket',
+    'https://salla.sa/appstore-sa',
 ];
 
-foreach ($urls as $url) {
-    echo "--- Testing Subdomain URL: {$url} ---\n";
-    $res = Http::withHeaders([
-        'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-    ])->withoutVerifying()->get($url);
-
-    echo "Status: " . $res->status() . " | Length: " . strlen($res->body()) . "\n";
-    $html = $res->body();
-    file_put_contents(__DIR__ . '/salla_subdomain.html', $html);
-
-    // Look for Salla Store ID in HTML
-    if (preg_match_all('/(?:store_id|storeId|merchant_id|merchantId|store)\s*[:=]\s*["\']?(\d{5,12})["\']?/i', $html, $m)) {
-        echo "Found IDs:\n";
-        print_r(array_slice(array_unique($m[1]), 0, 10));
-    }
-
-    if (preg_match_all('/"id"\s*:\s*(\d{5,10})/', $html, $m3)) {
-        echo "Found JSON IDs:\n";
-        print_r(array_slice(array_unique($m3[1]), 0, 10));
-    }
+foreach ($urlsToTest as $u) {
+    $norm = normalizeSallaDomain($u);
+    echo "URL: {$u} --> Normalized Domain: ".($norm ?: 'EXCLUDED')."\n";
 }
+
+$html = file_get_contents(__DIR__.'/mzajistore.html');
+echo 'Extracted Store ID from mzajistore.html: '.(extractStoreId($html) ?: 'NONE')."\n";

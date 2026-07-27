@@ -157,7 +157,9 @@ class ProcessSerpApiCampaignJob implements ShouldQueue
                     }
 
                     // Visit site to extract store ID
-                    $storeId = $this->extractStoreIdFromWebsite($rawUrl);
+                    $extractResult = $this->extractStoreIdFromWebsite($rawUrl);
+                    $storeId = $extractResult['store_id'];
+                    $extractError = $extractResult['error'];
 
                     if ($storeId) {
                         $campaign->increment('google_links_processed');
@@ -171,7 +173,7 @@ class ProcessSerpApiCampaignJob implements ShouldQueue
                         CampaignStoreError::create([
                             'campaign_id' => $campaign->id,
                             'store_url' => $rawUrl,
-                            'error_message' => "لم يتم العثور على store id في كود الصفحة لموقع: {$domain}",
+                            'error_message' => "لم يتم استخراج Store ID لموقع ({$domain}): ".($extractError ?: 'سبب غير معروف'),
                         ]);
                     }
                 }
@@ -189,7 +191,7 @@ class ProcessSerpApiCampaignJob implements ShouldQueue
             }
 
             $campaign->refresh();
-            $msg = "تم اكتشاف {$campaign->google_links_found} رابط من Google عبر SerpApi في {$campaign->google_pages_scraped} صفحة، منها {$campaign->already_exists_count} متجر موجود سابقاً و {$campaign->total_stores} متجر جديد جارٍ فحصه.";
+            $msg = "تم اكتشاف {$campaign->google_links_found} رابط من Google عبر SerpApi في {$campaign->google_pages_scraped} صفحة، منها {$campaign->already_exists_count} متجر موجود سابقاً، و {$campaign->total_stores} متجر تم استخراج store_id بنجاح وجارٍ فحصه، و {$campaign->failure_count} متجر تعذر استخراج بياناتها.";
 
             $campaign->update([
                 'status_message' => $msg,
@@ -227,27 +229,51 @@ class ProcessSerpApiCampaignJob implements ShouldQueue
 
     private function normalizeDomain(string $url): ?string
     {
-        $host = parse_url($url, PHP_URL_HOST);
+        $parts = parse_url($url);
+        $host = isset($parts['host']) ? strtolower(trim($parts['host'])) : '';
+        $host = preg_replace('/^www\./', '', $host);
+        $path = isset($parts['path']) ? trim($parts['path'], '/') : '';
+
         if (! $host) {
             return null;
         }
 
-        $host = strtolower(trim($host));
-        $host = preg_replace('/^www\./', '', $host);
-
-        $excluded = ['google.com', 'google.com.sa', 'youtube.com', 'wikipedia.org', 'facebook.com', 'twitter.com', 'instagram.com', 'salla.sa', 'community.salla.sa', 'help.salla.sa', 'apps.salla.sa'];
-        if (in_array($host, $excluded, true)) {
+        $globalExcludedHosts = ['google.com', 'google.com.sa', 'youtube.com', 'wikipedia.org', 'facebook.com', 'twitter.com', 'instagram.com', 'tiktok.com', 'snapchat.com'];
+        if (in_array($host, $globalExcludedHosts, true)) {
             return null;
+        }
+
+        if ($host === 'salla.sa') {
+            $pathSegments = explode('/', $path);
+            $firstSegment = strtolower($pathSegments[0] ?? '');
+            $excludedPaths = ['', 'appstore-sa', 'community', 'help', 'developer', 'apps', 'blog', 'privacy', 'terms', 'complaint', 'affiliates'];
+
+            if (empty($firstSegment) || in_array($firstSegment, $excludedPaths, true)) {
+                return null;
+            }
+
+            return "{$firstSegment}.salla.sa";
+        }
+
+        if (str_ends_with($host, '.salla.sa')) {
+            $sub = str_replace('.salla.sa', '', $host);
+            $excludedSubs = ['community', 'help', 'developer', 'apps', 'complaint', 'affiliates'];
+            if (in_array($sub, $excludedSubs, true)) {
+                return null;
+            }
+
+            return $host;
         }
 
         return $host;
     }
 
-    private function extractStoreIdFromWebsite(string $url): ?string
+    private function extractStoreIdFromWebsite(string $url): array
     {
         try {
             $response = Http::withHeaders([
-                'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+                'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
                 'Accept-Language' => 'ar-SA,ar;q=0.9,en-US;q=0.8,en;q=0.7',
             ])
                 ->withoutVerifying()
@@ -255,30 +281,34 @@ class ProcessSerpApiCampaignJob implements ShouldQueue
                 ->get($url);
 
             if ($response->failed()) {
-                return null;
+                return ['store_id' => null, 'error' => "فشل زيارة الموقع (HTTP {$response->status()})"];
             }
 
             $html = $response->body();
 
-            if (preg_match('/(?:storeId|store_id|store-id)\s*[:=]\s*["\']?(\d+)["\']?/i', $html, $matches)) {
-                return $matches[1];
+            // Pattern 1: "store":{"id":1347911590
+            if (preg_match('/["\']store["\']\s*:\s*\{\s*["\']id["\']\s*:\s*(\d{5,12})/i', $html, $matches)) {
+                return ['store_id' => $matches[1], 'error' => null];
             }
 
-            if (preg_match('/salla\.sa\/[^\/]+\/(\d+)/i', $html, $matches)) {
-                return $matches[1];
+            // Pattern 2: "store_id": 1347911590 or storeId: 1347911590
+            if (preg_match('/["\']?(?:store_id|storeId|merchant_id|merchantId)["\']?\s*[:=]\s*["\']?(\d{5,12})["\']?/i', $html, $matches)) {
+                return ['store_id' => $matches[1], 'error' => null];
             }
 
-            if (preg_match('/data-store-id=["\'](\d+)["\']/i', $html, $matches)) {
-                return $matches[1];
+            // Pattern 3: data-store-id="1347911590"
+            if (preg_match('/data-store-id=["\'](\d{5,12})["\']/i', $html, $matches)) {
+                return ['store_id' => $matches[1], 'error' => null];
             }
 
-            if (preg_match('/"id"\s*:\s*(\d{5,10})/', $html, $matches)) {
-                return $matches[1];
+            // Pattern 4: salla.sa/.../123456
+            if (preg_match('/salla\.sa\/[^\/]+\/(\d{5,12})/i', $html, $matches)) {
+                return ['store_id' => $matches[1], 'error' => null];
             }
 
-            return null;
+            return ['store_id' => null, 'error' => 'تعذر العثور على store_id في كود الصفحة (HTML) للمتجر'];
         } catch (\Throwable $e) {
-            return null;
+            return ['store_id' => null, 'error' => 'خطأ أثناء الاتصال بالمتجر: '.$e->getMessage()];
         }
     }
 }
