@@ -248,8 +248,6 @@ class ProcessGoogleCampaignJob implements ShouldQueue
             $response = Http::withOptions([
                 'curl' => [
                     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_2_0,
-                    CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
-                    CURLOPT_SSL_CIPHER_LIST => 'ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305',
                     CURLOPT_ENCODING => '',
                     CURLOPT_FOLLOWLOCATION => true,
                     CURLOPT_MAXREDIRS => 5,
@@ -259,18 +257,31 @@ class ProcessGoogleCampaignJob implements ShouldQueue
                 'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
                 'Accept-Language' => 'ar-SA,ar;q=0.9,en-US;q=0.8,en;q=0.7',
                 'Referer' => 'https://www.google.com/',
-                'Sec-Ch-Ua' => '"Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"',
-                'Sec-Ch-Ua-Mobile' => '?0',
-                'Sec-Ch-Ua-Platform' => '"Windows"',
-                'Sec-Fetch-Dest' => 'document',
-                'Sec-Fetch-Mode' => 'navigate',
-                'Sec-Fetch-Site' => 'cross-site',
-                'Sec-Fetch-User' => '?1',
-                'Upgrade-Insecure-Requests' => '1',
             ])
                 ->withoutVerifying()
-                ->timeout(15)
+                ->timeout(12)
                 ->get($url);
+
+            // Fallback 1: If salla.sa/slug returns 403, try visiting https://slug.com directly
+            if ($response->failed() && str_contains($url, 'salla.sa/')) {
+                $parsed = parse_url($url);
+                $path = trim($parsed['path'] ?? '', '/');
+                $slug = explode('/', $path)[0] ?? '';
+                if (! empty($slug)) {
+                    $fallbackDomainUrl = "https://{$slug}.com";
+                    $response = Http::withOptions([
+                        'curl' => [
+                            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_2_0,
+                            CURLOPT_ENCODING => '',
+                            CURLOPT_FOLLOWLOCATION => true,
+                        ],
+                    ])->withHeaders([
+                        'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+                        'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                        'Referer' => 'https://www.google.com/',
+                    ])->withoutVerifying()->timeout(10)->get($fallbackDomainUrl);
+                }
+            }
 
             if ($response->failed()) {
                 return ['store_id' => null, 'error' => "فشل زيارة الموقع (HTTP {$response->status()})"];
