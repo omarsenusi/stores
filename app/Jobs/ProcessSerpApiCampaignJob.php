@@ -263,16 +263,34 @@ class ProcessSerpApiCampaignJob implements ShouldQueue
         try {
             $response = Http::withHeaders([
                 'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-                'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+                'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
                 'Accept-Language' => 'ar-SA,ar;q=0.9,en-US;q=0.8,en;q=0.7',
+                'Referer' => 'https://www.google.com/',
                 'Sec-Ch-Ua' => '"Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"',
                 'Sec-Ch-Ua-Mobile' => '?0',
                 'Sec-Ch-Ua-Platform' => '"Windows"',
+                'Sec-Fetch-Dest' => 'document',
+                'Sec-Fetch-Mode' => 'navigate',
+                'Sec-Fetch-Site' => 'cross-site',
+                'Sec-Fetch-User' => '?1',
                 'Upgrade-Insecure-Requests' => '1',
             ])
                 ->withoutVerifying()
                 ->timeout(15)
                 ->get($url);
+
+            if ($response->failed()) {
+                // Fallback to Mobile Safari User Agent if Chrome headers hit 403
+                $response = Http::withHeaders([
+                    'User-Agent' => 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4.1 Mobile/15E148 Safari/604.1',
+                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                    'Accept-Language' => 'ar-SA,ar;q=0.9',
+                    'Referer' => 'https://www.google.com/',
+                ])
+                    ->withoutVerifying()
+                    ->timeout(15)
+                    ->get($url);
+            }
 
             if ($response->failed()) {
                 return ['store_id' => null, 'error' => "فشل زيارة الموقع (HTTP {$response->status()})"];
