@@ -81,7 +81,7 @@ class CampaignController extends Controller
             'type' => 'google',
             'status' => 'pending',
             'status_message' => 'جارٍ الاتصال بمحرك البحث...',
-            'search_query' => $request->query('query'),
+            'search_query' => $request->input('query'),
         ]);
 
         ProcessGoogleCampaignJob::dispatch($campaign->id);
