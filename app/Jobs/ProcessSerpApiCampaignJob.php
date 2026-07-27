@@ -19,6 +19,14 @@ class ProcessSerpApiCampaignJob implements ShouldQueue
 
     public int $timeout = 1800;
 
+    protected array $excludedSallaSystemNames = [
+        '', 'app-maker', 'app-maker-sa', 'appstore', 'appstore-sa', 'apps',
+        'developer', 'developers', 'community', 'help', 'blog', 'privacy',
+        'terms', 'complaint', 'affiliates', 'accounts', 'auth', 'admin',
+        'dashboard', 'merchant', 'partner', 'partners', 'demo', 'api', 's',
+        'support', 'status', 'insights', 'academy', 'learn', 'design', 'theme', 'themes',
+    ];
+
     public function __construct(
         public int $campaignId,
         public ?string $customApiKey = null
@@ -147,6 +155,7 @@ class ProcessSerpApiCampaignJob implements ShouldQueue
                     // Check if domain already exists in ScrapedStore
                     $alreadyExists = ScrapedStore::where('domain', $domain)
                         ->orWhere('domain', 'like', "%{$domain}%")
+                        ->orWhere('slug', $domain)
                         ->exists();
 
                     if ($alreadyExists) {
@@ -165,9 +174,16 @@ class ProcessSerpApiCampaignJob implements ShouldQueue
                         $path = trim($parsed['path'] ?? '', '/');
                         $segments = explode('/', $path);
                         $slug = strtolower($segments[0] ?? '');
-                        $excludedPaths = ['', 'appstore-sa', 'community', 'help', 'developer', 'apps', 'blog', 'privacy', 'terms', 'complaint', 'affiliates'];
-                        if (! empty($slug) && ! in_array($slug, $excludedPaths, true)) {
+                        if (! empty($slug) && ! in_array($slug, $this->excludedSallaSystemNames, true)) {
                             $storeIdentifier = $slug;
+                        }
+                    }
+
+                    if (! $storeIdentifier && str_ends_with(strtolower(parse_url($rawUrl, PHP_URL_HOST) ?? ''), '.salla.sa')) {
+                        $host = strtolower(parse_url($rawUrl, PHP_URL_HOST));
+                        $sub = str_replace('.salla.sa', '', $host);
+                        if (! in_array($sub, $this->excludedSallaSystemNames, true)) {
+                            $storeIdentifier = $sub;
                         }
                     }
 
@@ -258,21 +274,33 @@ class ProcessSerpApiCampaignJob implements ShouldQueue
             return null;
         }
 
-        $globalExcludedHosts = ['google.com', 'google.com.sa', 'youtube.com', 'wikipedia.org', 'facebook.com', 'twitter.com', 'instagram.com', 'tiktok.com', 'snapchat.com'];
+        $globalExcludedHosts = [
+            'google.com', 'google.com.sa', 'youtube.com', 'wikipedia.org',
+            'facebook.com', 'twitter.com', 'instagram.com', 'tiktok.com', 'snapchat.com',
+        ];
         if (in_array($host, $globalExcludedHosts, true)) {
             return null;
+        }
+
+        // Exclude system subdomains like app-maker.salla.sa
+        if (str_ends_with($host, '.salla.sa')) {
+            $sub = str_replace('.salla.sa', '', $host);
+            if (in_array($sub, $this->excludedSallaSystemNames, true)) {
+                return null;
+            }
+
+            return $sub;
         }
 
         if ($host === 'salla.sa') {
             $pathSegments = explode('/', $path);
             $storeSlug = strtolower($pathSegments[0] ?? '');
-            $excludedPaths = ['', 'appstore-sa', 'community', 'help', 'developer', 'apps', 'blog', 'privacy', 'terms', 'complaint', 'affiliates'];
 
-            if (empty($storeSlug) || in_array($storeSlug, $excludedPaths, true)) {
+            if (empty($storeSlug) || in_array($storeSlug, $this->excludedSallaSystemNames, true)) {
                 return null;
             }
 
-            return "salla.sa/{$storeSlug}";
+            return $storeSlug;
         }
 
         return $host;
