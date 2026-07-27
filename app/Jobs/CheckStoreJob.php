@@ -24,11 +24,36 @@ class CheckStoreJob implements ShouldQueue
 
     /**
      * Create a new job instance.
+     * $storeId can be a numeric ID (e.g. 1578880010) or a store slug (e.g. kawnroaster, salla.sa/kawnroaster)
      */
     public function __construct($storeId, $campaignId = null)
     {
         $this->storeId = $storeId;
         $this->campaignId = $campaignId;
+    }
+
+    /**
+     * Clean store identifier (extract slug or numeric ID from raw string/URL)
+     */
+    protected function cleanIdentifier(string $identifier): string
+    {
+        $identifier = trim($identifier);
+
+        if (preg_match('/^\d+$/', $identifier)) {
+            return $identifier;
+        }
+
+        if (str_contains($identifier, 'salla.sa/')) {
+            $parsed = parse_url($identifier);
+            $path = trim($parsed['path'] ?? '', '/');
+            $segments = explode('/', $path);
+            $first = strtolower($segments[0] ?? '');
+            if (! empty($first)) {
+                return $first;
+            }
+        }
+
+        return preg_replace('/^https?:\/\//i', '', $identifier);
     }
 
     /**
@@ -44,8 +69,14 @@ class CheckStoreJob implements ShouldQueue
             }
         }
 
+        $cleanIdentifier = $this->cleanIdentifier((string) $this->storeId);
+
         // Pre-check: If store already exists and is_found is true, skip API call and update campaign stats
-        $existing = ScrapedStore::where('store_id', (string) $this->storeId)->first();
+        $existing = ScrapedStore::where('store_id', (string) $this->storeId)
+            ->orWhere('store_id', $cleanIdentifier)
+            ->orWhere('domain', 'like', "%{$cleanIdentifier}%")
+            ->first();
+
         if ($existing && $existing->is_found) {
             if ($this->campaignId) {
                 $campaign = Campaign::find($this->campaignId);
@@ -63,15 +94,15 @@ class CheckStoreJob implements ShouldQueue
         Redis::throttle('salla-api')
             ->allow(30)
             ->every(60)
-            ->then(function () {
-                $this->processStore();
+            ->then(function () use ($cleanIdentifier) {
+                $this->processStore($cleanIdentifier);
             }, function () {
                 // If limit reached, release the job back to the queue to try again after 10 seconds
                 $this->release(10);
             });
     }
 
-    protected function processStore(): void
+    protected function processStore(string $cleanIdentifier): void
     {
         try {
             $response = Http::withoutVerifying()->withOptions([
@@ -96,7 +127,7 @@ class CheckStoreJob implements ShouldQueue
                 'sec-fetch-dest' => 'empty',
                 'sec-fetch-mode' => 'cors',
                 'sec-fetch-site' => 'cross-site',
-                'store-identifier' => $this->storeId,
+                'store-identifier' => $cleanIdentifier,
                 'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36',
                 'x-requested-with' => 'XMLHttpRequest',
             ])->get('https://api.salla.dev/store/v1/store/settings');
@@ -119,10 +150,16 @@ class CheckStoreJob implements ShouldQueue
             $productUrl = null;
             $productImage = null;
 
+            $actualStoreId = (string) $this->storeId;
+
             if ($status === 200 && isset($data['success']) && $data['success']) {
                 $isFound = true;
                 $store = $data['data']['store'] ?? null;
                 if ($store) {
+                    if (isset($store['id'])) {
+                        $actualStoreId = (string) $store['id'];
+                    }
+
                     $storeName = ! empty($store['meta']['title']) ? $store['meta']['title'] : ($store['name'] ?? null);
                     $storeDescription = ! empty($store['meta']['description']) ? $store['meta']['description'] : ($store['description'] ?? null);
                     $storeLogo = ! empty($store['logo']) ? $store['logo'] : ($store['avatar'] ?? null);
@@ -136,7 +173,6 @@ class CheckStoreJob implements ShouldQueue
                         if (isset($parsedUrl['host'])) {
                             $domain = $parsedUrl['host'];
                         } elseif (isset($parsedUrl['path'])) {
-                            // in case it's just a domain string without scheme
                             $domain = $parsedUrl['path'];
                         }
                     }
@@ -165,12 +201,10 @@ class CheckStoreJob implements ShouldQueue
                     'sec-fetch-dest' => 'empty',
                     'sec-fetch-mode' => 'cors',
                     'sec-fetch-site' => 'cross-site',
-                    'store-identifier' => $this->storeId,
+                    'store-identifier' => $cleanIdentifier,
                     'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36',
                     'x-requested-with' => 'XMLHttpRequest',
-                ])->get('https://api.salla.dev/store/v1/products', [
-                    'limit' => 3,
-                ]);
+                ])->get('https://api.salla.dev/store/v1/products');
 
                 if ($productsResponse->status() === 200) {
                     $prodData = $productsResponse->json();
@@ -178,8 +212,8 @@ class CheckStoreJob implements ShouldQueue
                         $firstProduct = $prodData['data'][0];
                         $productName = $firstProduct['name'] ?? null;
                         $productDescription = $firstProduct['description'] ?? null;
-                        $productUrl = $firstProduct['url'] ?? null;
-                        $productImage = $firstProduct['original_image'] ?? ($firstProduct['image']['url'] ?? null);
+                        $productUrl = $firstProduct['urls']['customer'] ?? null;
+                        $productImage = $firstProduct['main_image'] ?? null;
                     }
                 }
 
@@ -191,11 +225,9 @@ class CheckStoreJob implements ShouldQueue
                         $campaign->checkCompletion();
                     }
                 }
-
             } else {
-                $isFound = false;
-                $errorLog = "Unexpected status {$status}: ".substr($response->body(), 0, 500);
-                Log::warning("Unexpected status {$status} for store {$this->storeId}");
+                $errorLog = "API Status: {$status}. ".($data['error']['message'] ?? $data['message'] ?? 'Store not found or inaccessible');
+                Log::warning("Unexpected status {$status} for store {$cleanIdentifier}");
 
                 if ($this->campaignId) {
                     $campaign = Campaign::find($this->campaignId);
@@ -214,9 +246,9 @@ class CheckStoreJob implements ShouldQueue
             }
 
             ScrapedStore::updateOrCreate(
-                ['store_id' => (string) $this->storeId],
+                ['store_id' => $actualStoreId],
                 [
-                    'domain' => $domain,
+                    'domain' => $domain ?: $cleanIdentifier,
                     'product_name' => $productName,
                     'product_description' => $productDescription,
                     'product_url' => $productUrl,
@@ -234,7 +266,7 @@ class CheckStoreJob implements ShouldQueue
 
         } catch (\Exception $e) {
             $errorMsg = $e->getMessage();
-            Log::error("Error processing store {$this->storeId}: ".$errorMsg);
+            Log::error("Error processing store {$cleanIdentifier}: ".$errorMsg);
 
             ScrapedStore::updateOrCreate(
                 ['store_id' => (string) $this->storeId],

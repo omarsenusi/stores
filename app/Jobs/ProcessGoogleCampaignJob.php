@@ -148,15 +148,32 @@ class ProcessGoogleCampaignJob implements ShouldQueue
                         continue;
                     }
 
-                    $extractResult = $this->extractStoreIdFromWebsite($rawUrl);
-                    $storeId = $extractResult['store_id'];
-                    $extractError = $extractResult['error'];
+                    // Extract store identifier: if salla.sa/slug -> slug, else visit website to extract store ID
+                    $storeIdentifier = null;
+                    $extractError = null;
 
-                    if ($storeId) {
+                    if (str_contains($rawUrl, 'salla.sa/')) {
+                        $parsed = parse_url($rawUrl);
+                        $path = trim($parsed['path'] ?? '', '/');
+                        $segments = explode('/', $path);
+                        $slug = strtolower($segments[0] ?? '');
+                        $excludedPaths = ['', 'appstore-sa', 'community', 'help', 'developer', 'apps', 'blog', 'privacy', 'terms', 'complaint', 'affiliates'];
+                        if (! empty($slug) && ! in_array($slug, $excludedPaths, true)) {
+                            $storeIdentifier = $slug;
+                        }
+                    }
+
+                    if (! $storeIdentifier) {
+                        $extractResult = $this->extractStoreIdFromWebsite($rawUrl);
+                        $storeIdentifier = $extractResult['store_id'];
+                        $extractError = $extractResult['error'];
+                    }
+
+                    if ($storeIdentifier) {
                         $campaign->increment('google_links_processed');
                         $campaign->increment('total_stores');
 
-                        CheckStoreJob::dispatch($storeId, $campaign->id);
+                        CheckStoreJob::dispatch($storeIdentifier, $campaign->id);
                     } else {
                         $campaign->increment('google_links_processed');
                         $campaign->increment('failure_count');
@@ -164,7 +181,7 @@ class ProcessGoogleCampaignJob implements ShouldQueue
                         CampaignStoreError::create([
                             'campaign_id' => $campaign->id,
                             'store_url' => $rawUrl,
-                            'error_message' => "لم يتم استخراج Store ID لموقع ({$domain}): ".($extractError ?: 'سبب غير معروف'),
+                            'error_message' => "لم يتم استخراج Store ID أو Slug لموقع ({$domain}): ".($extractError ?: 'سبب غير معروف'),
                         ]);
                     }
                 }
@@ -261,27 +278,6 @@ class ProcessGoogleCampaignJob implements ShouldQueue
                 ->withoutVerifying()
                 ->timeout(12)
                 ->get($url);
-
-            // Fallback 1: If salla.sa/slug returns 403, try visiting https://slug.com directly
-            if ($response->failed() && str_contains($url, 'salla.sa/')) {
-                $parsed = parse_url($url);
-                $path = trim($parsed['path'] ?? '', '/');
-                $slug = explode('/', $path)[0] ?? '';
-                if (! empty($slug)) {
-                    $fallbackDomainUrl = "https://{$slug}.com";
-                    $response = Http::withOptions([
-                        'curl' => [
-                            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_2_0,
-                            CURLOPT_ENCODING => '',
-                            CURLOPT_FOLLOWLOCATION => true,
-                        ],
-                    ])->withHeaders([
-                        'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-                        'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                        'Referer' => 'https://www.google.com/',
-                    ])->withoutVerifying()->timeout(10)->get($fallbackDomainUrl);
-                }
-            }
 
             if ($response->failed()) {
                 return ['store_id' => null, 'error' => "فشل زيارة الموقع (HTTP {$response->status()})"];
