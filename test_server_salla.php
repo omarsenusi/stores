@@ -13,7 +13,7 @@ $testUrls = [
     'https://salla.sa/bassamtune',
 ];
 
-echo "=== Standalone Salla 403 & Store ID Tester (TLS Options) ===\n\n";
+echo "=== Inspection of Server 403 Payload & Store ID Patterns ===\n\n";
 
 foreach ($testUrls as $url) {
     echo "--- Testing URL: {$url} ---\n";
@@ -50,38 +50,33 @@ foreach ($testUrls as $url) {
     $response = curl_exec($ch);
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     $effectiveUrl = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
-    $error = curl_error($ch);
     curl_close($ch);
 
-    echo "Final HTTP Status: {$httpCode}\n";
-    echo "Effective Final URL: {$effectiveUrl}\n";
-
-    if ($error) {
-        echo "cURL Error: {$error}\n";
-        echo "--------------------------------------------------\n\n";
-        continue;
-    }
-
+    echo "HTTP Status: {$httpCode}\n";
     echo "Response Length: " . strlen($response) . " bytes\n";
+    echo "Sample Header/Title: " . (preg_match('/<title>(.*?)<\/title>/is', $response, $t) ? trim($t[1]) : 'No title tag') . "\n";
 
-    // Extract Store ID
-    $storeId = null;
-
+    // Regex 1: store object ID
     if (preg_match('/["\']store["\']\s*:\s*\{\s*["\']id["\']\s*:\s*(\d{5,12})/i', $response, $m)) {
-        $storeId = $m[1];
-    } elseif (preg_match('/["\']?(?:store_id|storeId|merchant_id|merchantId)["\']?\s*[:=]\s*["\']?(\d{5,12})["\']?/i', $response, $m)) {
-        $storeId = $m[1];
-    } elseif (preg_match('/data-store-id=["\'](\d{5,12})["\']/i', $response, $m)) {
-        $storeId = $m[1];
-    } elseif (preg_match('/salla\.sa\/[^\/]+\/(\d{5,12})/i', $response, $m)) {
-        $storeId = $m[1];
+        echo "Regex 1 Matched: " . $m[1] . "\n";
     }
 
-    if ($storeId) {
-        echo "--> SUCCESS! Store ID Extracted: {$storeId}\n";
-    } else {
-        echo "--> FAILED to find Store ID in HTML response.\n";
+    // Regex 2: store_id or merchant_id
+    if (preg_match('/["\']?(?:store_id|storeId|merchant_id|merchantId)["\']?\s*[:=]\s*["\']?(\d{5,12})["\']?/i', $response, $m)) {
+        echo "Regex 2 Matched: " . $m[1] . "\n";
     }
 
+    // Regex 3: data-store-id
+    if (preg_match('/data-store-id=["\'](\d{5,12})["\']/i', $response, $m)) {
+        echo "Regex 3 Matched: " . $m[1] . "\n";
+    }
+
+    // Regex 4: salla.sa app / script / image store id links
+    if (preg_match_all('/(\d{7,11})/', $response, $allMatches)) {
+        $uniqueDigits = array_slice(array_unique($allMatches[1]), 0, 10);
+        echo "Sample Potential Store IDs (7-11 digits found): " . implode(', ', $uniqueDigits) . "\n";
+    }
+
+    echo "First 400 chars of Response:\n" . substr(strip_tags($response), 0, 400) . "\n";
     echo "--------------------------------------------------\n\n";
 }
