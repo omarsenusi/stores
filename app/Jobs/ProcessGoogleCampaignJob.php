@@ -64,36 +64,65 @@ class ProcessGoogleCampaignJob implements ShouldQueue
             'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
         ];
 
+        $openSerpUrl = rtrim(env('OPENSERP_URL', 'http://127.0.0.1:7000'), '/');
         $processedDomains = [];
-        $maxPages = 5; // Scrape up to 5 pages (approx 50 results)
+        $page = 1;
+        $maxPages = 50; // Read up to 50 pages (approx 500-1000 Google search results)
+        $consecutiveEmptyPages = 0;
 
         try {
-            for ($page = 0; $page < $maxPages; $page++) {
+            while ($page <= $maxPages) {
                 // Re-check cancellation
                 if (Campaign::where('id', $campaign->id)->value('status') === 'cancelled') {
                     return;
                 }
 
-                $start = $page * 10;
-                $searchUrl = 'https://www.google.com/search?q='.urlencode($query)."&start={$start}&hl=ar";
+                $campaign->update([
+                    'status_message' => "جارٍ كشط نتائج بحث Google (الصفحة {$page})...",
+                ]);
 
-                $ua = $userAgents[$page % count($userAgents)];
-                $response = Http::withHeaders([
-                    'User-Agent' => $ua,
-                    'Accept-Language' => 'ar-SA,ar;q=0.9,en;q=0.8',
-                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                ])->withoutVerifying()->timeout(15)->get($searchUrl);
+                // Try fetching via OpenSERP API first
+                $links = [];
+                $serpResponse = Http::timeout(25)->get("{$openSerpUrl}/search", [
+                    'engine' => 'google',
+                    'q' => $query,
+                    'page' => $page,
+                ]);
 
                 $campaign->increment('google_pages_scraped');
 
-                if ($response->failed()) {
-                    Log::warning("Google scrape page {$page} failed for campaign {$this->campaignId}");
+                if ($serpResponse->successful()) {
+                    $items = $serpResponse->json();
+                    if (is_array($items) && ! empty($items)) {
+                        foreach ($items as $item) {
+                            if (! empty($item['url'])) {
+                                $links[] = $item['url'];
+                            }
+                        }
+                    }
+                } else {
+                    // Fallback to direct HTML scrape if OpenSERP is not running
+                    Log::warning("OpenSERP API failed or not running on page {$page}. Falling back to direct HTML request.");
+                    $searchUrl = 'https://www.google.com/search?q='.urlencode($query).'&start='.(($page - 1) * 10).'&hl=ar';
+                    $directResp = Http::withHeaders([
+                        'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+                    ])->withoutVerifying()->timeout(15)->get($searchUrl);
 
-                    continue;
+                    if ($directResp->successful()) {
+                        $links = $this->extractLinksFromGoogleHtml($directResp->body());
+                    }
                 }
 
-                $html = $response->body();
-                $links = $this->extractLinksFromGoogleHtml($html);
+                // If no links found at all for this page, we've reached the last page of Google results!
+                if (empty($links)) {
+                    $consecutiveEmptyPages++;
+                    if ($consecutiveEmptyPages >= 2) {
+                        Log::info("OpenSERP reached last page of Google search at page {$page}. Ending loop.");
+                        break;
+                    }
+                } else {
+                    $consecutiveEmptyPages = 0;
+                }
 
                 foreach ($links as $rawUrl) {
                     // Check cancellation
@@ -142,12 +171,13 @@ class ProcessGoogleCampaignJob implements ShouldQueue
                     }
                 }
 
-                // Random delay to avoid hitting Google anti-bot
+                $page++;
+                // Small delay to prevent rate-limiting OpenSERP / Google
                 usleep(500000); // 0.5 sec
             }
 
             $campaign->refresh();
-            $msg = "تم اكتشاف {$campaign->google_links_found} رابط، منها {$campaign->already_exists_count} متجر موجود سابقاً و {$campaign->total_stores} متجر جديد جارٍ فحصه.";
+            $msg = "تم اكتشاف {$campaign->google_links_found} رابط في {$campaign->google_pages_scraped} صفحة، منها {$campaign->already_exists_count} متجر موجود سابقاً و {$campaign->total_stores} متجر جديد جارٍ فحصه.";
 
             $campaign->update([
                 'status_message' => $msg,
