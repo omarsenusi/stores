@@ -17,6 +17,8 @@ class ProcessExcelCampaignJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public $queue = 'campaigns';
+
     public $timeout = 1800; // 30 minutes timeout for processing huge excel files (44k+ stores)
 
     public $tries = 3;

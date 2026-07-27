@@ -206,8 +206,21 @@ return [
             'maxTime' => 0,
             'maxJobs' => 0,
             'memory' => 128,
-            'tries' => 1,
-            'timeout' => 60,
+            'tries' => 3,
+            'timeout' => 120,
+            'nice' => 0,
+        ],
+        'supervisor-campaigns' => [
+            'connection' => 'redis',
+            'queue' => ['campaigns'],
+            'balance' => 'auto',
+            'autoScalingStrategy' => 'time',
+            'maxProcesses' => 3,
+            'maxTime' => 0,
+            'maxJobs' => 0,
+            'memory' => 512,
+            'tries' => 3,
+            'timeout' => 1800,
             'nice' => 0,
         ],
     ],
@@ -219,10 +232,18 @@ return [
                 'balanceMaxShift' => 1,
                 'balanceCooldown' => 3,
             ],
+            'supervisor-campaigns' => [
+                'maxProcesses' => 3,
+                'balanceMaxShift' => 1,
+                'balanceCooldown' => 3,
+            ],
         ],
 
         'local' => [
             'supervisor-1' => [
+                'maxProcesses' => 5,
+            ],
+            'supervisor-campaigns' => [
                 'maxProcesses' => 3,
             ],
         ],

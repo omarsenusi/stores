@@ -17,6 +17,8 @@ class ProcessGoogleCampaignJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public $queue = 'campaigns';
+
     public $timeout = 600; // 10 minutes timeout for scraping Google and visiting sites
 
     public $tries = 3;
