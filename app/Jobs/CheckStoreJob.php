@@ -2,6 +2,8 @@
 
 namespace App\Jobs;
 
+use App\Models\Campaign;
+use App\Models\CampaignStoreError;
 use App\Models\ScrapedStore;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -18,12 +20,15 @@ class CheckStoreJob implements ShouldQueue
 
     public $storeId;
 
+    public $campaignId;
+
     /**
      * Create a new job instance.
      */
-    public function __construct($storeId)
+    public function __construct($storeId, $campaignId = null)
     {
         $this->storeId = $storeId;
+        $this->campaignId = $campaignId;
     }
 
     /**
@@ -31,6 +36,29 @@ class CheckStoreJob implements ShouldQueue
      */
     public function handle(): void
     {
+        // If part of a campaign that has been cancelled, stop execution early
+        if ($this->campaignId) {
+            $campaign = Campaign::find($this->campaignId);
+            if ($campaign && $campaign->status === 'cancelled') {
+                return;
+            }
+        }
+
+        // Pre-check: If store already exists and is_found is true, skip API call and update campaign stats
+        $existing = ScrapedStore::where('store_id', (string) $this->storeId)->first();
+        if ($existing && $existing->is_found) {
+            if ($this->campaignId) {
+                $campaign = Campaign::find($this->campaignId);
+                if ($campaign) {
+                    $campaign->increment('already_exists_count');
+                    $campaign->increment('processed_stores');
+                    $campaign->checkCompletion();
+                }
+            }
+
+            return;
+        }
+
         // We will throttle at 30 requests every 60 seconds to ensure long-term stability without hitting rate limits.
         Redis::throttle('salla-api')
             ->allow(30)
@@ -95,9 +123,9 @@ class CheckStoreJob implements ShouldQueue
                 $isFound = true;
                 $store = $data['data']['store'] ?? null;
                 if ($store) {
-                    $storeName = !empty($store['meta']['title']) ? $store['meta']['title'] : ($store['name'] ?? null);
-                    $storeDescription = !empty($store['meta']['description']) ? $store['meta']['description'] : ($store['description'] ?? null);
-                    $storeLogo = !empty($store['logo']) ? $store['logo'] : ($store['avatar'] ?? null);
+                    $storeName = ! empty($store['meta']['title']) ? $store['meta']['title'] : ($store['name'] ?? null);
+                    $storeDescription = ! empty($store['meta']['description']) ? $store['meta']['description'] : ($store['description'] ?? null);
+                    $storeLogo = ! empty($store['logo']) ? $store['logo'] : ($store['avatar'] ?? null);
                     $contacts = $store['contacts'] ?? null;
                     $features = $store['features'] ?? null;
                     $fullSettings = $data;
@@ -107,7 +135,7 @@ class CheckStoreJob implements ShouldQueue
                         $parsedUrl = parse_url($trackUrl);
                         if (isset($parsedUrl['host'])) {
                             $domain = $parsedUrl['host'];
-                        } else if (isset($parsedUrl['path'])) {
+                        } elseif (isset($parsedUrl['path'])) {
                             // in case it's just a domain string without scheme
                             $domain = $parsedUrl['path'];
                         }
@@ -146,7 +174,7 @@ class CheckStoreJob implements ShouldQueue
 
                 if ($productsResponse->status() === 200) {
                     $prodData = $productsResponse->json();
-                    if (isset($prodData['success']) && $prodData['success'] && !empty($prodData['data'])) {
+                    if (isset($prodData['success']) && $prodData['success'] && ! empty($prodData['data'])) {
                         $firstProduct = $prodData['data'][0];
                         $productName = $firstProduct['name'] ?? null;
                         $productDescription = $firstProduct['description'] ?? null;
@@ -155,10 +183,34 @@ class CheckStoreJob implements ShouldQueue
                     }
                 }
 
+                if ($this->campaignId) {
+                    $campaign = Campaign::find($this->campaignId);
+                    if ($campaign) {
+                        $campaign->increment('success_count');
+                        $campaign->increment('processed_stores');
+                        $campaign->checkCompletion();
+                    }
+                }
+
             } else {
                 $isFound = false;
                 $errorLog = "Unexpected status {$status}: ".substr($response->body(), 0, 500);
                 Log::warning("Unexpected status {$status} for store {$this->storeId}");
+
+                if ($this->campaignId) {
+                    $campaign = Campaign::find($this->campaignId);
+                    if ($campaign) {
+                        $campaign->increment('failure_count');
+                        $campaign->increment('processed_stores');
+                        $campaign->checkCompletion();
+                    }
+                    CampaignStoreError::create([
+                        'campaign_id' => $this->campaignId,
+                        'store_id' => (string) $this->storeId,
+                        'error_message' => $errorLog,
+                        'details' => ['status' => $status],
+                    ]);
+                }
             }
 
             ScrapedStore::updateOrCreate(
@@ -190,6 +242,21 @@ class CheckStoreJob implements ShouldQueue
                     'error_log' => $errorMsg,
                 ]
             );
+
+            if ($this->campaignId) {
+                $campaign = Campaign::find($this->campaignId);
+                if ($campaign) {
+                    $campaign->increment('failure_count');
+                    $campaign->increment('processed_stores');
+                    $campaign->checkCompletion();
+                }
+                CampaignStoreError::create([
+                    'campaign_id' => $this->campaignId,
+                    'store_id' => (string) $this->storeId,
+                    'error_message' => $errorMsg,
+                ]);
+            }
+
             $this->fail($e);
         }
     }

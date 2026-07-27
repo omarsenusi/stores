@@ -114,11 +114,13 @@ export default function StoresIndex({ stores, filter, search, maintenance, stats
     // Auto-refresh data every 60 seconds
     useEffect(() => {
         const interval = setInterval(() => {
-            router.reload({ only: ['stores', 'stats'], preserveScroll: true, preserveState: true });
+            router.reload({ only: ['stores', 'stats'] });
         }, 60000);
 
         return () => clearInterval(interval);
     }, []);
+
+
 
     const handleFilterChange = (filterVal: string, maintVal: string) => {
         setCurrentFilter(filterVal);
