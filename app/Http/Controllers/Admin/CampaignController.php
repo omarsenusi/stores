@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Jobs\ProcessExcelCampaignJob;
 use App\Jobs\ProcessGoogleCampaignJob;
+use App\Jobs\ProcessSerpApiCampaignJob;
 use App\Models\Campaign;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -109,7 +110,6 @@ class CampaignController extends Controller
 
         return redirect()->back()->with('success', 'تم إنشاء حملة بحث SerpApi (Google) بنجاح وبدأت المعالجة');
     }
-
 
     public function stats(Campaign $campaign)
     {
