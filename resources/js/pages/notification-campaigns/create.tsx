@@ -286,7 +286,7 @@ export default function CreateNotificationCampaign({ campaign }: Props) {
     const selectedStoresList = Array.from(selectedStoresMap.values());
 
     return (
-        <AppLayout breadcrumbs={[{ title: 'حملات الإشعارات', href: '/notification-campaigns' }, { title: 'إنشاء حملة' }]}>
+        <>
             <Head title="معالج إنشاء حملة إشعارات متكاملة" />
 
             <div dir="rtl" className="p-6 space-y-6 max-w-6xl mx-auto w-full">
@@ -877,9 +877,14 @@ export default function CreateNotificationCampaign({ campaign }: Props) {
                                 <div dangerouslySetInnerHTML={{ __html: renderRenderedPreview() }} />
                             </div>
                         </div>
-                    </DialogContent>
-                </Dialog>
             </div>
-        </AppLayout>
+        </>
     );
 }
+
+CreateNotificationCampaign.layout = {
+    breadcrumbs: [
+        { title: 'حملات الإشعارات', href: '/notification-campaigns' },
+        { title: 'إنشاء حملة' },
+    ],
+};

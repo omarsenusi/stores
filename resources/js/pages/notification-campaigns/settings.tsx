@@ -99,42 +99,32 @@ export default function MailSettings({ settings }: Props) {
     };
 
     return (
-        <AppLayout breadcrumbs={[{ title: 'حملات الإشعارات', href: '/notification-campaigns' }, { title: 'إعدادات البريد الإلكتروني' }]}>
+        <>
             <Head title="إعدادات خادم البريد الـ SMTP" />
 
             <div dir="rtl" className="p-6 space-y-6 max-w-4xl mx-auto w-full">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-slate-800">
-                    <div className="space-y-1">
-                        <div className="flex items-center gap-2">
-                            <Settings className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
-                            <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-100">إعدادات خادم البريد SMTP وسرعة الإرسال</h1>
-                        </div>
-                        <p className="text-xs text-muted-foreground">
-                            قم بضبط خادم البريد لتضمن وصول رسائل الحملات إلى المتاجر بدون الانزلاق إلى مجلد Spam
-                        </p>
-                    </div>
-
-                    <Button
-                        type="button"
-                        onClick={() => setTestModalOpen(true)}
-                        className="bg-indigo-600 hover:bg-indigo-700 text-white gap-2 font-medium shrink-0"
-                    >
-                        <Send className="h-4 w-4" />
-                        <span>اختبار اتصالات البريد الآن</span>
-                    </Button>
-                </div>
-
                 <form onSubmit={handleSubmit} className="space-y-6">
                     {/* SMTP Credentials Card */}
                     <Card className="border-slate-200 dark:border-slate-800 shadow-sm">
-                        <CardHeader>
-                            <CardTitle className="text-base font-bold flex items-center gap-2 text-indigo-600">
-                                <Server className="h-5 w-5" />
-                                <span>بيانات الاتصال بخادم البريد (SMTP Server Setup)</span>
-                            </CardTitle>
-                            <CardDescription>
-                                أدخل تفاصيل خادم الـ SMTP الخاص بك (Mailgun, SendGrid, Amazon SES, Google Workspace, إلخ)
-                            </CardDescription>
+                        <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <div>
+                                <CardTitle className="text-base font-bold flex items-center gap-2 text-indigo-600">
+                                    <Server className="h-5 w-5" />
+                                    <span>بيانات الاتصال بخادم البريد (SMTP Server Setup)</span>
+                                </CardTitle>
+                                <CardDescription className="mt-1">
+                                    أدخل تفاصيل خادم الـ SMTP الخاص بك (Mailgun, SendGrid, Amazon SES, Google Workspace, إلخ)
+                                </CardDescription>
+                            </div>
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => setTestModalOpen(true)}
+                                className="gap-2 text-xs font-bold shrink-0"
+                            >
+                                <Send className="h-4 w-4 text-indigo-600" />
+                                <span>اختبار اتصالات البريد الآن</span>
+                            </Button>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -350,6 +340,13 @@ export default function MailSettings({ settings }: Props) {
                     </DialogContent>
                 </Dialog>
             </div>
-        </AppLayout>
+        </>
     );
 }
+
+MailSettings.layout = {
+    breadcrumbs: [
+        { title: 'حملات الإشعارات', href: '/notification-campaigns' },
+        { title: 'إعدادات البريد الإلكتروني' },
+    ],
+};

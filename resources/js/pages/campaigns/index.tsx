@@ -238,19 +238,8 @@ export default function CampaignsIndex({ campaigns: initialCampaigns, stats: ini
 
             <div dir="rtl" className="p-6 space-y-6 max-w-7xl mx-auto w-full">
 
-                {/* Clean Page Title Header */}
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-slate-800">
-                    <div className="space-y-1">
-                        <div className="flex items-center gap-2">
-                            <Layers className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
-                            <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-100">حملات استخراج وفحص المتاجر</h1>
-                        </div>
-                        <p className="text-xs text-muted-foreground">
-                            قم برفع ملفات Excel أو ابحث المباشر في Google لاستخراج المتاجر وفحصها تلقائياً بالخلفية
-                        </p>
-                    </div>
-
-                    <div className="flex items-center gap-3 shrink-0">
+                {/* Action Buttons Modals Container */}
+                <div className="flex items-center gap-3 shrink-0">
                         {/* Excel Upload Modal Trigger */}
                         <Dialog open={excelModalOpen} onOpenChange={setExcelModalOpen}>
                             <DialogTrigger asChild>
@@ -427,10 +416,8 @@ export default function CampaignsIndex({ campaigns: initialCampaigns, stats: ini
                                         </Button>
                                     </DialogFooter>
                                 </form>
-                            </DialogContent>
                         </Dialog>
                     </div>
-                </div>
 
 
                 {/* Overall Stats Cards */}
@@ -684,4 +671,10 @@ export default function CampaignsIndex({ campaigns: initialCampaigns, stats: ini
         </>
     );
 }
+
+CampaignsIndex.layout = {
+    breadcrumbs: [
+        { title: 'حملات الاستخراج', href: '/campaigns' },
+    ],
+};
 

@@ -181,39 +181,10 @@ export default function NotificationCampaignsIndex({ campaigns: initialCampaigns
     };
 
     return (
-        <AppLayout breadcrumbs={[{ title: 'حملات الإشعارات', href: '/notification-campaigns' }]}>
+        <>
             <Head title="إدارة حملات الإشعارات والبريد الإلكتروني" />
 
             <div dir="rtl" className="p-6 space-y-6 max-w-7xl mx-auto w-full">
-                {/* Clean Page Title Header */}
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-slate-800">
-                    <div className="space-y-1">
-                        <div className="flex items-center gap-2">
-                            <Mail className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
-                            <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-100">حملات البريد والإشعارات (Horizon Queue)</h1>
-                        </div>
-                        <p className="text-xs text-muted-foreground">
-                            قم بإرسال حملات بريدية مستهدفة للمتاجر المفهرسة مع متابعة دقيقة للأداء الفوري ومنع حظر السيرفر
-                        </p>
-                    </div>
-
-                    <div className="flex items-center gap-3 shrink-0">
-                        <Link href="/notification-settings">
-                            <Button variant="outline" className="gap-2 text-xs">
-                                <Settings className="h-4 w-4" />
-                                <span>إعدادات SMTP</span>
-                            </Button>
-                        </Link>
-
-                        <Link href="/notification-campaigns/create">
-                            <Button className="bg-indigo-600 hover:bg-indigo-700 text-white gap-2 text-xs font-medium">
-                                <Plus className="h-4 w-4" />
-                                <span>إنشاء حملة جديدة</span>
-                            </Button>
-                        </Link>
-                    </div>
-                </div>
-
                 {/* Overall Stats Cards */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <Card className="bg-card shadow-sm border-slate-200 dark:border-slate-800">
@@ -261,10 +232,28 @@ export default function NotificationCampaignsIndex({ campaigns: initialCampaigns
 
                 {/* Campaigns List */}
                 <div className="space-y-4">
-                    <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-                        <Activity className="h-5 w-5 text-indigo-500" />
-                        <span>قائمة الحملات</span>
-                    </h2>
+                    <div className="flex items-center justify-between gap-4">
+                        <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                            <Activity className="h-5 w-5 text-indigo-500" />
+                            <span>قائمة الحملات</span>
+                        </h2>
+
+                        <div className="flex items-center gap-2">
+                            <Link href="/notification-settings">
+                                <Button variant="outline" size="sm" className="gap-2 text-xs">
+                                    <Settings className="h-4 w-4" />
+                                    <span>إعدادات SMTP</span>
+                                </Button>
+                            </Link>
+
+                            <Link href="/notification-campaigns/create">
+                                <Button size="sm" className="bg-indigo-600 hover:bg-indigo-700 text-white gap-2 text-xs font-medium">
+                                    <Plus className="h-4 w-4" />
+                                    <span>إنشاء حملة جديدة</span>
+                                </Button>
+                            </Link>
+                        </div>
+                    </div>
 
                     {campaignList.length === 0 ? (
                         <Card className="p-12 text-center border-dashed">
@@ -505,6 +494,12 @@ export default function NotificationCampaignsIndex({ campaigns: initialCampaigns
                     </DialogContent>
                 </Dialog>
             </div>
-        </AppLayout>
+        </>
     );
 }
+
+NotificationCampaignsIndex.layout = {
+    breadcrumbs: [
+        { title: 'حملات الإشعارات', href: '/notification-campaigns' },
+    ],
+};
