@@ -877,6 +877,8 @@ export default function CreateNotificationCampaign({ campaign }: Props) {
                                 <div dangerouslySetInnerHTML={{ __html: renderRenderedPreview() }} />
                             </div>
                         </div>
+                    </DialogContent>
+                </Dialog>
             </div>
         </>
     );

@@ -416,8 +416,9 @@ export default function CampaignsIndex({ campaigns: initialCampaigns, stats: ini
                                         </Button>
                                     </DialogFooter>
                                 </form>
-                        </Dialog>
-                    </div>
+                                </DialogContent>
+                            </Dialog>
+                        </div>
 
 
                 {/* Overall Stats Cards */}
