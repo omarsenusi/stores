@@ -33,7 +33,7 @@ return new class extends Migration
                 'store_description',
                 'contacts',
                 'features',
-                'full_settings'
+                'full_settings',
             ]);
         });
     }

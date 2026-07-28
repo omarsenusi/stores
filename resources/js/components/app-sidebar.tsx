@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, FolderGit2, LayoutGrid, Megaphone, Store } from 'lucide-react';
+import { Mail, Megaphone, Settings, Store, LayoutGrid, BookOpen, FolderGit2 } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -35,9 +35,19 @@ export function AppSidebar() {
             icon: Store,
         },
         {
-            title: 'الحملات',
+            title: 'حملات الكشط',
             href: '/campaigns',
             icon: Megaphone,
+        },
+        {
+            title: 'حملات الإشعارات',
+            href: '/notification-campaigns',
+            icon: Mail,
+        },
+        {
+            title: 'إعدادات البريد',
+            href: '/notification-settings',
+            icon: Settings,
         },
     ];
 

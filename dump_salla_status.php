@@ -1,11 +1,13 @@
 <?php
+
 require __DIR__.'/vendor/autoload.php';
 
-use Illuminate\Support\Facades\Http;
+use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Http\Client\Pool;
+use Illuminate\Support\Facades\Http;
 
 $app = require_once __DIR__.'/bootstrap/app.php';
-$kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
+$kernel = $app->make(Kernel::class);
 $kernel->bootstrap();
 
 $storeId = '1082915046';
@@ -27,7 +29,7 @@ $endpoints = [
     'uploads', 'images', 'videos', 'documents', 'downloads', 'subscriptions',
     'plans', 'pricing', 'tickets', 'support', 'messages', 'chat', 'conversations',
     'wallet', 'points', 'rewards', 'loyalty', 'affiliates', 'referrals',
-    'store/settings' // The special one we found
+    'store/settings', // The special one we found
 ];
 
 $headers = [
@@ -49,28 +51,30 @@ foreach ($chunkedEndpoints as $chunk) {
         $requests = [];
         foreach ($chunk as $endpoint) {
             $requests[] = $pool->as($endpoint)
-                               ->withoutVerifying()
-                               ->withOptions(['version' => 2.0])
-                               ->withHeaders($headers)
-                               ->get("https://api.salla.dev/store/v1/{$endpoint}");
+                ->withoutVerifying()
+                ->withOptions(['version' => 2.0])
+                ->withHeaders($headers)
+                ->get("https://api.salla.dev/store/v1/{$endpoint}");
         }
+
         return $requests;
     });
 
     foreach ($responses as $endpoint => $response) {
-        if ($response instanceof \Exception) {
-            $endpointStatuses[$endpoint] = 'Error: ' . $response->getMessage();
+        if ($response instanceof Exception) {
+            $endpointStatuses[$endpoint] = 'Error: '.$response->getMessage();
+
             continue;
         }
-        
+
         $endpointStatuses[$endpoint] = $response->status();
         echo "Endpoint: /store/v1/$endpoint -> Status: {$response->status()}\n";
     }
-    
+
     sleep(1); // small delay between chunks
 }
 
-$outputFile = __DIR__ . "/salla_endpoints_status_dump.json";
+$outputFile = __DIR__.'/salla_endpoints_status_dump.json';
 file_put_contents($outputFile, json_encode($endpointStatuses, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 
 echo "\nDone! Saved just the statuses to:\n{$outputFile}\n";

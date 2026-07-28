@@ -1,11 +1,13 @@
 <?php
+
 require __DIR__.'/vendor/autoload.php';
 
-use Illuminate\Support\Facades\Http;
+use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Http\Client\Pool;
+use Illuminate\Support\Facades\Http;
 
 $app = require_once __DIR__.'/bootstrap/app.php';
-$kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
+$kernel = $app->make(Kernel::class);
 $kernel->bootstrap();
 
 $concurrentRequests = 500;
@@ -46,14 +48,15 @@ $responses = Http::pool(function (Pool $pool) use ($headers, $concurrentRequests
     $requests = [];
     for ($i = 0; $i < $concurrentRequests; $i++) {
         $storeId = 1481 + $i;
-        $reqHeaders = array_merge($headers, ['store-identifier' => (string)$storeId]);
-        
-        $requests[] = $pool->as((string)$storeId)
-                           ->withoutVerifying()
-                           ->withOptions(['version' => 2.0])
-                           ->withHeaders($reqHeaders)
-                           ->get('https://api.salla.dev/store/v1/products', ['limit' => 4]);
+        $reqHeaders = array_merge($headers, ['store-identifier' => (string) $storeId]);
+
+        $requests[] = $pool->as((string) $storeId)
+            ->withoutVerifying()
+            ->withOptions(['version' => 2.0])
+            ->withHeaders($reqHeaders)
+            ->get('https://api.salla.dev/store/v1/products', ['limit' => 4]);
     }
+
     return $requests;
 });
 
@@ -62,13 +65,13 @@ $timeTaken = round($endTime - $startTime, 2);
 
 $statusCounts = [];
 foreach ($responses as $storeId => $response) {
-    if ($response instanceof \Exception) {
-        $status = 'Exception: ' . $response->getMessage();
+    if ($response instanceof Exception) {
+        $status = 'Exception: '.$response->getMessage();
     } else {
         $status = $response->status();
     }
-    
-    if (!isset($statusCounts[$status])) {
+
+    if (! isset($statusCounts[$status])) {
         $statusCounts[$status] = 0;
     }
     $statusCounts[$status]++;

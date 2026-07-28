@@ -223,6 +223,19 @@ return [
             'timeout' => 1800,
             'nice' => 0,
         ],
+        'supervisor-notifications' => [
+            'connection' => 'redis',
+            'queue' => ['notification-campaigns'],
+            'balance' => 'auto',
+            'autoScalingStrategy' => 'time',
+            'maxProcesses' => 5,
+            'maxTime' => 0,
+            'maxJobs' => 0,
+            'memory' => 512,
+            'tries' => 3,
+            'timeout' => 3600,
+            'nice' => 0,
+        ],
     ],
 
     'environments' => [
@@ -237,6 +250,11 @@ return [
                 'balanceMaxShift' => 1,
                 'balanceCooldown' => 3,
             ],
+            'supervisor-notifications' => [
+                'maxProcesses' => 5,
+                'balanceMaxShift' => 1,
+                'balanceCooldown' => 3,
+            ],
         ],
 
         'local' => [
@@ -245,6 +263,9 @@ return [
             ],
             'supervisor-campaigns' => [
                 'maxProcesses' => 3,
+            ],
+            'supervisor-notifications' => [
+                'maxProcesses' => 5,
             ],
         ],
     ],

@@ -1,10 +1,13 @@
 <?php
 
+use App\Models\ScrapedStore;
+use Illuminate\Contracts\Console\Kernel;
+
 require __DIR__.'/vendor/autoload.php';
 $app = require_once __DIR__.'/bootstrap/app.php';
-$app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
+$app->make(Kernel::class)->bootstrap();
 
-$stats = \App\Models\ScrapedStore::selectRaw('
+$stats = ScrapedStore::selectRaw('
     COUNT(*) as total,
     SUM(is_found = 1) as found_count,
     SUM(is_found = 0) as not_found,

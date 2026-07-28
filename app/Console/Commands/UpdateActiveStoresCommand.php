@@ -2,7 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Models\ScrapedStore;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Http;
 
 class UpdateActiveStoresCommand extends Command
 {
@@ -27,13 +29,13 @@ class UpdateActiveStoresCommand extends Command
     {
         $this->info('Starting update for active stores...');
 
-        $stores = \App\Models\ScrapedStore::where('is_found', true)->get();
+        $stores = ScrapedStore::where('is_found', true)->get();
 
         $bar = $this->output->createProgressBar($stores->count());
 
         foreach ($stores as $store) {
             try {
-                $response = \Illuminate\Support\Facades\Http::withoutVerifying()->withOptions([
+                $response = Http::withoutVerifying()->withOptions([
                     'version' => 2.0,
                 ])->withHeaders([
                     'accept' => 'application/json, text/plain, */*',
@@ -66,9 +68,9 @@ class UpdateActiveStoresCommand extends Command
                 if ($status === 200 && isset($data['success']) && $data['success']) {
                     $storeData = $data['data']['store'] ?? null;
                     if ($storeData) {
-                        $storeName = !empty($storeData['meta']['title']) ? $storeData['meta']['title'] : ($storeData['name'] ?? null);
-                        $storeDescription = !empty($storeData['meta']['description']) ? $storeData['meta']['description'] : ($storeData['description'] ?? null);
-                        $storeLogo = !empty($storeData['logo']) ? $storeData['logo'] : ($storeData['avatar'] ?? null);
+                        $storeName = ! empty($storeData['meta']['title']) ? $storeData['meta']['title'] : ($storeData['name'] ?? null);
+                        $storeDescription = ! empty($storeData['meta']['description']) ? $storeData['meta']['description'] : ($storeData['description'] ?? null);
+                        $storeLogo = ! empty($storeData['logo']) ? $storeData['logo'] : ($storeData['avatar'] ?? null);
                         $contacts = $storeData['contacts'] ?? null;
                         $features = $storeData['features'] ?? null;
                         $fullSettings = $data;
@@ -79,7 +81,7 @@ class UpdateActiveStoresCommand extends Command
                             $parsedUrl = parse_url($trackUrl);
                             if (isset($parsedUrl['host'])) {
                                 $domain = $parsedUrl['host'];
-                            } else if (isset($parsedUrl['path'])) {
+                            } elseif (isset($parsedUrl['path'])) {
                                 $domain = $parsedUrl['path'];
                             }
                         }
@@ -97,7 +99,7 @@ class UpdateActiveStoresCommand extends Command
                 }
 
                 // Fetch products to verify active products exist
-                $productsResponse = \Illuminate\Support\Facades\Http::withoutVerifying()->withOptions([
+                $productsResponse = Http::withoutVerifying()->withOptions([
                     'version' => 2.0,
                 ])->withHeaders([
                     'accept' => 'application/json, text/plain, */*',
@@ -128,7 +130,7 @@ class UpdateActiveStoresCommand extends Command
 
                 if ($productsResponse->status() === 200) {
                     $prodData = $productsResponse->json();
-                    if (isset($prodData['success']) && $prodData['success'] && !empty($prodData['data'])) {
+                    if (isset($prodData['success']) && $prodData['success'] && ! empty($prodData['data'])) {
                         $firstProduct = $prodData['data'][0];
                         $store->update([
                             'product_name' => $firstProduct['name'] ?? null,
@@ -142,10 +144,10 @@ class UpdateActiveStoresCommand extends Command
             } catch (\Exception $e) {
                 // Ignore and continue
             }
-            
+
             $bar->advance();
             // Small sleep to avoid instant rate limiting if list is large
-            usleep(200000); 
+            usleep(200000);
         }
 
         $bar->finish();

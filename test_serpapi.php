@@ -5,19 +5,21 @@
  * Usage: php test_serpapi.php [SERPAPI_KEY]
  */
 
-require __DIR__ . '/vendor/autoload.php';
+require __DIR__.'/vendor/autoload.php';
 
-$app = require_once __DIR__ . '/bootstrap/app.php';
-$kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
+$app = require_once __DIR__.'/bootstrap/app.php';
+$kernel = $app->make(Kernel::class);
 $kernel->bootstrap();
 
+use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Support\Facades\Http;
 
 $apiKey = isset($argv[1]) ? trim($argv[1]) : getenv('SERPAPI_KEY');
 
 echo "=== SerpApi & Store ID Extraction Tester ===\n";
 
-function extractStoreId(string $url): ?string {
+function extractStoreId(string $url): ?string
+{
     try {
         $response = Http::withHeaders([
             'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
@@ -57,12 +59,12 @@ function extractStoreId(string $url): ?string {
         }
 
         return null;
-    } catch (\Throwable $e) {
+    } catch (Throwable $e) {
         return null;
     }
 }
 
-if (!$apiKey) {
+if (! $apiKey) {
     echo "Notice: No SerpApi Key passed. Testing Store ID extraction on sample Salla stores:\n\n";
     $testUrls = [
         'https://salla.sa/foodworldmarket',
@@ -106,18 +108,18 @@ while ($page <= 3) {
     ]);
 
     if ($res->failed()) {
-        echo "SerpApi Error (HTTP " . $res->status() . "): " . $res->body() . "\n";
+        echo 'SerpApi Error (HTTP '.$res->status().'): '.$res->body()."\n";
         break;
     }
 
     $json = $res->json();
     if (isset($json['error'])) {
-        echo "SerpApi Error: " . $json['error'] . "\n";
+        echo 'SerpApi Error: '.$json['error']."\n";
         break;
     }
 
     $organic = $json['organic_results'] ?? [];
-    echo "Google Results Found: " . count($organic) . "\n";
+    echo 'Google Results Found: '.count($organic)."\n";
 
     if (empty($organic)) {
         echo "Reached end of Google search results.\n";
@@ -127,7 +129,7 @@ while ($page <= 3) {
     foreach ($organic as $i => $item) {
         $link = $item['link'] ?? null;
         $title = $item['title'] ?? 'N/A';
-        echo "\n[" . ($start + $i + 1) . "] Title: {$title}\n";
+        echo "\n[".($start + $i + 1)."] Title: {$title}\n";
         echo "    Link: {$link}\n";
 
         if ($link) {
@@ -141,7 +143,7 @@ while ($page <= 3) {
     }
 
     $next = $json['serpapi_pagination']['next'] ?? null;
-    if (!$next) {
+    if (! $next) {
         echo "\nEnd of pagination (no next page link).\n";
         break;
     }

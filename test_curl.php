@@ -1,10 +1,12 @@
 <?php
+
 require __DIR__.'/vendor/autoload.php';
 
+use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Support\Facades\Http;
 
 $app = require_once __DIR__.'/bootstrap/app.php';
-$kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
+$kernel = $app->make(Kernel::class);
 $kernel->bootstrap();
 
 echo "Testing with Guzzle default (HTTP/1.1)...\n";
@@ -36,8 +38,8 @@ $response = Http::withHeaders([
     'x-requested-with' => 'XMLHttpRequest',
 ])->get('https://api.salla.dev/store/v1/products', ['limit' => 4]);
 
-echo "Status: " . $response->status() . "\n";
-echo "Body snippet: " . substr($response->body(), 0, 100) . "\n\n";
+echo 'Status: '.$response->status()."\n";
+echo 'Body snippet: '.substr($response->body(), 0, 100)."\n\n";
 
 echo "Testing with Guzzle HTTP/2...\n";
 $response2 = Http::withOptions(['version' => 2.0])->withHeaders([
@@ -68,6 +70,5 @@ $response2 = Http::withOptions(['version' => 2.0])->withHeaders([
     'x-requested-with' => 'XMLHttpRequest',
 ])->get('https://api.salla.dev/store/v1/products', ['limit' => 4]);
 
-echo "Status: " . $response2->status() . "\n";
-echo "Body snippet: " . substr($response2->body(), 0, 100) . "\n\n";
-
+echo 'Status: '.$response2->status()."\n";
+echo 'Body snippet: '.substr($response2->body(), 0, 100)."\n\n";

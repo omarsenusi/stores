@@ -5,16 +5,16 @@ namespace App\Exports;
 use App\Models\ScrapedStore;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Concerns\FromQuery;
+use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithStyles;
-use Maatwebsite\Excel\Concerns\WithColumnWidths;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use PhpOffice\PhpSpreadsheet\Style\Fill;
-use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class StoresExport implements FromQuery, WithHeadings, WithMapping, WithStyles, WithColumnWidths
+class StoresExport implements FromQuery, WithColumnWidths, WithHeadings, WithMapping, WithStyles
 {
     protected $request;
 
@@ -31,9 +31,9 @@ class StoresExport implements FromQuery, WithHeadings, WithMapping, WithStyles, 
             $search = $this->request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('store_name', 'like', "%{$search}%")
-                  ->orWhere('domain', 'like', "%{$search}%")
-                  ->orWhereRaw('CAST(contacts AS CHAR) LIKE ?', ["%{$search}%"])
-                  ->orWhereRaw('CAST(full_settings AS CHAR) LIKE ?', ["%{$search}%"]);
+                    ->orWhere('domain', 'like', "%{$search}%")
+                    ->orWhereRaw('CAST(contacts AS CHAR) LIKE ?', ["%{$search}%"])
+                    ->orWhereRaw('CAST(full_settings AS CHAR) LIKE ?', ["%{$search}%"]);
             });
         }
 
@@ -43,7 +43,7 @@ class StoresExport implements FromQuery, WithHeadings, WithMapping, WithStyles, 
             } elseif ($this->request->maintenance === 'no') {
                 $query->where(function ($q) {
                     $q->where('full_settings->data->maintenance', false)
-                      ->orWhereNull('full_settings->data->maintenance');
+                        ->orWhereNull('full_settings->data->maintenance');
                 });
             }
         }
@@ -73,21 +73,21 @@ class StoresExport implements FromQuery, WithHeadings, WithMapping, WithStyles, 
     {
         $settings = is_array($store->full_settings) ? $store->full_settings : json_decode($store->full_settings, true);
         $data = $settings['data'] ?? [];
-        
+
         $url = $data['store']['url'] ?? "https://{$store->domain}";
         $freelance_number = $data['store']['settings']['freelance_number'] ?? '';
         $maintenance = ($data['maintenance'] ?? false) ? 'Yes' : 'No';
-        
+
         $theme_name = $data['theme']['name'] ?? '';
         $theme_mode = $data['theme']['mode'] ?? '';
-        
+
         $contacts = is_array($store->contacts) ? $store->contacts : json_decode($store->contacts, true) ?? [];
         $whatsapp = $contacts['whatsapp'] ?? '';
         $mobile = $contacts['mobile'] ?? '';
-        
+
         // Add a space before phone numbers to force Excel to treat them as text and avoid scientific notation (e.g. 9.66E+11)
-        $whatsapp = $whatsapp ? ' ' . $whatsapp : '';
-        $mobile = $mobile ? ' ' . $mobile : '';
+        $whatsapp = $whatsapp ? ' '.$whatsapp : '';
+        $mobile = $mobile ? ' '.$mobile : '';
 
         $features = $data['store']['features'] ?? [];
         $loyalty = in_array('loyalty-system-v2', $features) || in_array('loyalty-system', $features) ? 'Yes' : 'No';
@@ -133,9 +133,9 @@ class StoresExport implements FromQuery, WithHeadings, WithMapping, WithStyles, 
 
         // Apply alignment to all cells
         $sheet->getStyle('A2:L'.$sheet->getHighestRow())
-              ->getAlignment()
-              ->setVertical(Alignment::VERTICAL_CENTER)
-              ->setWrapText(true); // Allow description to wrap if it's too long
+            ->getAlignment()
+            ->setVertical(Alignment::VERTICAL_CENTER)
+            ->setWrapText(true); // Allow description to wrap if it's too long
 
         return [
             1 => [

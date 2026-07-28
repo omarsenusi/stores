@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\StoresExport;
 use App\Http\Controllers\Controller;
 use App\Models\ScrapedStore;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Maatwebsite\Excel\Facades\Excel;
 
 class StoreController extends Controller
 {
@@ -25,9 +27,9 @@ class StoreController extends Controller
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('store_name', 'like', "%{$search}%")
-                  ->orWhere('domain', 'like', "%{$search}%")
-                  ->orWhereRaw('CAST(contacts AS CHAR) LIKE ?', ["%{$search}%"])
-                  ->orWhereRaw('CAST(full_settings AS CHAR) LIKE ?', ["%{$search}%"]);
+                    ->orWhere('domain', 'like', "%{$search}%")
+                    ->orWhereRaw('CAST(contacts AS CHAR) LIKE ?', ["%{$search}%"])
+                    ->orWhereRaw('CAST(full_settings AS CHAR) LIKE ?', ["%{$search}%"]);
             });
         }
 
@@ -37,7 +39,7 @@ class StoreController extends Controller
             } elseif ($request->maintenance === 'no') {
                 $query->where(function ($q) {
                     $q->where('full_settings->data->maintenance', false)
-                      ->orWhereNull('full_settings->data->maintenance');
+                        ->orWhereNull('full_settings->data->maintenance');
                 });
             }
         }
@@ -71,6 +73,6 @@ class StoreController extends Controller
 
     public function export(Request $request)
     {
-        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\StoresExport($request), 'active_stores.xlsx');
+        return Excel::download(new StoresExport($request), 'active_stores.xlsx');
     }
 }

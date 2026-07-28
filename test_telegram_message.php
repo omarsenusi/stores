@@ -2,8 +2,9 @@
 
 require __DIR__.'/vendor/autoload.php';
 $app = require_once __DIR__.'/bootstrap/app.php';
-$app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
+$app->make(Kernel::class)->bootstrap();
 
+use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Support\Facades\Http;
 
 $botToken = '7261497209:AAFzaaMruLYSTUUl0_2SNwAJO70rb93-sVA';
@@ -20,5 +21,5 @@ $response = Http::withoutVerifying()->post("https://api.telegram.org/bot{$botTok
 if ($response->successful()) {
     echo "Message sent successfully!\n";
 } else {
-    echo "Failed to send message: " . $response->body() . "\n";
+    echo 'Failed to send message: '.$response->body()."\n";
 }

@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use App\Models\Setting;
 use App\Models\ScrapedStore;
+use App\Models\Setting;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class ScrapeNextSallaStoreCommand extends Command
 {
@@ -39,16 +39,16 @@ class ScrapeNextSallaStoreCommand extends Command
 
         for ($i = 0; $i < $batchSize; $i++) {
             $currentId = $lastId + 1;
-            
+
             $this->info("Checking store ID: {$currentId}");
-            
+
             try {
                 $response = Http::withoutVerifying()->withOptions([
                     'version' => 2.0,
                 ])->withHeaders($this->getHeaders($currentId))
-                ->get('https://api.salla.dev/store/v1/store/settings', [
-                    'store_identifier' => $currentId,
-                ]);
+                    ->get('https://api.salla.dev/store/v1/store/settings', [
+                        'store_identifier' => $currentId,
+                    ]);
 
                 $status = $response->status();
                 $data = $response->json();
@@ -56,7 +56,7 @@ class ScrapeNextSallaStoreCommand extends Command
                 if ($status === 200 && isset($data['success']) && $data['success']) {
                     $this->info("Store ID {$currentId} found!");
                     $this->processFoundStore($currentId, $data, $chatId, $botToken);
-                    
+
                     // Update lastId in DB only if we found it
                     $lastId = $currentId;
                     $setting->update(['value' => (string) $lastId]);
@@ -66,11 +66,11 @@ class ScrapeNextSallaStoreCommand extends Command
                     break;
                 }
             } catch (\Exception $e) {
-                $this->error("Error checking store ID {$currentId}: " . $e->getMessage());
+                $this->error("Error checking store ID {$currentId}: ".$e->getMessage());
                 // Stop on error to retry later
                 break;
             }
-            
+
             // Small delay to be gentle on the API
             usleep(500000); // 0.5 seconds
         }
@@ -81,21 +81,23 @@ class ScrapeNextSallaStoreCommand extends Command
     protected function processFoundStore($storeId, $data, $chatId, $botToken)
     {
         $store = $data['data']['store'] ?? null;
-        if (!$store) return;
+        if (! $store) {
+            return;
+        }
 
-        $storeName = !empty($store['meta']['title']) ? $store['meta']['title'] : ($store['name'] ?? null);
-        $storeDescription = !empty($store['meta']['description']) ? $store['meta']['description'] : ($store['description'] ?? null);
-        $storeLogo = !empty($store['logo']) ? $store['logo'] : ($store['avatar'] ?? null);
+        $storeName = ! empty($store['meta']['title']) ? $store['meta']['title'] : ($store['name'] ?? null);
+        $storeDescription = ! empty($store['meta']['description']) ? $store['meta']['description'] : ($store['description'] ?? null);
+        $storeLogo = ! empty($store['logo']) ? $store['logo'] : ($store['avatar'] ?? null);
         $contacts = $store['contacts'] ?? null;
         $features = $store['features'] ?? null;
-        
+
         $domain = null;
         $trackUrl = $data['data']['jitsu']['track_url'] ?? ($store['url'] ?? null);
         if ($trackUrl) {
             $parsedUrl = parse_url($trackUrl);
             if (isset($parsedUrl['host'])) {
                 $domain = $parsedUrl['host'];
-            } else if (isset($parsedUrl['path'])) {
+            } elseif (isset($parsedUrl['path'])) {
                 $domain = $parsedUrl['path'];
             }
         }
@@ -110,10 +112,10 @@ class ScrapeNextSallaStoreCommand extends Command
             $productsResponse = Http::withoutVerifying()->withOptions([
                 'version' => 2.0,
             ])->withHeaders($this->getHeaders($storeId))
-            ->get('https://api.salla.dev/store/v1/products', [
-                'limit' => 3,
-                'page' => 1,
-            ]);
+                ->get('https://api.salla.dev/store/v1/products', [
+                    'limit' => 3,
+                    'page' => 1,
+                ]);
 
             $productsData = $productsResponse->json();
             if ($productsResponse->status() === 200 && isset($productsData['data']) && count($productsData['data']) > 0) {
@@ -150,10 +152,10 @@ class ScrapeNextSallaStoreCommand extends Command
         $this->info("Saved store {$storeId} to database.");
 
         // Send Telegram message
-        if (!empty($chatId)) {
+        if (! empty($chatId)) {
             $this->sendTelegramMessage($scrapedStore, $chatId, $botToken);
         } else {
-            $this->warn("No Telegram Chat ID found in settings. Skipping notification.");
+            $this->warn('No Telegram Chat ID found in settings. Skipping notification.');
         }
     }
 
@@ -162,12 +164,12 @@ class ScrapeNextSallaStoreCommand extends Command
         $domain = $store->domain ? $store->domain : 'غير متوفر';
         $fullUrl = $store->full_settings['data']['store']['url'] ?? "https://salla.sa/{$domain}";
         $storeName = $store->store_name ?? 'بدون اسم';
-        $description = $store->store_description ? \Illuminate\Support\Str::limit($store->store_description, 100) : 'لا يوجد وصف';
-        
+        $description = $store->store_description ? Str::limit($store->store_description, 100) : 'لا يوجد وصف';
+
         $contacts = is_array($store->contacts) ? $store->contacts : json_decode($store->contacts, true) ?? [];
         $whatsapp = $contacts['whatsapp'] ?? 'غير متوفر';
         $mobile = $contacts['mobile'] ?? 'غير متوفر';
-        
+
         $themeName = $store->full_settings['data']['theme']['name'] ?? 'غير متوفر';
         $maintenance = (isset($store->full_settings['data']['maintenance']) && $store->full_settings['data']['maintenance']) ? 'نعم 🔒' : 'لا 🔓';
 
@@ -184,13 +186,13 @@ class ScrapeNextSallaStoreCommand extends Command
         $text .= "📱 <b>جوال:</b> {$mobile}\n";
         $text .= "🎨 <b>رقم القالب:</b> {$themeName}\n";
         $text .= "🛠 <b>وضع الصيانة:</b> {$maintenance}\n\n";
-        
+
         if ($store->product_name) {
             $productName = htmlspecialchars(strip_tags($store->product_name));
             $text .= "📦 <b>أحدث منتج:</b> {$productName}\n\n";
         }
 
-        $text .= "#متجر_جديد #سلة #Salla #Scraper";
+        $text .= '#متجر_جديد #سلة #Salla #Scraper';
 
         try {
             $response = Http::withoutVerifying()->post("https://api.telegram.org/bot{$botToken}/sendMessage", [
@@ -199,14 +201,14 @@ class ScrapeNextSallaStoreCommand extends Command
                 'parse_mode' => 'HTML',
                 'disable_web_page_preview' => false,
             ]);
-            
+
             if ($response->successful()) {
-                $this->info("Telegram message sent successfully!");
+                $this->info('Telegram message sent successfully!');
             } else {
-                $this->error("Telegram API Error: " . $response->body());
+                $this->error('Telegram API Error: '.$response->body());
             }
         } catch (\Exception $e) {
-            $this->error("Failed to send Telegram message: " . $e->getMessage());
+            $this->error('Failed to send Telegram message: '.$e->getMessage());
         }
     }
 
