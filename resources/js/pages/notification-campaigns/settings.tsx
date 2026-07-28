@@ -103,13 +103,13 @@ export default function MailSettings({ settings }: Props) {
             <Head title="إعدادات خادم البريد الـ SMTP" />
 
             <div dir="rtl" className="p-6 space-y-6 max-w-4xl mx-auto w-full">
-                <div className="bg-gradient-to-r from-slate-900 to-indigo-950 p-6 rounded-2xl text-white shadow-lg border border-indigo-900/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-slate-800">
                     <div className="space-y-1">
                         <div className="flex items-center gap-2">
-                            <Settings className="h-6 w-6 text-indigo-400" />
-                            <h1 className="text-xl font-bold">إعدادات خادم البريد SMTP وسرعة الإرسال</h1>
+                            <Settings className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
+                            <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-100">إعدادات خادم البريد SMTP وسرعة الإرسال</h1>
                         </div>
-                        <p className="text-xs text-slate-300">
+                        <p className="text-xs text-muted-foreground">
                             قم بضبط خادم البريد لتضمن وصول رسائل الحملات إلى المتاجر بدون الانزلاق إلى مجلد Spam
                         </p>
                     </div>
@@ -117,7 +117,7 @@ export default function MailSettings({ settings }: Props) {
                     <Button
                         type="button"
                         onClick={() => setTestModalOpen(true)}
-                        className="bg-indigo-600 hover:bg-indigo-700 text-white gap-2 font-bold shadow-md"
+                        className="bg-indigo-600 hover:bg-indigo-700 text-white gap-2 font-medium shrink-0"
                     >
                         <Send className="h-4 w-4" />
                         <span>اختبار اتصالات البريد الآن</span>
